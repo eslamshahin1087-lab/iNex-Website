@@ -10,9 +10,8 @@ for(const page of pages)assert.doesNotMatch(read(page),/InsurNex|broker CRM|brok
 assert.ok(read("contact.html").includes("eslamshahin1087-lab.github.io/iNex/"));assert.doesNotMatch(read("contact.html"),/hello@inex\.com|mailto:/);
 for(const page of ["index.html","company.html"]){
   const html=read(page);
-  assert.match(html,/onerror="this\.hidden=true;this\.parentElement\.classList\.add\([\x27"]portrait-fallback[\x27"]\)"/,page+" must activate the portrait fallback when the image fails");
+  assert.ok(html.includes("onerror=\"this.hidden=true;this.parentElement.classList.add('portrait-fallback')\""),page+" must activate the portrait fallback when the image fails");
 }
 assert.match(css,/\.ceo-photo-frame\.portrait-fallback:before/,"Homepage portrait fallback styling must exist");
 assert.match(css,/\.ceo-profile-photo\.portrait-fallback:before/,"Company portrait fallback styling must exist");
-assert.doesNotMatch(read("index.html")+read("company.html"),/classList\.add\(\\[\x27"]portrait-fallback/, "Portrait fallback handler must not contain escaped quote syntax");
 console.log("iNex customer-awareness website checks passed.");
