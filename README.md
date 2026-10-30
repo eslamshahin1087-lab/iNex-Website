@@ -1,14 +1,25 @@
-# iNex Official Marketing Website
+# iNex Corporate InsurTech Website
 
-Independent bilingual marketing website for the iNex insurance platform.
+Independent bilingual corporate website for the iNex insurance technology platform.
+
+## Website structure
+
+- `index.html` — corporate homepage
+- `platform.html` — platform capabilities
+- `solutions.html` — broker, customer, corporate and ecosystem use cases
+- `resources.html` — knowledge-centre landing page (editorial content is not yet published)
+- `company.html` — company perspective and service disclosures
+- `contact.html` — contact information and approved-channel placeholder
+- `404.html` — branded not-found page
 
 ## Project boundaries
 
-- This repository contains the marketing website only.
-- The application repository \`eslamshahin1087-lab/iNex-App\` is a read-only product reference.
+- This repository contains the public corporate website only.
+- `eslamshahin1087-lab/iNex-App` is a read-only product reference.
 - No Firebase, Firestore, authentication, Cloudinary, Worker, API or production data integration is included.
 - The website does not modify or deploy the application.
-- No production deployment or custom-domain connection has been performed.
+- Do not connect the application repository to Cloudflare Pages.
+- No custom domain or production deployment is part of this development branch.
 
 ## Stack
 
@@ -16,61 +27,41 @@ Static HTML, CSS and vanilla JavaScript. No build step or runtime dependency.
 
 ## Local preview
 
-Run any static server from the repository root, for example:
+Run a static server from the repository root:
 
-\`\`\`bash
+```bash
 python3 -m http.server 8080
-\`\`\`
+```
 
-Then visit \`http://localhost:8080\`.
+Then visit `http://localhost:8080`.
 
 ## Cloudflare Pages
 
-Recommended configuration:
+The current production Pages project is separate from this development branch. Do not change production settings or deploy this branch without explicit approval.
 
-- Production branch: \`main\`
-- Build command: leave empty
-- Build output directory: \`/\` (repository root)
-- Root directory: \`/\`
+For static hosting, use the repository root as the output directory and no build command.
 
-Connect this repository to Cloudflare Pages only after review and explicit approval. Do not connect the application repository.
+## Product accuracy and disclosures
 
-## App destination
+Public copy is intentionally limited to capabilities previously documented in the application: policy and document tracking, protection assessment, quote requests/review, InsuraPoints, customer services, broker administration and Corporate HR Hub. Availability may depend on account permissions and current application configuration.
 
-The current app link is taken from the source application's README:
-\`https://eslamshahin1087-lab.github.io/iNex/\`
+No payroll, attendance, AI copilot, insurer integrations, analytics, or other unverified functionality is advertised.
 
-The current logo is referenced from the source application repository via its raw GitHub URL. This avoids copying or modifying original app files. To fully self-host the logo in this repository, add the approved logo binary as \`assets/inex-logo.png\` after transferring it as a binary asset.
+iNex is described as a technology platform connected to insurance brokerage services. It is not described as an insurer and does not claim to issue insurance policies itself. Coverage, pricing and acceptance remain subject to the insurer's terms and final policy.
 
-## Product accuracy
+The contact page intentionally does not invent an email address or display a non-functional form. Add an approved corporate contact channel before launch.
 
-Public copy is intentionally limited to functions visible in the current app and its README: policy/document tracking, protection assessment, quote comparison, InsuraPoints, customer services, broker administration and Corporate HR Hub. No payroll, attendance, AI copilot or other unverified features are advertised.
-
-The FRA number (38062) is cited in the source repository README and app landing page; this website describes it as a number stated in project materials and directs visitors to the app's current legal disclosure for authoritative details.
-
- 
 ## Quality and accessibility
 
-- Mobile navigation exposes its expanded state, supports Escape to close, and returns focus to the menu trigger.
-- Visible keyboard focus styles and reduced-motion preferences are included.
-- The marketing site is responsive; it does not claim to be an installable PWA. PWA functionality belongs to the application and is not asserted here.
-- Open Graph and Twitter card metadata are provided. A canonical URL is intentionally omitted until a production domain is approved.
-- Run the static project checks with `npm test`. The check uses only Node.js built-ins and introduces no runtime dependency.
+- Shared responsive design system for all pages.
+- Arabic RTL by default and English LTR through a persistent language switch.
+- Keyboard-operable mobile navigation with Escape support.
+- Visible keyboard focus and reduced-motion support.
+- Local approved logo asset.
+- External new-tab links include `rel="noopener"`.
+- Run static regression checks with `npm test`.
+- Run Chromium smoke tests with `npm run test:e2e` after installing Playwright and Chromium.
 
-## Deployment readiness
+## Deployment
 
-- `404.html` provides a branded not-found page for static hosting.
-- `robots.txt` permits normal crawling. A sitemap and canonical URL are intentionally deferred until the final public site URL is approved.
-- `_headers` supplies baseline security headers for Cloudflare Pages, including a restrictive Content Security Policy. Hosting providers that do not support the Cloudflare Pages `_headers` convention may ignore this file.
-- Language switching updates the document language, direction, title, description and social metadata.
-- Verify the published page and security headers on the chosen hosting provider before connecting a custom domain.
-
-## Automated browser QA
-
-- `npm test` runs dependency-free static regression checks.
-- `npm install` installs the Playwright test runner.
-- `npx playwright install chromium` installs the local browser.
-- `npm run test:e2e` runs Chromium smoke tests against a local static server.
-- GitHub Actions runs browser checks independently from static checks on pull requests and development branches.
-
-Browser coverage includes Arabic/English switching and metadata, RTL/LTR direction, mobile menu keyboard behaviour and focus restoration, desktop navigation visibility, and the branded 404 page.
+All work is performed on a feature branch and must pass static and browser checks before review. Production deployment, custom-domain changes and application changes require separate explicit approval.

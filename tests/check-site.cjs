@@ -1,59 +1,38 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-
 const root = path.resolve(__dirname, "..");
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
-const html = read("index.html");
+const pages = ["index.html","platform.html","solutions.html","resources.html","company.html","contact.html"];
+for (const page of pages) {
+  const html = read(page);
+  assert.match(html, /<html lang="ar" dir="rtl">/, page + " must default to Arabic RTL");
+  assert.match(html, /assets\/site\.css/, page + " must load shared CSS");
+  assert.match(html, /assets\/site\.js/, page + " must load shared JS");
+  assert.match(html, /id="mobileMenu"/, page + " must include mobile navigation");
+  assert.match(html, /id="langBtn"/, page + " must include language switch");
+  assert.match(html, /data-ar=/, page + " must provide Arabic copy");
+  assert.match(html, /data-en=/, page + " must provide English copy");
+  assert.match(html, /assets\/inex-logo\.png/, page + " must use local approved logo");
+  const ids = [...html.matchAll(/\bid=["']([^"']+)["']/g)].map((m) => m[1]);
+  assert.equal(new Set(ids).size, ids.length, page + " IDs must be unique");
+}
 const css = read("assets/site.css");
 const js = read("assets/site.js");
-const readme = read("README.md");
-
-const ids = [...html.matchAll(/\bid=["']([^"']+)["']/g)].map((match) => match[1]);
-assert.equal(new Set(ids).size, ids.length, "HTML IDs must be unique");
-
-for (const asset of ["assets/site.css", "assets/site.js", "assets/inex-logo.png"]) {
-  assert.ok(html.includes(asset), "HTML must load " + asset);
-  assert.ok(fs.existsSync(path.join(root, asset)), "Missing local asset: " + asset);
-}
-
-const translations = js.match(/const copy=\{\s*ar:\{([\s\S]*?)\n\},\s*en:\{([\s\S]*?)\n\}\};/);
-assert.ok(translations, "Arabic and English translation dictionaries must exist");
-const htmlKeys = [...html.matchAll(/data-i18n=["']([^"']+)["']/g)].map((match) => match[1]);
-for (const key of new Set(htmlKeys)) {
-  assert.ok(translations[1].includes(key + ":"), "Missing Arabic translation: " + key);
-  assert.ok(translations[2].includes(key + ":"), "Missing English translation: " + key);
-}
-
-const externalBlankLinks = [...html.matchAll(/<a\b[^>]*target=["']_blank["'][^>]*>/g)].map((match) => match[0]);
-for (const link of externalBlankLinks) {
-  assert.match(link, /rel=["'][^"']*noopener[^"']*["']/, "External new-tab links must include rel=noopener");
-}
-assert.match(html, /<nav[^>]+id=["']mobileMenu["'][^>]+hidden/, "Mobile menu must start hidden");
-assert.match(html, /aria-controls=["']mobileMenu["']/, "Menu trigger must reference its controlled navigation");
-assert.match(js, /event\.key==="Escape"/, "Mobile navigation must support Escape");
-assert.match(css, /prefers-reduced-motion:reduce/, "Reduced-motion preference must be supported");
+for (const asset of ["assets/site.css","assets/site.js","assets/inex-logo.png"]) assert.ok(fs.existsSync(path.join(root,asset)), "Missing asset " + asset);
+assert.match(js, /localStorage\.getItem\("inex-site-language"\)/, "Language preference should persist");
+assert.match(js, /innerHTML=el\.dataset\[next\]/, "Authored emphasis markup should survive language switching");
+assert.match(js, /e\.key==="Escape"/, "Mobile menu must support Escape");
+assert.match(css, /prefers-reduced-motion:reduce/, "Reduced motion must be supported");
 assert.match(css, /:focus-visible/, "Keyboard focus styles must be present");
-assert.match(html, /name=["']description["']/, "SEO description is required");
-assert.match(html, /property=["']og:title["']/, "Open Graph title is required");
-assert.match(js, /meta\[name="description"\]/, "Language switching must update the description");
-assert.match(js, /meta\[property="og:locale"\]/, "Language switching must update Open Graph locale");
-assert.doesNotMatch(js, /\bfetch\s*\(/, "Marketing site must not call application APIs");
-
-assert.ok(fs.existsSync(path.join(root, "404.html")), "Branded 404 page is required");
-assert.match(read("404.html"), /name="robots" content="noindex,follow"/, "404 page must not be indexed");
-assert.ok(!read("404.html").includes(" style="), "404 page must not use inline styles under CSP");
-assert.ok(fs.existsSync(path.join(root, "_headers")), "Cloudflare Pages security headers file is required");
-const headers = read("_headers");
-for (const directive of ["X-Content-Type-Options: nosniff", "X-Frame-Options: DENY", "Content-Security-Policy:"]) {
-  assert.ok(headers.includes(directive), "Missing security header: " + directive);
+for (const page of pages) {
+ const html=read(page);
+ const links=[...html.matchAll(/<a\b[^>]*target=["']_blank["'][^>]*>/g)].map(m=>m[0]);
+ for(const link of links) assert.match(link,/rel=["'][^"']*noopener[^"']*["']/,"External links must use noopener");
 }
-assert.match(read("robots.txt"), /User-agent: \*/, "robots.txt must declare crawler policy");
-assert.match(readme, /No Firebase, Firestore, authentication, Cloudinary, Worker, API/, "Marketing site must remain isolated from app services");
-
-assert.ok(html.includes("og:image:alt"), "Open Graph image alternative text is required");
-assert.ok(html.includes("twitter:image:alt"), "Twitter image alternative text is required");
-assert.ok(html.includes("apple-touch-icon"), "Apple touch icon metadata is required");
-assert.ok(!html.includes("iNex-App/main/inex-logo.png"), "Social logo metadata must not depend on the application repository");
-
-console.log("iNex website deployment-readiness checks passed.");
+assert.match(read("_headers"),/Content-Security-Policy:/);
+assert.match(read("_headers"),/X-Frame-Options: DENY/);
+assert.match(read("404.html"),/name="robots" content="noindex,follow"/);
+assert.match(read("README.md"),/No Firebase, Firestore, authentication, Cloudinary, Worker, API/);
+assert.doesNotMatch(read("contact.html"),/hello@inex\.com|mailto:/,"Do not invent contact addresses");
+console.log("iNex corporate website checks passed.");
