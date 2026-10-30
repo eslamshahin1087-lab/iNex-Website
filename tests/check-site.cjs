@@ -8,4 +8,11 @@ assert.match(read("_headers"),/Content-Security-Policy:/);assert.match(read("_he
 assert.match(readme,/Insurance Awareness & Customer Solutions/);assert.ok(fs.existsSync(path.join(root,"assets/ceo-portrait.jpg")),"Missing CEO portrait");assert.match(read("index.html"),/ceo-preview/);assert.match(read("company.html"),/id="leadership"/);assert.match(read("company.html"),/Islam Ibrahim/);assert.match(css,/\.ceo-profile/);assert.match(css,/\.reveal\.is-visible/);assert.match(js,/IntersectionObserver/);assert.match(js,/scrollProgress/);assert.doesNotMatch(readme,/CRM for brokers|broker management platform/i);
 for(const page of pages)assert.doesNotMatch(read(page),/InsurNex|broker CRM|broker management/i,page+" must not mix InsurNex positioning");
 assert.ok(read("contact.html").includes("eslamshahin1087-lab.github.io/iNex/"));assert.doesNotMatch(read("contact.html"),/hello@inex\.com|mailto:/);
+for(const page of ["index.html","company.html"]){
+  const html=read(page);
+  assert.match(html,/onerror="this\.hidden=true;this\.parentElement\.classList\.add\([\x27"]portrait-fallback[\x27"]\)"/,page+" must activate the portrait fallback when the image fails");
+}
+assert.match(css,/\.ceo-photo-frame\.portrait-fallback:before/,"Homepage portrait fallback styling must exist");
+assert.match(css,/\.ceo-profile-photo\.portrait-fallback:before/,"Company portrait fallback styling must exist");
+assert.doesNotMatch(read("index.html")+read("company.html"),/classList\.add\(\\[\x27"]portrait-fallback/, "Portrait fallback handler must not contain escaped quote syntax");
 console.log("iNex customer-awareness website checks passed.");
