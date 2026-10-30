@@ -36,7 +36,18 @@ assert.match(css, /prefers-reduced-motion:reduce/, "Reduced-motion preference mu
 assert.match(css, /:focus-visible/, "Keyboard focus styles must be present");
 assert.match(html, /name=["']description["']/, "SEO description is required");
 assert.match(html, /property=["']og:title["']/, "Open Graph title is required");
-assert.match(readme, /No Firebase, Firestore, authentication, Cloudinary, Worker, API/, "Marketing site must remain isolated from app services");
+assert.match(js, /meta\[name="description"\]/, "Language switching must update the description");
+assert.match(js, /meta\[property="og:locale"\]/, "Language switching must update Open Graph locale");
 assert.doesNotMatch(js, /\bfetch\s*\(/, "Marketing site must not call application APIs");
 
-console.log("iNex website quality checks passed.");
+assert.ok(fs.existsSync(path.join(root, "404.html")), "Branded 404 page is required");
+assert.match(read("404.html"), /name="robots" content="noindex,follow"/, "404 page must not be indexed");
+assert.ok(fs.existsSync(path.join(root, "_headers")), "Cloudflare Pages security headers file is required");
+const headers = read("_headers");
+for (const directive of ["X-Content-Type-Options: nosniff", "X-Frame-Options: DENY", "Content-Security-Policy:"]) {
+  assert.ok(headers.includes(directive), "Missing security header: " + directive);
+}
+assert.match(read("robots.txt"), /User-agent: \*/, "robots.txt must declare crawler policy");
+assert.match(readme, /No Firebase, Firestore, authentication, Cloudinary, Worker, API/, "Marketing site must remain isolated from app services");
+
+console.log("iNex website deployment-readiness checks passed.");
