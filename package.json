@@ -4,9 +4,13 @@
   "private": true,
   "description": "Independent bilingual iNex marketing website",
   "scripts": {
-    "test": "node tests/check-site.cjs"
+    "test": "node tests/check-site.cjs",
+    "test:e2e": "playwright test"
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
   }
 }
