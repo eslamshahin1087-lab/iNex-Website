@@ -54,3 +54,12 @@ html[dir=ltr] #scrollProgress{transform-origin:left}
 @keyframes orbit-drift{to{transform:rotate(360deg)}}
 @media(max-width:760px){.ceo-preview{grid-template-columns:1fr;padding:30px 22px;gap:22px}.ceo-preview-media{min-height:360px}.ceo-photo-frame{width:min(78%,300px)}.ceo-orbit-a{width:320px}.ceo-orbit-b{width:360px}.ceo-profile{margin-top:34px}.ceo-profile-inner{grid-template-columns:1fr;padding:24px;gap:28px}.ceo-profile-photo{width:min(100%,300px);margin-inline:auto}.ceo-profile-copy h2{font-size:36px}}
 @media(prefers-reduced-motion:reduce){.visual-orbit,.floating-note,.hero-copy>*,.ceo-orbit{animation:none!important}.motion-ready .reveal{opacity:1;transform:none;transition:none}.button:after{display:none}}
+
+
+/* Graceful portrait fallback when the local CEO image cannot be fetched. */
+.ceo-photo-frame.portrait-fallback{min-height:420px;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;background:radial-gradient(circle at 50% 36%,#f7e7c4 0,#c9a46b 34%,#8d642f 100%);overflow:hidden}
+.ceo-photo-frame.portrait-fallback:before{content:"II";flex:1;display:grid;place-items:center;color:#0a1833;font:900 clamp(92px,15vw,150px)/1 "Plus Jakarta Sans";letter-spacing:-.09em;text-shadow:0 12px 34px #07152d22}
+.ceo-profile-photo.portrait-fallback{min-height:390px;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;background:radial-gradient(circle at 50% 36%,#f7e7c4 0,#c9a46b 34%,#8d642f 100%);overflow:hidden}
+.ceo-profile-photo.portrait-fallback:before{content:"II";flex:1;display:grid;place-items:center;color:#0a1833;font:900 clamp(92px,15vw,150px)/1 "Plus Jakarta Sans";letter-spacing:-.09em;text-shadow:0 12px 34px #07152d22}
+.ceo-photo-frame.portrait-fallback .ceo-photo-caption{color:#0a1833}
+@media(max-width:760px){.ceo-photo-frame.portrait-fallback{min-height:350px}.ceo-profile-photo.portrait-fallback{min-height:350px}}
