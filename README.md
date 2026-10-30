@@ -1,67 +1,67 @@
-# iNex Corporate InsurTech Website
+# iNex — Insurance Awareness & Customer Solutions
 
-Independent bilingual corporate website for the iNex insurance technology platform.
+Independent bilingual corporate website for **iNex**, the customer-facing insurance awareness and customer solutions platform.
+
+## Product definition
+
+iNex is designed around customers and insurance awareness. It helps people understand insurance concepts, review their protection needs, explore insurance options and access customer services through a digital experience.
+
+**iNex is not InsurNex.** InsurNex is a separate insurance-brokerage operations product and is outside the scope of this website.
 
 ## Website structure
 
-- `index.html` — corporate homepage
-- `platform.html` — platform capabilities
-- `solutions.html` — broker, customer, corporate and ecosystem use cases
-- `resources.html` — knowledge-centre landing page (editorial content is not yet published)
-- `company.html` — company perspective and service disclosures
-- `contact.html` — contact information and approved-channel placeholder
+- `index.html` — customer-first brand homepage
+- `platform.html` — verified iNex customer-facing capabilities
+- `solutions.html` — individuals, families, employees and corporate customer contexts
+- `awareness.html` — insurance education topics and awareness guidance
+- `company.html` — iNex philosophy, role and service disclosures
+- `contact.html` — customer service route through the iNex application
 - `404.html` — branded not-found page
+
+## Product accuracy
+
+Website copy is grounded in the iNex application repository and customer app, including:
+- Insurance tips and awareness content
+- Insurance protection assessment
+- Customer policy and document access
+- Quote requests and comparison of available offers
+- Consultation, appointments, complaints and broker communication
+- InsuraPoints rewards programme
+- Corporate HR Hub capabilities, subject to account permissions and configuration
+
+General awareness content is educational and does not replace policy wording, insurer terms or professional advice. The website does not claim that a full editorial article library is currently published.
+
+iNex is a technology and awareness platform connected to insurance brokerage services. It is not an insurer, does not underwrite risk and does not issue policies itself. Quote requests and consultations are handled through the licensed insurance broker; coverage, pricing and acceptance remain subject to the insurer's terms and final policy.
 
 ## Project boundaries
 
-- This repository contains the public corporate website only.
-- `eslamshahin1087-lab/iNex-App` is a read-only product reference.
+- This repository contains the public iNex website only.
+- The iNex application repository is a read-only product reference.
+- InsurNex is a separate product and must not be referenced as the iNex product.
 - No Firebase, Firestore, authentication, Cloudinary, Worker, API or production data integration is included.
-- The website does not modify or deploy the application.
-- Do not connect the application repository to Cloudflare Pages.
-- No custom domain or production deployment is part of this development branch.
+- Do not modify the application repository or its backend.
+- Do not change Cloudflare production settings, custom domains or production deployment without separate explicit approval.
 
-## Stack
+## Stack and local preview
 
-Static HTML, CSS and vanilla JavaScript. No build step or runtime dependency.
-
-## Local preview
-
-Run a static server from the repository root:
+Static HTML, CSS and vanilla JavaScript. No build step.
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Then visit `http://localhost:8080`.
+Open `http://localhost:8080`.
 
-## Cloudflare Pages
+## Quality
 
-The current production Pages project is separate from this development branch. Do not change production settings or deploy this branch without explicit approval.
-
-For static hosting, use the repository root as the output directory and no build command.
-
-## Product accuracy and disclosures
-
-Public copy is intentionally limited to capabilities previously documented in the application: policy and document tracking, protection assessment, quote requests/review, InsuraPoints, customer services, broker administration and Corporate HR Hub. Availability may depend on account permissions and current application configuration.
-
-No payroll, attendance, AI copilot, insurer integrations, analytics, or other unverified functionality is advertised.
-
-iNex is described as a technology platform connected to insurance brokerage services. It is not described as an insurer and does not claim to issue insurance policies itself. Coverage, pricing and acceptance remain subject to the insurer's terms and final policy.
-
-The contact page intentionally does not invent an email address or display a non-functional form. Add an approved corporate contact channel before launch.
-
-## Quality and accessibility
-
-- Shared responsive design system for all pages.
-- Arabic RTL by default and English LTR through a persistent language switch.
-- Keyboard-operable mobile navigation with Escape support.
-- Visible keyboard focus and reduced-motion support.
-- Local approved logo asset.
-- External new-tab links include `rel="noopener"`.
-- Run static regression checks with `npm test`.
-- Run Chromium smoke tests with `npm run test:e2e` after installing Playwright and Chromium.
+- Arabic RTL by default and English LTR with persisted language choice.
+- Localized page titles, descriptions, navigation and page copy.
+- Responsive desktop and mobile navigation.
+- Keyboard-operable mobile menu with Escape support.
+- Visible focus styles and reduced-motion support.
+- Run static checks with `npm test`.
+- Run browser checks with `npm run test:e2e` after installing Playwright and Chromium.
 
 ## Deployment
 
-All work is performed on a feature branch and must pass static and browser checks before review. Production deployment, custom-domain changes and application changes require separate explicit approval.
+Development takes place on a feature branch. All changes must pass static and browser checks and be reviewed before merging. Production deployment and custom-domain changes require separate explicit approval.
