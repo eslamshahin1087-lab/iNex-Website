@@ -33,6 +33,10 @@ General awareness content is educational and does not replace policy wording, in
 
 iNex is a technology and awareness platform connected to insurance brokerage services. It is not an insurer, does not underwrite risk and does not issue policies itself. Quote requests and consultations are handled through the licensed insurance broker; coverage, pricing and acceptance remain subject to the insurer's terms and final policy.
 
+## Application access
+
+The customer application is maintained in the separate `iNex-App` repository. Its GitHub Pages project path is `https://eslamshahin1087-lab.github.io/iNex-App/`. Do not use the obsolete `/iNex/` path in website navigation or calls to action.
+
 ## Project boundaries
 
 - This repository contains the public iNex website only.
