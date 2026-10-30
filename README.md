@@ -14,7 +14,7 @@ iNex is designed around customers and insurance awareness. It helps people under
 - `platform.html` — verified iNex customer-facing capabilities
 - `solutions.html` — individuals, families, employees and corporate customer contexts
 - `awareness.html` — insurance education topics and awareness guidance
-- `company.html` — iNex philosophy, role and service disclosures
+- `company.html` — iNex philosophy, role and service disclosures plus CEO profile and leadership section
 - `contact.html` — customer service route through the iNex application
 - `404.html` — branded not-found page
 
@@ -59,6 +59,8 @@ Open `http://localhost:8080`.
 - Responsive desktop and mobile navigation.
 - Keyboard-operable mobile menu with Escape support.
 - Visible focus styles and reduced-motion support.
+- Subtle scroll-reveal interactions, animated progress indicator and motion-safe micro-interactions.
+- CEO profile with the user-supplied portrait, localized Arabic/English copy and responsive presentation.
 - Run static checks with `npm test`.
 - Run browser checks with `npm run test:e2e` after installing Playwright and Chromium.
 
