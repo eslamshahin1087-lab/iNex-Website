@@ -63,3 +63,6 @@ html[dir=ltr] #scrollProgress{transform-origin:left}
 .ceo-profile-photo.portrait-fallback:before{content:"II";flex:1;display:grid;place-items:center;color:#0a1833;font:900 clamp(92px,15vw,150px)/1 "Plus Jakarta Sans";letter-spacing:-.09em;text-shadow:0 12px 34px #07152d22}
 .ceo-photo-frame.portrait-fallback .ceo-photo-caption{color:#0a1833}
 @media(max-width:760px){.ceo-photo-frame.portrait-fallback{min-height:350px}.ceo-profile-photo.portrait-fallback{min-height:350px}}
+
+/* Keep broken portrait elements hidden even when base image rules set display:block. */
+.ceo-photo-frame.portrait-fallback img,.ceo-profile-photo.portrait-fallback img{display:none!important}
