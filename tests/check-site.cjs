@@ -10,8 +10,13 @@ for(const page of pages)assert.doesNotMatch(read(page),/InsurNex|broker CRM|brok
 assert.ok(read("contact.html").includes("eslamshahin1087-lab.github.io/iNex/"));assert.doesNotMatch(read("contact.html"),/hello@inex\.com|mailto:/);
 for(const page of ["index.html","company.html"]){
   const html=read(page);
-  assert.ok(html.includes("onerror=\"this.hidden=true;this.parentElement.classList.add('portrait-fallback')\""),page+" must activate the portrait fallback when the image fails");
+  assert.match(html,/<img[^>]+ceo-portrait\\.jpg/);
+  assert.doesNotMatch(html,/onerror=/,page+" must not use CSP-blocked inline event handlers");
 }
+assert.match(js,/querySelectorAll\\("\\.ceo-photo-frame img,\\.ceo-profile-photo img"\\)/);
+assert.match(js,/addEventListener\\("error",activateFallback/);
+assert.match(js,/image\\.hidden=true/);
+assert.match(js,/classList\\.add\\("portrait-fallback"\\)/);
 assert.match(css,/\.ceo-photo-frame\.portrait-fallback:before/,"Homepage portrait fallback styling must exist");
 assert.match(css,/\.ceo-profile-photo\.portrait-fallback:before/,"Company portrait fallback styling must exist");
 console.log("iNex customer-awareness website checks passed.");
