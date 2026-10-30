@@ -12,7 +12,7 @@ const readme = read("README.md");
 const ids = [...html.matchAll(/\bid=["']([^"']+)["']/g)].map((match) => match[1]);
 assert.equal(new Set(ids).size, ids.length, "HTML IDs must be unique");
 
-for (const asset of ["assets/site.css", "assets/site.js"]) {
+for (const asset of ["assets/site.css", "assets/site.js", "assets/inex-logo.png"]) {
   assert.ok(html.includes(asset), "HTML must load " + asset);
   assert.ok(fs.existsSync(path.join(root, asset)), "Missing local asset: " + asset);
 }
