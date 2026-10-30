@@ -80,7 +80,7 @@ test("all English translation strings are English and navigation stays consisten
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
     await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
     const arabicValues = await page.locator("[data-en]").evaluateAll(nodes =>
-      nodes.map(node => node.dataset.en).filter(value => /[\\u0600-\\u06FF]/.test(value))
+      nodes.map(node => node.dataset.en).filter(value => [...value].some(character => { const code = character.codePointAt(0); return code >= 0x0600 && code <= 0x06FF; }))
     );
     expect(arabicValues, path + " contains Arabic in English translations").toEqual([]);
     await expect(page.locator(".desktop-nav a").nth(4)).toHaveText("Company");
