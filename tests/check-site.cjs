@@ -42,6 +42,7 @@ assert.doesNotMatch(js, /\bfetch\s*\(/, "Marketing site must not call applicatio
 
 assert.ok(fs.existsSync(path.join(root, "404.html")), "Branded 404 page is required");
 assert.match(read("404.html"), /name="robots" content="noindex,follow"/, "404 page must not be indexed");
+assert.ok(!read("404.html").includes(" style="), "404 page must not use inline styles under CSP");
 assert.ok(fs.existsSync(path.join(root, "_headers")), "Cloudflare Pages security headers file is required");
 const headers = read("_headers");
 for (const directive of ["X-Content-Type-Options: nosniff", "X-Frame-Options: DENY", "Content-Security-Policy:"]) {
