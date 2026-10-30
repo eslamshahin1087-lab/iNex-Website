@@ -17,6 +17,7 @@ assert.ok(js.includes('document.querySelectorAll(".ceo-photo-frame img,.ceo-prof
 assert.ok(js.includes('image.addEventListener("error",activateFallback,{once:true})'));
 assert.ok(js.includes("image.hidden=true"));
 assert.ok(js.includes('classList.add("portrait-fallback")'));
+assert.match(css,/\.ceo-photo-frame\.portrait-fallback img,\.ceo-profile-photo\.portrait-fallback img\{display:none!important\}/,"Failed portrait images must be hidden above fallback backgrounds");
 assert.match(css,/\.ceo-photo-frame\.portrait-fallback:before/,"Homepage portrait fallback styling must exist");
 assert.match(css,/\.ceo-profile-photo\.portrait-fallback:before/,"Company portrait fallback styling must exist");
 console.log("iNex customer-awareness website checks passed.");
