@@ -16,3 +16,15 @@ button:focus-visible,a:focus-visible{outline-offset:4px}
 }
 @media(min-width:681px){.mobile-menu{display:none!important}}
 @media(max-width:680px){.mobile-menu.open{display:block}.menu-btn{min-width:44px;min-height:44px;cursor:pointer}.nav-actions{margin-inline-start:auto}}
+
+/* Branded not-found page */
+.not-found{min-height:100vh;display:grid;place-items:center;padding-block:48px}
+.not-found-card{width:min(680px,100%);padding:clamp(28px,6vw,64px);background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);text-align:center}
+.not-found-logo{width:76px;height:76px;object-fit:contain;margin:0 auto 20px}
+.not-found-code{font:800 clamp(64px,12vw,100px)/1 "Plus Jakarta Sans",sans-serif;color:var(--navy);letter-spacing:-5px}
+.not-found h1{font-size:clamp(24px,4vw,34px);color:var(--navy);margin:18px 0 8px}
+.not-found p{color:var(--muted);margin:8px auto;max-width:470px}
+.not-found-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:28px}
+.not-found .english{direction:ltr;font-family:"Plus Jakarta Sans",sans-serif;margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+
+.not-found-secondary{color:var(--navy);border-color:#CBD4E0}

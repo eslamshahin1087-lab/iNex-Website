@@ -27,7 +27,19 @@ function applyLanguage(next){
  lang=next;document.documentElement.lang=next;document.documentElement.dir=next==="ar"?"rtl":"ltr";
  document.querySelectorAll("[data-i18n]").forEach(el=>{const key=el.dataset.i18n;if(copy[next][key]!==undefined)el.innerHTML=copy[next][key]});
  button.textContent=next==="ar"?"EN":"عربي";
+ button.setAttribute("aria-label",next==="ar"?"Switch language to English":"تغيير اللغة إلى العربية");
  document.title=next==="ar"?"iNex | التأمين أصبح أوضح":"iNex | Insurance, intelligently connected";
+ document.querySelector('meta[name="description"]').content=next==="ar"
+  ?"iNex — منظومة رقمية لإدارة رحلة التأمين، متابعة الوثائق، تقييم الحماية، ومساندة الوسيط والعميل."
+  :"iNex — a digital insurance platform for policy tracking, protection assessment, quote comparison and broker communication.";
+ document.querySelector('meta[property="og:description"]').content=next==="ar"
+  ?"إدارة أوضح للتأمين، متابعة أذكى للوثائق، وتجربة رقمية متكاملة."
+  :"Clearer insurance management, smarter policy follow-up and a connected digital experience.";
+ document.querySelector('meta[property="og:locale"]').content=next==="ar"?"ar_EG":"en_US";
+ document.querySelector('meta[name="twitter:title"]').content=document.title;
+ document.querySelector('meta[name="twitter:description"]').content=next==="ar"
+  ?"إدارة أوضح للتأمين، متابعة أذكى للوثائق، وتجربة رقمية متكاملة."
+  :"Clearer insurance management, smarter policy follow-up and a connected digital experience.";
  try{localStorage.setItem("inex-site-language",next)}catch(e){}
 }
 button.addEventListener("click",()=>applyLanguage(lang==="ar"?"en":"ar"));
@@ -36,6 +48,7 @@ function closeMenu({restoreFocus=false}={}){
   menu.classList.remove("open");
   menu.hidden=true;
   menuButton.setAttribute("aria-expanded","false");
+  menuButton.setAttribute("aria-label",lang==="ar"?"فتح القائمة":"Open menu");
   menuButton.textContent="☰";
   if(restoreFocus)menuButton.focus();
 }
@@ -44,6 +57,7 @@ menuButton.addEventListener("click",()=>{
   menu.hidden=!open;
   menu.classList.toggle("open",open);
   menuButton.setAttribute("aria-expanded",String(open));
+  menuButton.setAttribute("aria-label",open?(lang==="ar"?"إغلاق القائمة":"Close menu"):(lang==="ar"?"فتح القائمة":"Open menu"));
   menuButton.textContent=open?"×":"☰";
   if(open)menu.querySelector("a")?.focus();
 });

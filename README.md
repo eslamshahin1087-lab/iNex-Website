@@ -56,3 +56,11 @@ The FRA number (38062) is cited in the source repository README and app landing 
 - The marketing site is responsive; it does not claim to be an installable PWA. PWA functionality belongs to the application and is not asserted here.
 - Open Graph and Twitter card metadata are provided. A canonical URL is intentionally omitted until a production domain is approved.
 - Run the static project checks with `npm test`. The check uses only Node.js built-ins and introduces no runtime dependency.
+
+## Deployment readiness
+
+- `404.html` provides a branded not-found page for static hosting.
+- `robots.txt` permits normal crawling. A sitemap and canonical URL are intentionally deferred until the final public site URL is approved.
+- `_headers` supplies baseline security headers for Cloudflare Pages, including a restrictive Content Security Policy. Hosting providers that do not support the Cloudflare Pages `_headers` convention may ignore this file.
+- Language switching updates the document language, direction, title, description and social metadata.
+- Verify the published page and security headers on the chosen hosting provider before connecting a custom domain.
