@@ -22,7 +22,7 @@ const js = read("assets/site.js");
 for (const asset of ["assets/site.css","assets/site.js","assets/inex-logo.png"]) assert.ok(fs.existsSync(path.join(root,asset)), "Missing asset " + asset);
 assert.match(js, /localStorage\.getItem\("inex-site-language"\)/, "Language preference should persist");
 assert.match(js, /innerHTML=el\.dataset\[next\]/, "Authored emphasis markup should survive language switching");
-assert.match(js, /event\.key==="Escape"/, "Mobile menu must support Escape");
+assert.match(js, /e\.key==="Escape"/, "Mobile menu must support Escape");
 assert.match(css, /prefers-reduced-motion:reduce/, "Reduced motion must be supported");
 assert.match(css, /:focus-visible/, "Keyboard focus styles must be present");
 for (const page of pages) {
