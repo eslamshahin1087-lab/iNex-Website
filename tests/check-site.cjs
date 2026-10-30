@@ -51,4 +51,9 @@ for (const directive of ["X-Content-Type-Options: nosniff", "X-Frame-Options: DE
 assert.match(read("robots.txt"), /User-agent: \*/, "robots.txt must declare crawler policy");
 assert.match(readme, /No Firebase, Firestore, authentication, Cloudinary, Worker, API/, "Marketing site must remain isolated from app services");
 
+assert.ok(html.includes("og:image:alt"), "Open Graph image alternative text is required");
+assert.ok(html.includes("twitter:image:alt"), "Twitter image alternative text is required");
+assert.ok(html.includes("apple-touch-icon"), "Apple touch icon metadata is required");
+assert.ok(!html.includes("iNex-App/main/inex-logo.png"), "Social logo metadata must not depend on the application repository");
+
 console.log("iNex website deployment-readiness checks passed.");

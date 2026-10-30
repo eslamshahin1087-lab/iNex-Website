@@ -28,6 +28,10 @@ function applyLanguage(next){
  document.querySelectorAll("[data-i18n]").forEach(el=>{const key=el.dataset.i18n;if(copy[next][key]!==undefined)el.innerHTML=copy[next][key]});
  button.textContent=next==="ar"?"EN":"عربي";
  button.setAttribute("aria-label",next==="ar"?"Switch language to English":"تغيير اللغة إلى العربية");
+ const menuTrigger=document.getElementById("menuBtn");
+ if(menuTrigger)menuTrigger.setAttribute("aria-label",menuTrigger.getAttribute("aria-expanded")==="true"?(next==="ar"?"إغلاق القائمة":"Close menu"):(next==="ar"?"فتح القائمة":"Open menu"));
+ document.querySelector(".links")?.setAttribute("aria-label",next==="ar"?"التنقل الرئيسي":"Main navigation");
+ document.querySelector("#mobileMenu")?.setAttribute("aria-label",next==="ar"?"قائمة الهاتف":"Mobile navigation");
  document.title=next==="ar"?"iNex | التأمين أصبح أوضح":"iNex | Insurance, intelligently connected";
  document.querySelector('meta[name="description"]').content=next==="ar"
   ?"iNex — منظومة رقمية لإدارة رحلة التأمين، متابعة الوثائق، تقييم الحماية، ومساندة الوسيط والعميل."
