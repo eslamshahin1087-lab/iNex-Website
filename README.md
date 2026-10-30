@@ -64,3 +64,13 @@ The FRA number (38062) is cited in the source repository README and app landing 
 - `_headers` supplies baseline security headers for Cloudflare Pages, including a restrictive Content Security Policy. Hosting providers that do not support the Cloudflare Pages `_headers` convention may ignore this file.
 - Language switching updates the document language, direction, title, description and social metadata.
 - Verify the published page and security headers on the chosen hosting provider before connecting a custom domain.
+
+## Automated browser QA
+
+- `npm test` runs dependency-free static regression checks.
+- `npm install` installs the Playwright test runner.
+- `npx playwright install chromium` installs the local browser.
+- `npm run test:e2e` runs Chromium smoke tests against a local static server.
+- GitHub Actions runs browser checks independently from static checks on pull requests and development branches.
+
+Browser coverage includes Arabic/English switching and metadata, RTL/LTR direction, mobile menu keyboard behaviour and focus restoration, desktop navigation visibility, and the branded 404 page.
