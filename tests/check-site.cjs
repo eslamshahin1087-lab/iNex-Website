@@ -23,7 +23,7 @@ for (const asset of ["assets/site.css","assets/site.js","assets/inex-logo.png"])
 assert.match(js, /localStorage\.getItem\("inex-site-language"\)/, "Language preference should persist");
 assert.match(js, /innerHTML=el\.dataset\[next\]/, "Authored emphasis markup should survive language switching");
 assert.match(js, /e\.key==="Escape"/, "Mobile menu must support Escape");
-assert.match(css, /prefers-reduced-motion:reduce/, "Reduced motion must be supported");
+for (const page of pages) { const html=read(page); const values=[...html.matchAll(/data-en="([^"]*)"/g)].map(match=>match[1]); assert.ok(values.every(value=>!/[\\u0600-\\u06FF]/.test(value)), page + " has Arabic in English translations"); assert.match(html,/data-en="Company">الشركة<\\/a>/,page + " company nav needs English translation"); }\nassert.match(css, /\.workspace-window/, "Product workspace preview styles must exist");\nassert.match(css, /prefers-reduced-motion:reduce/, "Reduced motion must be supported");
 assert.match(css, /:focus-visible/, "Keyboard focus styles must be present");
 for (const page of pages) {
  const html=read(page);
