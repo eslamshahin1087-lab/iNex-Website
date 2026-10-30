@@ -26,3 +26,5 @@ button:focus-visible,a:focus-visible{outline-offset:4px}
 .not-found p{color:var(--muted);margin:8px auto;max-width:470px}
 .not-found-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:28px}
 .not-found .english{direction:ltr;font-family:"Plus Jakarta Sans",sans-serif;margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+
+.not-found-secondary{color:var(--navy);border-color:#CBD4E0}
