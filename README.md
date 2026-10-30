@@ -68,6 +68,7 @@ The FRA number (38062) is cited in the source repository README and app landing 
 ## Automated browser QA
 
 - `npm test` runs dependency-free static regression checks.
+- `wrangler.toml` declares the Cloudflare Pages project name and repository-root output directory; it does not itself authenticate, create a Cloudflare project, or deploy the site.
 - `npm install` installs the Playwright test runner.
 - `npx playwright install chromium` installs the local browser.
 - `npm run test:e2e` runs Chromium smoke tests against a local static server.
