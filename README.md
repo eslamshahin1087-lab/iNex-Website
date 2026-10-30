@@ -47,3 +47,12 @@ The current logo is referenced from the source application repository via its ra
 Public copy is intentionally limited to functions visible in the current app and its README: policy/document tracking, protection assessment, quote comparison, InsuraPoints, customer services, broker administration and Corporate HR Hub. No payroll, attendance, AI copilot or other unverified features are advertised.
 
 The FRA number (38062) is cited in the source repository README and app landing page; this website describes it as a number stated in project materials and directs visitors to the app's current legal disclosure for authoritative details.
+
+ 
+## Quality and accessibility
+
+- Mobile navigation exposes its expanded state, supports Escape to close, and returns focus to the menu trigger.
+- Visible keyboard focus styles and reduced-motion preferences are included.
+- The marketing site is responsive; it does not claim to be an installable PWA. PWA functionality belongs to the application and is not asserted here.
+- Open Graph and Twitter card metadata are provided. A canonical URL is intentionally omitted until a production domain is approved.
+- Run the static project checks with `npm test`. The check uses only Node.js built-ins and introduces no runtime dependency.
