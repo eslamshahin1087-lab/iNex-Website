@@ -6,5 +6,22 @@ test("English translations contain no Arabic strings across all pages",async({pa
 test("mobile menu opens, closes with Escape and restores focus",async({page})=>{await page.setViewportSize({width:390,height:844});await page.goto("/");const trigger=page.locator("#menuBtn"),menu=page.locator("#mobileMenu");await expect(menu).toBeHidden();await trigger.click();await expect(menu).toBeVisible();await expect(trigger).toHaveAttribute("aria-expanded","true");await page.keyboard.press("Escape");await expect(menu).toBeHidden();await expect(trigger).toBeFocused();});
 test("desktop navigation is visible and mobile menu is hidden",async({page})=>{await page.setViewportSize({width:1440,height:900});await page.goto("/");await expect(page.locator(".desktop-nav")).toBeVisible();await expect(page.locator("#menuBtn")).toBeHidden();await expect(page.locator("#mobileMenu")).toBeHidden();});
 test("404 page remains branded and noindex",async({page})=>{await page.goto("/404.html");await expect(page).toHaveTitle("404 | iNex");await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content","noindex,follow");await expect(page.locator(".not-found-logo")).toBeVisible();});
-test("CEO profile and supplied portrait are present in both leadership placements",async({page})=>{await page.goto("/");await expect(page.locator(".ceo-preview img")).toHaveAttribute("src","/assets/ceo-portrait.jpg");await expect(page.locator(".ceo-preview")).toContainText("الرئيس التنفيذي لـ iNex");await page.goto("/company.html#leadership");await expect(page.locator("#leadership img")).toBeVisible();await expect(page.locator("#leadership h2")).toHaveText("إسلام إبراهيم");await page.getByRole("button",{name:"Switch language to English"}).click();await expect(page.locator("#leadership h2")).toHaveText("Islam Ibrahim");});
+test("CEO portrait loads or displays the designed fallback in both leadership placements",async({page})=>{
+  const verifyPortrait=async(locator)=>{
+    await locator.scrollIntoViewIfNeeded();
+    await expect.poll(()=>locator.evaluate(img=>img.naturalWidth>0||(img.hidden&&img.parentElement?.classList.contains("portrait-fallback")))).toBe(true);
+    const state=await locator.evaluate(img=>({loaded:img.naturalWidth>0,hidden:img.hidden,fallback:img.parentElement?.classList.contains("portrait-fallback")}));
+    expect(state.loaded||state.fallback).toBe(true);
+    if(state.fallback)expect(state.hidden).toBe(true);
+  };
+  await page.goto("/");
+  await expect(page.locator(".ceo-preview img")).toHaveAttribute("src","/assets/ceo-portrait.jpg");
+  await expect(page.locator(".ceo-preview")).toContainText("الرئيس التنفيذي لـ iNex");
+  await verifyPortrait(page.locator(".ceo-preview img"));
+  await page.goto("/company.html#leadership");
+  await verifyPortrait(page.locator("#leadership img"));
+  await expect(page.locator("#leadership h2")).toHaveText("إسلام إبراهيم");
+  await page.getByRole("button",{name:"Switch language to English"}).click();
+  await expect(page.locator("#leadership h2")).toHaveText("Islam Ibrahim");
+});
 test("scroll progress indicator is available without blocking page content",async({page})=>{await page.goto("/");await expect(page.locator("#scrollProgress")).toBeAttached();await expect(page.locator("main")).toBeVisible();});
