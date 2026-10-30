@@ -1,0 +1,42 @@
+const fs = require("node:fs");
+const path = require("node:path");
+const assert = require("node:assert/strict");
+
+const root = path.resolve(__dirname, "..");
+const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
+const html = read("index.html");
+const css = read("assets/site.css");
+const js = read("assets/site.js");
+const readme = read("README.md");
+
+const ids = [...html.matchAll(/\\bid=["']([^"']+)["']/g)].map((match) => match[1]);
+assert.equal(new Set(ids).size, ids.length, "HTML IDs must be unique");
+
+for (const asset of ["assets/site.css", "assets/site.js"]) {
+  assert.ok(html.includes(asset), `HTML must load ${asset}`);
+  assert.ok(fs.existsSync(path.join(root, asset)), `Missing local asset: ${asset}`);
+}
+
+const translationBlock = js.match(/const copy=\\{([\\s\\S]*?)\\n\\};/);
+assert.ok(translationBlock, "Translation dictionary must exist");
+const dictionary = translationBlock[1];
+const htmlKeys = [...html.matchAll(/data-i18n=["']([^"']+)["']/g)].map((match) => match[1]);
+for (const key of new Set(htmlKeys)) {
+  assert.match(dictionary, new RegExp(`(?:^|[,\\s])${key}:`), `Missing translation key: ${key}`);
+}
+
+const externalBlankLinks = [...html.matchAll(/<a\\b[^>]*target=["']_blank["'][^>]*>/g)].map((match) => match[0]);
+for (const link of externalBlankLinks) {
+  assert.match(link, /rel=["'][^"']*noopener[^"']*["']/, "External new-tab links must include rel=noopener");
+}
+assert.match(html, /<nav[^>]+id=["']mobileMenu["'][^>]+hidden/, "Mobile menu must start hidden");
+assert.match(html, /aria-controls=["']mobileMenu["']/, "Menu trigger must reference its controlled navigation");
+assert.match(js, /event\\.key==="Escape"/, "Mobile navigation must support Escape");
+assert.match(css, /prefers-reduced-motion:reduce/, "Reduced-motion preference must be supported");
+assert.match(css, /:focus-visible/, "Keyboard focus styles must be present");
+assert.match(html, /name=["']description["']/, "SEO description is required");
+assert.match(html, /property=["']og:title["']/, "Open Graph title is required");
+assert.match(readme, /No Firebase, Firestore, authentication, Cloudinary, Worker, API/, "Marketing site must remain isolated from app services");
+assert.doesNotMatch(js, /\\bfetch\\s*\\(/, "Marketing site must not call application APIs");
+
+console.log("iNex website quality checks passed.");
