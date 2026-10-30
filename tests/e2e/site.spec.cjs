@@ -2,7 +2,7 @@ const { test, expect } = require("@playwright/test");
 
 test("all corporate pages load with shared navigation", async ({ page }) => {
   for (const [path, heading] of [
-    ["/", "نربط عالم التأمين"],
+    ["/", "منصة واحدة"],
     ["/platform.html", "إدارة أكثر ترابطًا"],
     ["/solutions.html", "تقنية تتكيف مع"],
     ["/resources.html", "رؤى تساعد على فهم"],
@@ -22,17 +22,22 @@ test("Arabic and English language switching updates direction, page title and co
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(page).toHaveTitle("الرئيسية | iNex");
   const arabicHeading = page.locator("main h1");
-  await expect(arabicHeading).toContainText("نربط عالم التأمين");
+  await expect(arabicHeading).toContainText("منصة واحدة");
   const arabicDescription = await page.locator('meta[name="description"]').getAttribute("content");
 
   await page.getByRole("button", { name: "Switch language to English" }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await expect(page).toHaveTitle("Home | iNex");
-  await expect(page.locator("main h1")).toContainText("Connecting insurance");
+  await expect(page.locator("main h1")).toContainText("One platform");
+  await expect(page.locator(".desktop-nav a").nth(4)).toHaveText("Company");
   await expect(page.getByRole("button", { name: "التبديل إلى العربية" })).toBeVisible();
   const englishDescription = await page.locator('meta[name="description"]').getAttribute("content");
   expect(englishDescription).not.toBe(arabicDescription);
+  await page.getByRole("button", { name: "التبديل إلى العربية" }).click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "ar");
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await expect(page.locator(".desktop-nav a").nth(4)).toHaveText("الشركة");
 });
 
 test("mobile navigation opens, closes with Escape and restores focus", async ({ page }) => {
@@ -66,4 +71,26 @@ test("branded 404 page includes local logo and noindex metadata", async ({ page 
   await expect(logo).toBeVisible();
   await expect.poll(() => logo.evaluate((img) => img.naturalWidth)).toBeGreaterThan(0);
   await expect(page.getByRole("heading", { name: "الصفحة غير موجودة" })).toBeVisible();
+});
+
+test("all English translation strings are English and navigation stays consistent on every page", async ({ page }) => {
+  for (const path of ["/", "/platform.html", "/solutions.html", "/resources.html", "/company.html", "/contact.html"]) {
+    await page.goto(path, { waitUntil: "domcontentloaded" });
+    await page.getByRole("button", { name: "Switch language to English" }).click();
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+    const arabicValues = await page.locator("[data-en]").evaluateAll(nodes =>
+      nodes.map(node => node.dataset.en).filter(value => /[\\u0600-\\u06FF]/.test(value))
+    );
+    expect(arabicValues, path + " contains Arabic in English translations").toEqual([]);
+    await expect(page.locator(".desktop-nav a").nth(4)).toHaveText("Company");
+    await expect(page).toHaveTitle(/(Home|Platform|Solutions|Resources|Company|Contact) \\| iNex/);
+  }
+});
+
+test("homepage brand is not duplicated beside the approved logo", async ({ page }) => {
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await expect(page.locator(".nav .brand img")).toBeVisible();
+  await expect(page.locator(".nav .brand span")).toHaveCount(0);
+  await expect(page.locator(".workspace-window")).toBeVisible();
 });
