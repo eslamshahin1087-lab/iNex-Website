@@ -4,6 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0A1833">
+<meta name="color-scheme" content="light">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_EG">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="iNex | Insurance, intelligently connected">
+<meta name="twitter:description" content="إدارة أوضح للتأمين، متابعة أذكى للوثائق، وتجربة رقمية متكاملة.">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/eslamshahin1087-lab/iNex-App/main/inex-logo.png">
 <meta name="description" content="iNex — منظومة رقمية لإدارة رحلة التأمين، متابعة الوثائق، تقييم الحماية، ومساندة الوسيط والعميل.">
 <meta property="og:title" content="iNex | Insurance, intelligently connected">
 <meta property="og:description" content="إدارة أوضح للتأمين، متابعة أذكى للوثائق، وتجربة رقمية متكاملة.">
@@ -32,13 +41,13 @@
     <div class="nav-actions">
       <button class="lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
       <a class="button button-small button-outline" href="https://eslamshahin1087-lab.github.io/iNex/" target="_blank" rel="noopener" data-i18n="login">الدخول للتطبيق</a>
-      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">☰</button>
     </div>
   </div>
-  <div class="mobile-menu" id="mobileMenu">
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation" hidden>
     <a href="#platform" data-i18n="navPlatform">المنظومة</a><a href="#capabilities" data-i18n="navFeatures">القدرات</a><a href="#workflow" data-i18n="navWorkflow">رحلة العمل</a><a href="#about" data-i18n="navAbout">عن iNex</a>
     <a href="https://eslamshahin1087-lab.github.io/iNex/" target="_blank" rel="noopener" data-i18n="login">الدخول للتطبيق</a>
-  </div>
+  </nav>
 </header>
 <main id="main">
 <section class="hero wrap">
@@ -71,7 +80,7 @@
 <section class="stats wrap">
  <div><strong>FRA 38062</strong><span data-i18n="statLicense">رقم الترخيص الوارد في مستندات المشروع</span></div>
  <div><strong>AR <i>↔</i> EN</strong><span data-i18n="statLang">واجهة ثنائية اللغة</span></div>
- <div><strong>PWA</strong><span data-i18n="statPwa">تجربة ويب قابلة للتثبيت</span></div>
+ <div><strong>Mobile-first</strong><span data-i18n="statPwa">تجربة متجاوبة للهاتف والويب</span></div>
 </section>
 <section id="platform" class="section platform">
  <div class="wrap">
@@ -118,6 +127,7 @@
 </section>
 </main>
 <footer class="footer"><div class="wrap footer-inner"><span>© <span id="year"></span> iNex</span><span data-i18n="footer">منصة رقمية للوساطة وإدارة التأمين</span><a href="https://github.com/eslamshahin1087-lab/iNex-App" target="_blank" rel="noopener">GitHub</a></div></footer>
-<script src="assets/site.js"></script>
+<noscript><p class="noscript wrap">يعمل الموقع بصورة أفضل عند تفعيل JavaScript. يمكنك الانتقال مباشرة إلى تطبيق iNex من رابط الدخول أعلى الصفحة.</p></noscript>
+<script src="assets/site.js" defer></script>
 </body>
 </html>
