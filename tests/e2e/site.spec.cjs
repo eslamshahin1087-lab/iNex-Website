@@ -74,6 +74,7 @@ test("branded 404 page includes local logo and noindex metadata", async ({ page 
 });
 
 test("all English translation strings are English and navigation stays consistent on every page", async ({ page }) => {
+  await page.addInitScript(() => localStorage.removeItem("inex-site-language"));
   for (const path of ["/", "/platform.html", "/solutions.html", "/resources.html", "/company.html", "/contact.html"]) {
     await page.goto(path, { waitUntil: "domcontentloaded" });
     await page.getByRole("button", { name: "Switch language to English" }).click();
