@@ -1,12 +1,12 @@
 # iNex — Insurance Awareness & Customer Solutions
 
-Independent bilingual corporate website for **iNex**, the customer-facing insurance awareness and customer solutions platform.
+Independent bilingual corporate website for **iNex**, the customer-facing insurance awareness and customer solutions platform, with a clearly identified strategic partnership with **InsurNex**, an intelligent assistant for insurance brokers.
 
 ## Product definition
 
 iNex is designed around customers and insurance awareness. It helps people understand insurance concepts, review their protection needs, explore insurance options and access customer services through a digital experience.
 
-**iNex is not InsurNex.** InsurNex is a separate insurance-brokerage operations product and is outside the scope of this website.
+**iNex and InsurNex are distinct products.** iNex serves insurance customers with awareness and customer solutions. InsurNex is a strategic partner and an intelligent assistant for insurance brokers. This website may promote and link to InsurNex, while clearly explaining each product's audience and purpose. Do not imply shared accounts, data integration, or capabilities unless verified.
 
 ## Website structure
 
@@ -35,13 +35,13 @@ iNex is a technology and awareness platform connected to insurance brokerage ser
 
 ## Application access
 
-The customer application is maintained in the separate `iNex-App` repository. Its registration entry point is `https://eslamshahin1087-lab.github.io/iNex-App/wathiqati-app.html?screen=signup` and opens the account creation screen for signed-out visitors. Do not use the obsolete `/iNex/` path in website navigation or calls to action.
+The iNex customer application is maintained in the separate `iNex-App` repository. Its registration entry point is `https://eslamshahin1087-lab.github.io/iNex-App/wathiqati-app.html?screen=signup` and opens the account creation screen for signed-out visitors. The strategic partner InsurNex app is available at `https://insurnex-8a9df.web.app/welcome`. Do not use the obsolete `/iNex/` path in website navigation or calls to action.
 
 ## Project boundaries
 
 - This repository contains the public iNex website only.
 - The iNex application repository is a read-only product reference.
-- InsurNex is a separate product and must not be referenced as the iNex product.
+- InsurNex is a distinct strategic partner product; present it separately from iNex and link to its published application.
 - No Firebase, Firestore, authentication, Cloudinary, Worker, API or production data integration is included.
 - Do not modify the application repository or its backend.
 - Do not change Cloudflare production settings, custom domains or production deployment without separate explicit approval.
