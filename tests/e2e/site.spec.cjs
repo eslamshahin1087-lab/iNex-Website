@@ -22,7 +22,7 @@ test("CEO portrait image or designed fallback is visible in both leadership plac
     if(state.fallback)expect(state.hidden).toBe(true);
   };
   await page.goto("/");
-  await expect(page.locator(".ceo-preview img")).toHaveAttribute("src","/assets/ceo-portrait.jpg");
+  await expect(page.locator(".ceo-preview img")).toHaveAttribute("src","/assets/ceo-portrait-clean.png");
   await expect(page.locator(".ceo-preview")).toContainText("الرئيس التنفيذي لـ iNex");
   await verifyPortrait(page.locator(".ceo-photo-frame"));
   await page.goto("/company.html#leadership");
