@@ -7,7 +7,7 @@ assert.match(css,/\.awareness-card/);assert.match(css,/prefers-reduced-motion:re
 assert.match(read("_headers"),/Content-Security-Policy:/);assert.match(read("_headers"),/X-Frame-Options: DENY/);assert.match(read("404.html"),/name="robots" content="noindex,follow"/);
 assert.match(readme,/Insurance Awareness & Customer Solutions/);assert.ok(fs.existsSync(path.join(root,"assets/ceo-portrait.jpg")),"Missing CEO portrait");assert.match(read("index.html"),/ceo-preview/);assert.match(read("company.html"),/id="leadership"/);assert.match(read("company.html"),/Islam Ibrahim/);assert.match(css,/\.ceo-profile/);assert.match(css,/\.reveal\.is-visible/);assert.match(js,/IntersectionObserver/);assert.match(js,/scrollProgress/);assert.doesNotMatch(readme,/CRM for brokers|broker management platform/i);
 for(const page of pages)assert.doesNotMatch(read(page),/InsurNex|broker CRM|broker management/i,page+" must not mix InsurNex positioning");
-assert.ok(read("contact.html").includes("eslamshahin1087-lab.github.io/iNex/"));assert.doesNotMatch(read("contact.html"),/hello@inex\.com|mailto:/);
+for(const page of [...pages,"resources.html"]){const html=read(page);assert.ok(html.includes("https://eslamshahin1087-lab.github.io/iNex-App/"),page+" must link to the current iNex application path");assert.ok(!html.includes("https://eslamshahin1087-lab.github.io/iNex/"),page+" must not retain the obsolete GitHub Pages path");}assert.doesNotMatch(read("contact.html"),/hello@inex\.com|mailto:/);
 for(const page of ["index.html","company.html"]){
   const html=read(page);
   assert.ok(html.includes('src="/assets/ceo-portrait.jpg"'),page+" must include the CEO portrait asset");
