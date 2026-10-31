@@ -6,30 +6,26 @@ test("English translations contain no Arabic strings across all pages",async({pa
 test("mobile menu opens, closes with Escape and restores focus",async({page})=>{await page.setViewportSize({width:390,height:844});await page.goto("/");const trigger=page.locator("#menuBtn"),menu=page.locator("#mobileMenu");await expect(menu).toBeHidden();await trigger.click();await expect(menu).toBeVisible();await expect(trigger).toHaveAttribute("aria-expanded","true");await page.keyboard.press("Escape");await expect(menu).toBeHidden();await expect(trigger).toBeFocused();});
 test("desktop navigation is visible and mobile menu is hidden",async({page})=>{await page.setViewportSize({width:1440,height:900});await page.goto("/");await expect(page.locator(".desktop-nav")).toBeVisible();await expect(page.locator("#menuBtn")).toBeHidden();await expect(page.locator("#mobileMenu")).toBeHidden();});
 test("404 page remains branded and noindex",async({page})=>{await page.goto("/404.html");await expect(page).toHaveTitle("404 | iNex");await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content","noindex,follow");await expect(page.locator(".not-found-logo")).toBeVisible();});
-test("CEO portrait image or designed fallback is visible in both leadership placements",async({page})=>{
-  const verifyPortrait=async(frame)=>{
-    await frame.scrollIntoViewIfNeeded();
-    await expect(frame).toBeVisible();
-    await expect.poll(()=>frame.evaluate(el=>{
-      const img=el.querySelector("img");
-      return Boolean(img&&(img.naturalWidth>0||(img.hidden&&el.classList.contains("portrait-fallback"))));
-    })).toBe(true);
-    const state=await frame.evaluate(el=>{
-      const img=el.querySelector("img");
-      return {loaded:img.naturalWidth>0,hidden:img.hidden,fallback:el.classList.contains("portrait-fallback")};
-    });
-    expect(state.loaded||state.fallback).toBe(true);
-    if(state.fallback)expect(state.hidden).toBe(true);
-  };
+test("founding leadership portraits and bilingual titles render",async({page})=>{
   await page.goto("/");
-  await expect(page.locator(".ceo-preview img")).toHaveAttribute("src","/assets/ceo-portrait-clean.png");
-  await expect(page.locator(".ceo-preview")).toContainText("الرئيس التنفيذي لـ iNex");
-  await verifyPortrait(page.locator(".ceo-photo-frame"));
+  await expect(page.locator(".leadership-preview-grid .leader-preview-card")).toHaveCount(2);
+  await expect(page.locator(".leadership-preview-grid")).toContainText("Islam Ibrahim");
+  await expect(page.locator(".leadership-preview-grid")).toContainText("Fawzya Hesham");
+  await expect(page.locator('.leadership-preview-grid img[src="/assets/fawzya-hesham.jpg"]')).toBeVisible();
+  await expect(page.locator('.leadership-preview-grid img[src="/assets/fawzya-hesham.jpg"]')).toHaveJSProperty("complete",true);
   await page.goto("/company.html#leadership");
-  await verifyPortrait(page.locator("#leadership .ceo-profile-photo"));
-  await expect(page.locator("#leadership h2")).toHaveText("إسلام إبراهيم");
+  await expect(page.locator("#leadership .leader-card")).toHaveCount(2);
+  await expect(page.locator("#leadership")).toContainText("فوزية هشام");
+  await expect(page.locator("#leadership img[alt*=Fawzya]")).toHaveAttribute("src","/assets/fawzya-hesham.jpg");
   await page.getByRole("button",{name:"Switch language to English"}).click();
-  await expect(page.locator("#leadership h2")).toHaveText("Islam Ibrahim");
+  await expect(page.locator("#leadership")).toContainText("Fawzya Hesham");
+  await expect(page.locator("#leadership")).toContainText("COO & Co-Founder");
+});
+test("homepage leadership cards remain usable on mobile",async({page})=>{
+  await page.setViewportSize({width:390,height:844});
+  await page.goto("/");
+  await expect(page.locator(".leadership-preview-grid .leader-preview-card")).toHaveCount(2);
+  await expect(page.locator(".leadership-preview-grid")).toBeVisible();
 });
 test("all app launch links use the current iNex-App GitHub Pages path",async({page})=>{
   for(const path of ["/","/platform.html","/solutions.html","/awareness.html","/company.html","/contact.html","/resources.html"]){
