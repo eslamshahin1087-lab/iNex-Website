@@ -14,6 +14,7 @@ test("founding leadership portraits and bilingual titles render",async({page})=>
   await expect(page.locator('.leadership-preview-grid img[src="/assets/fawzya-hesham.jpg"]')).toBeVisible();
   await expect(page.locator('.leadership-preview-grid img[src="/assets/fawzya-hesham.jpg"]')).toHaveJSProperty("complete",true);
   await page.goto("/company.html#leadership");
+  await expect(page.locator("#leadership")).toHaveClass(/is-visible/);
   await expect(page.locator("#leadership .leader-card")).toHaveCount(2);
   await expect(page.locator("#leadership")).toContainText("إسلام إبراهيم");
   await expect(page.locator("#leadership")).toContainText("فوزية هشام");
@@ -38,3 +39,6 @@ test("all app launch links use the current iNex-App GitHub Pages path",async({pa
   }
 });
 test("scroll progress indicator is available without blocking page content",async({page})=>{await page.goto("/");await expect(page.locator("#scrollProgress")).toBeAttached();await expect(page.locator("main")).toBeVisible();});
+
+test("homepage leadership link opens the visible company section",async({page})=>{await page.goto("/");await page.locator(".leadership-link").click();await expect(page).toHaveURL(/\/company(?:\.html)?\/?#leadership$/);await expect(page.locator("#leadership")).toHaveClass(/is-visible/);await expect(page.locator("#leadership .leader-card")).toHaveCount(2);});
+test("product partnership copy switches in both languages",async({page})=>{await page.addInitScript(()=>localStorage.removeItem("inex-site-language"));await page.goto("/");const partner=page.locator("#insurnex-partner");await page.getByRole("button",{name:"Switch language to English"}).click();await expect(partner).toContainText("Explore InsurNex");await expect(page.locator("html")).toHaveAttribute("dir","ltr");await page.getByRole("button",{name:"التبديل إلى العربية"}).click();await expect(partner).toContainText("اكتشف InsurNex");await expect(page.locator("html")).toHaveAttribute("dir","rtl");});
