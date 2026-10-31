@@ -66,3 +66,32 @@ html[dir=ltr] #scrollProgress{transform-origin:left}
 
 /* Keep broken portrait elements hidden even when base image rules set display:block. */
 .ceo-photo-frame.portrait-fallback img,.ceo-profile-photo.portrait-fallback img{display:none!important}
+
+/* iNex insurtech marketing refresh — leadership system */
+.leadership-preview{padding-top:38px}
+.leadership-preview-heading{display:grid;grid-template-columns:1fr .8fr;gap:54px;align-items:end;margin-bottom:30px}
+.leadership-preview-heading h2,.leadership-section-heading h2{font-size:clamp(29px,3.4vw,44px);line-height:1.45;color:var(--navy);margin:14px 0}
+.leadership-preview-heading>p,.leadership-section-heading>p{color:var(--muted);font-size:14px;line-height:2.05}
+.leadership-preview-grid,.leadership-team-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.leader-preview-card{display:grid;grid-template-columns:.78fr 1.22fr;gap:20px;align-items:center;padding:18px;border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:0 16px 42px rgba(7,21,45,.06);min-width:0}
+.leader-preview-photo{overflow:hidden;border-radius:14px;background:#e9edf3;aspect-ratio:4/5}
+.leader-preview-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 24%}
+.leader-preview-card:nth-child(2) .leader-preview-photo img{object-position:center 30%}
+.leader-preview-copy{min-width:0}
+.leader-role{display:inline-block;color:#9b7138;font-size:10px;font-weight:900;letter-spacing:.4px;line-height:1.8}
+.leader-preview-copy h3,.leader-card-content h3{margin:8px 0 10px;color:var(--navy);font-size:clamp(19px,2vw,25px);line-height:1.35}
+.leader-preview-copy p,.leader-card-content p{margin:0;color:var(--muted);font-size:12px;line-height:2}
+.leadership-link{margin-top:22px}
+.leadership-section{margin-top:55px;padding:clamp(26px,5vw,58px);border:1px solid #e1e6ed;border-radius:25px;background:linear-gradient(145deg,#f1f4f8,#fff 55%,#f4ecdf)}
+.leadership-section-heading{max-width:850px;margin-bottom:34px}
+.leadership-team-grid{gap:26px}
+.leader-card{display:grid;grid-template-columns:.78fr 1.22fr;gap:24px;align-items:center;padding:20px;border:1px solid #e1e6ed;border-radius:20px;background:rgba(255,255,255,.9);box-shadow:0 18px 48px rgba(7,21,45,.07);min-width:0}
+.leader-card-photo{overflow:hidden;aspect-ratio:4/5;border-radius:15px;background:#e8edf3}
+.leader-card-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 22%}
+.leader-card:nth-child(2) .leader-card-photo img{object-position:center 30%}
+.leader-card-content{min-width:0}
+.leader-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+.leader-tags span{padding:6px 10px;border:1px solid #e4d6bd;border-radius:30px;background:#fbf8f1;color:#76592e;font-size:10px;font-weight:700}
+.leadership-cta{margin-top:30px}
+@media(max-width:900px){.leadership-preview-grid,.leadership-team-grid{grid-template-columns:1fr}.leader-preview-card,.leader-card{grid-template-columns:minmax(130px,.65fr) 1.35fr}.leadership-preview-heading{gap:22px}}
+@media(max-width:600px){.leadership-preview-heading{grid-template-columns:1fr;gap:8px}.leadership-preview-grid,.leadership-team-grid{gap:15px}.leader-preview-card,.leader-card{grid-template-columns:1fr;padding:14px;gap:14px}.leader-preview-photo,.leader-card-photo{width:min(100%,300px);margin-inline:auto;aspect-ratio:4/5}.leader-preview-copy,.leader-card-content{padding:2px 4px 6px}.leadership-section{padding:22px 16px;margin-top:34px}.leader-preview-copy h3,.leader-card-content h3{font-size:23px}}
