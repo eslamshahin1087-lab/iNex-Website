@@ -9,15 +9,17 @@ test("404 page remains branded and noindex",async({page})=>{await page.goto("/40
 test("founding leadership portraits and bilingual titles render",async({page})=>{
   await page.goto("/");
   await expect(page.locator(".leadership-preview-grid .leader-preview-card")).toHaveCount(2);
-  await expect(page.locator(".leadership-preview-grid")).toContainText("Islam Ibrahim");
-  await expect(page.locator(".leadership-preview-grid")).toContainText("Fawzya Hesham");
+  await expect(page.locator(".leadership-preview-grid")).toContainText("إسلام إبراهيم");
+  await expect(page.locator(".leadership-preview-grid")).toContainText("فوزية هشام");
   await expect(page.locator('.leadership-preview-grid img[src="/assets/fawzya-hesham.jpg"]')).toBeVisible();
   await expect(page.locator('.leadership-preview-grid img[src="/assets/fawzya-hesham.jpg"]')).toHaveJSProperty("complete",true);
   await page.goto("/company.html#leadership");
   await expect(page.locator("#leadership .leader-card")).toHaveCount(2);
+  await expect(page.locator("#leadership")).toContainText("إسلام إبراهيم");
   await expect(page.locator("#leadership")).toContainText("فوزية هشام");
   await expect(page.locator("#leadership img[alt*=Fawzya]")).toHaveAttribute("src","/assets/fawzya-hesham.jpg");
   await page.getByRole("button",{name:"Switch language to English"}).click();
+  await expect(page.locator("#leadership")).toContainText("Islam Ibrahim");
   await expect(page.locator("#leadership")).toContainText("Fawzya Hesham");
   await expect(page.locator("#leadership")).toContainText("COO & Co-Founder");
 });
@@ -30,7 +32,7 @@ test("homepage leadership cards remain usable on mobile",async({page})=>{
 test("all app launch links use the current iNex-App GitHub Pages path",async({page})=>{
   for(const path of ["/","/platform.html","/solutions.html","/awareness.html","/company.html","/contact.html","/resources.html"]){
     await page.goto(path);
-    const links=page.locator('a[href="https://eslamshahin1087-lab.github.io/iNex-App/"]');
+    const links=page.locator('a[href="https://eslamshahin1087-lab.github.io/iNex-App/wathiqati-app.html?screen=signup"]');
     await expect(links.first()).toBeAttached();
     await expect(page.locator('a[href="https://eslamshahin1087-lab.github.io/iNex/"]')).toHaveCount(0);
   }
