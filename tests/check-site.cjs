@@ -22,7 +22,9 @@ assert.match(css,/\.ceo-profile-photo\.portrait-fallback:before/,"Company portra
 for(const page of pages){const html=read(page);assert.ok(html.includes("https://www.facebook.com/profile.php?id=61592318504674"),page+" must link to the official iNex Facebook page");assert.ok(html.includes("https://insurnex-8a9df.web.app/?view=desktop"),page+" must link to the InsurNex desktop application");}assert.ok(read("index.html").includes('id="product-ecosystem"'));assert.ok(read("index.html").includes('id="insurnex-partner"'));for(const file of ["index.html","company.html"]){const html=read(file);assert.ok(html.includes("https://www.linkedin.com/in/islam-ibrahim-mba-%F0%9F%8E%A0-188832210/"));assert.ok(html.includes("https://www.linkedin.com/in/fawzya-hesham-4315a119b/"));}
 const homepage=read("index.html");
 assert.match(homepage,/id="insurer-network"/);assert.match(homepage,/جمعنالك/);
-const primaryLogos=homepage.match(/<div class="insurer-logo-set" data-logo-copy="primary">([\\s\\S]*?)<\\/div>/)?.[1]||"";
+const primaryStart=homepage.indexOf('<div class="insurer-logo-set" data-logo-copy="primary">');
+const primaryEnd=homepage.indexOf("</div>",primaryStart);
+const primaryLogos=homepage.slice(primaryStart,primaryEnd);
 assert.equal([...primaryLogos.matchAll(/<a class="insurer-logo-card"/g)].length,18,"Primary logo set must contain 18 logos");
 assert.equal([...homepage.matchAll(/<a class="insurer-logo-card"/g)].length,36,"Marquee must contain a duplicated visual set");
 assert.match(homepage,/data-logo-copy="duplicate" aria-hidden="true" inert/);
