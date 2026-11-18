@@ -6,17 +6,3 @@ const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matc
 if(!reduceMotion&&"IntersectionObserver"in window){document.documentElement.classList.add("motion-ready");const targets=document.querySelectorAll(".reveal,.section,.proof-strip,.dark-band,.page-hero,.info-card,.feature-card,.solution-card,.principles article,.disclosure,.ceo-preview,.ceo-profile");targets.forEach(el=>el.classList.add("reveal"));const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("is-visible");observer.unobserve(entry.target)}})},{threshold:.01,rootMargin:"0px 0px -20px 0px"});targets.forEach(el=>observer.observe(el))}
 document.querySelectorAll(".ceo-photo-frame img,.ceo-profile-photo img").forEach(image=>{const activateFallback=()=>{image.hidden=true;image.parentElement?.classList.add("portrait-fallback")};image.addEventListener("error",activateFallback,{once:true});if(image.loading!=="lazy"&&image.complete&&image.naturalWidth===0)activateFallback()});
 applyLanguage(language)})();
-/* Keep the marquee cycle exactly equal to one logo group for a seamless loop. */
-(()=>{"use strict";
- const track=document.querySelector(".insurer-logo-track");
- const primary=document.querySelector('.insurer-logo-set[data-logo-copy="primary"]');
- if(!track||!primary)return;
- const syncMarqueeDistance=()=>{
-   const width=primary.getBoundingClientRect().width;
-   if(width>0)track.style.setProperty("--marquee-distance",width+"px");
- };
- syncMarqueeDistance();
- if("ResizeObserver"in window){const observer=new ResizeObserver(syncMarqueeDistance);observer.observe(primary);}
- else window.addEventListener("resize",syncMarqueeDistance,{passive:true});
- if(document.fonts?.ready)document.fonts.ready.then(syncMarqueeDistance);
-})();

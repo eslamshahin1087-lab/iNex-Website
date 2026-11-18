@@ -56,6 +56,15 @@ test("product partnership copy switches in both languages",async({page})=>{await
  await expect(page.locator("#insurer-network .insurer-logo-sprite")).toHaveCount(36);
  await expect(page.locator("#insurer-network").locator("xpath=following-sibling::section[@id='insurance-knowledge']")).toHaveCount(1);
  await expect(track).toHaveCSS("animation-name","inex-insurer-marquee");
+ await expect(track).toHaveCSS("animation-play-state","running");
+ const hasVisibleLogo=await page.locator("#insurer-network .insurer-logo-card").evaluateAll((elements)=>{
+   const viewport=document.querySelector("#insurer-network .insurer-logo-viewport").getBoundingClientRect();
+   return elements.some((element)=>{
+     const rect=element.getBoundingClientRect();
+     return rect.width>0&&rect.height>0&&rect.right>viewport.left&&rect.left<viewport.right&&rect.bottom>viewport.top&&rect.top<viewport.bottom;
+   });
+ });
+ expect(hasVisibleLogo,"At least one insurer logo must intersect the visible marquee viewport").toBeTruthy();
 
  await viewport.hover();
  await expect(track).toHaveCSS("animation-play-state","paused");

@@ -98,3 +98,8 @@ The 18 supplied company logos are shown in a continuous horizontal marquee. The 
 ## Arabic typography and continuous marquee correction
 
 The homepage now uses IBM Plex Sans Arabic for reading and Alexandria for headings and controls, with neutral Arabic letter spacing and language-appropriate line heights. The insurer section is explicitly closed before the next content section. The marquee measures one complete logo set (including its responsive spacing) and moves by exactly that distance for a seamless loop; both sets remain non-shrinking and single-line. It pauses on hover/focus and uses a manually scrollable fallback for reduced-motion preferences.
+
+
+## Marquee rendering reliability
+
+The logo marquee uses a pure-CSS half-track translation. Because the track contains two identical, non-shrinking logo groups, `translateX(-50%)` advances exactly one complete group and loops seamlessly without relying on JavaScript width measurements. Browser smoke tests also verify that at least one logo card intersects the visible marquee viewport.
