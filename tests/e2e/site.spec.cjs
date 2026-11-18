@@ -46,6 +46,8 @@ test("homepage leadership link opens the visible company section",async({page})=
 test("product partnership copy switches in both languages",async({page})=>{await page.addInitScript(()=>localStorage.removeItem("inex-site-language"));await page.goto("/");const partner=page.locator("#insurnex-partner");await page.getByRole("button",{name:"Switch language to English"}).click();await expect(partner).toContainText("Explore InsurNex");await expect(page.locator("html")).toHaveAttribute("dir","ltr");await page.getByRole("button",{name:"التبديل إلى العربية"}).click();await expect(partner).toContainText("اكتشف InsurNex");await expect(page.locator("html")).toHaveAttribute("dir","rtl");});test("homepage insurer logo directory renders all supplied logos in Arabic and English",async({page})=>{
  await page.addInitScript(()=>localStorage.removeItem("inex-site-language"));
  await page.goto("/");
+ await expect(page.locator("body")).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
+ await expect(page.locator("#main h1")).toHaveCSS("font-family",/Alexandria/);
  const viewport=page.locator("#insurer-network .insurer-logo-viewport");
  const track=page.locator("#insurer-network .insurer-logo-track");
  const cards=page.locator('#insurer-network .insurer-logo-set[data-logo-copy="primary"] .insurer-logo-card');
