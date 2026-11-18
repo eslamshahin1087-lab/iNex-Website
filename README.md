@@ -93,3 +93,8 @@ The homepage insurer directory uses the 18 company logo images supplied for this
 ## Insurer logo marquee
 
 The 18 supplied company logos are shown in a continuous horizontal marquee. The animation runs at a moderate pace, pauses while the pointer is over the logo viewport or keyboard focus is within it, and respects `prefers-reduced-motion`. The visual duplicate set is hidden from assistive technology and made inert so it does not create duplicate keyboard stops.
+
+
+## Arabic typography and continuous marquee correction
+
+The homepage now uses IBM Plex Sans Arabic for reading and Alexandria for headings and controls, with neutral Arabic letter spacing and language-appropriate line heights. The insurer section is explicitly closed before the next content section. The marquee measures one complete logo set (including its responsive spacing) and moves by exactly that distance for a seamless loop; both sets remain non-shrinking and single-line. It pauses on hover/focus and uses a manually scrollable fallback for reduced-motion preferences.
