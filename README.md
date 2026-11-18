@@ -78,3 +78,8 @@ Development takes place on a feature branch. All changes must pass static and br
 The homepage includes a bilingual insurer directory inspired by a publicly visible Amanleek website section. The five referenced company names are Libano-Suisse Takaful, Allianz, Chubb, MetLife and Sarwa Insurance. They are displayed as an informational directory with links to each company's official website; their appearance does not imply a commercial partnership, endorsement, ranking, recommendation, or confirmed product availability through iNex.
 
 The homepage also includes two original SVG illustrations: one for customer protection and insurance categories, and another for digital insurance technology. The insurance awareness, iNex customer platform and InsurNex broker-facing product remain clearly differentiated.
+
+
+## Shared visual identity system
+
+All public HTML pages load `assets/brand-system.css` after the existing component stylesheet. This shared layer standardizes iNex's midnight-navy, champagne-gold and restrained digital-blue palette, navigation, typography, buttons, cards, section rhythm, page headers, insurer directory, InsurTech panels, leadership and contact layouts. It includes RTL/LTR and mobile breakpoints and respects reduced-motion preferences.
