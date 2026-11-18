@@ -11,8 +11,10 @@ test("founding leadership portraits and bilingual titles render",async({page})=>
   await expect(page.locator(".leadership-preview-grid .leader-preview-card")).toHaveCount(2);
   await expect(page.locator(".leadership-preview-grid")).toContainText("إسلام إبراهيم");
   await expect(page.locator(".leadership-preview-grid")).toContainText("فوزية هشام");
-  await expect(page.locator('.leadership-preview-grid img[src="/assets/fawzya-hesham.jpg"]')).toBeVisible();
-  await expect(page.locator('.leadership-preview-grid img[src="/assets/fawzya-hesham.jpg"]')).toHaveJSProperty("complete",true);
+  const cofounderPortrait=page.locator('.leadership-preview-grid img[src="/assets/fawzya-hesham.jpg"]');
+  await cofounderPortrait.scrollIntoViewIfNeeded();
+  await expect(cofounderPortrait).toBeVisible();
+  await expect(cofounderPortrait).toHaveJSProperty("complete",true);
   await page.goto("/company.html#leadership");
   await expect(page.locator("#leadership")).toHaveClass(/is-visible/);
   await expect(page.locator("#leadership .leader-card")).toHaveCount(2);
