@@ -52,6 +52,8 @@ test("product partnership copy switches in both languages",async({page})=>{await
  await expect(cards).toHaveCount(18);
  await expect(page.locator('#insurer-network .insurer-logo-set[data-logo-copy="duplicate"]')).toHaveAttribute("aria-hidden","true");
  await expect(page.locator("#insurer-network .insurer-logo-sprite")).toHaveCount(36);
+ await viewport.hover();
+ await expect(track).toHaveCSS("animation-play-state","paused");
  await cards.first().hover();
  await expect(track).toHaveCSS("animation-play-state","paused");
  await page.mouse.move(0,0);
