@@ -75,6 +75,6 @@ Development takes place on a feature branch. All changes must pass static and br
 
 ## Homepage insurance and InsurTech content
 
-The homepage includes a bilingual insurer directory inspired by a publicly visible Amanleek website section. The five referenced company names are Libano-Suisse Takaful, Allianz, Chubb, MetLife and Sarwa Insurance. They are displayed as an informational directory with links to each company's official website; their appearance does not imply a commercial partnership, endorsement, or confirmed product availability through iNex.
+The homepage includes a bilingual insurer directory inspired by a publicly visible Amanleek website section. The five referenced company names are Libano-Suisse Takaful, Allianz, Chubb, MetLife and Sarwa Insurance. They are displayed as an informational directory with links to each company's official website; their appearance does not imply a commercial partnership, endorsement, ranking, recommendation, or confirmed product availability through iNex.
 
 The homepage also includes two original SVG illustrations: one for customer protection and insurance categories, and another for digital insurance technology. The insurance awareness, iNex customer platform and InsurNex broker-facing product remain clearly differentiated.
