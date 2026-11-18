@@ -38,7 +38,7 @@ assert.match(read("assets/brand-system.css"),/\.insurer-logo-sprite/);
 for(const font of ["IBM+Plex+Sans+Arabic","Alexandria"])assert.ok(read("index.html").includes(font),"Homepage must load "+font);
 for(const selector of ['html[lang="ar"] body','html[lang="ar"] h1','html[lang="ar"] .hero h1'])assert.ok(read("assets/brand-system.css").includes(selector),"Arabic typography missing "+selector);
 assert.ok(!read("assets/site.js").includes("syncMarqueeDistance"),"Marquee must not depend on JavaScript width measurement");
-assert.match(read("assets/site.js"),/ResizeObserver/);
+assert.ok(!read("assets/site.js").includes("ResizeObserver"),"Marquee must remain CSS-driven");
 assert.ok(read("assets/brand-system.css").includes("translate3d(-50%,0,0)"),"Marquee must translate by half of its duplicated track");
 
 for(const token of [".insurer-logo-viewport",".insurer-logo-track","inex-insurer-marquee","animation-play-state:paused","prefers-reduced-motion"])assert.ok(read("assets/brand-system.css").includes(token),"Marquee must support "+token);
