@@ -83,3 +83,8 @@ The homepage also includes two original SVG illustrations: one for customer prot
 ## Shared visual identity system
 
 All public HTML pages load `assets/brand-system.css` after the existing component stylesheet. This shared layer standardizes iNex's midnight-navy, champagne-gold and restrained digital-blue palette, navigation, typography, buttons, cards, section rhythm, page headers, insurer directory, InsurTech panels, leadership and contact layouts. It includes RTL/LTR and mobile breakpoints and respects reduced-motion preferences.
+
+
+## Supplied insurance company logo directory
+
+The homepage insurer directory uses the 18 company logo images supplied for this project, combined into an optimized AVIF sprite at `assets/insurance-companies-sprite.avif`. The display is an informational directory with links to company websites. It is not a ranking, recommendation, endorsement, or statement that the named insurers have partnered with iNex or that their products are available through the platform.

@@ -20,7 +20,18 @@ assert.match(css,/\.ceo-photo-frame\.portrait-fallback img,\.ceo-profile-photo\.
 assert.match(css,/\.ceo-photo-frame\.portrait-fallback:before/,"Homepage portrait fallback styling must exist");
 assert.match(css,/\.ceo-profile-photo\.portrait-fallback:before/,"Company portrait fallback styling must exist");
 for(const page of pages){const html=read(page);assert.ok(html.includes("https://www.facebook.com/profile.php?id=61592318504674"),page+" must link to the official iNex Facebook page");assert.ok(html.includes("https://insurnex-8a9df.web.app/?view=desktop"),page+" must link to the InsurNex desktop application");}assert.ok(read("index.html").includes('id="product-ecosystem"'));assert.ok(read("index.html").includes('id="insurnex-partner"'));for(const file of ["index.html","company.html"]){const html=read(file);assert.ok(html.includes("https://www.linkedin.com/in/islam-ibrahim-mba-%F0%9F%8E%A0-188832210/"));assert.ok(html.includes("https://www.linkedin.com/in/fawzya-hesham-4315a119b/"));}
-assert.match(read("index.html"),/id="insurer-network"/);assert.match(read("index.html"),/جمعنالك/);for(const name of ["LIBANO-SUISSE","Allianz","CHUBB","MetLife","SARWA"])assert.ok(read("index.html").includes(name),"Missing insurer "+name);assert.match(read("index.html"),/لا يعني وجود شراكة أو اعتماد بينها وبين iNex/);assert.match(read("index.html"),/id="insurance-knowledge"/);assert.match(read("index.html"),/id="insurtech"/);assert.ok(fs.existsSync(path.join(root,"assets/insurance-illustration.svg")),"Missing insurance illustration");assert.ok(fs.existsSync(path.join(root,"assets/insurtech-illustration.svg")),"Missing InsurTech illustration");assert.match(css,/\.insurer-logo-grid/);assert.match(css,/\.insurance-knowledge/);assert.match(css,/\.insurtech-feature/);
+const homepage=read("index.html");
+assert.match(homepage,/id="insurer-network"/);assert.match(homepage,/جمعنالك/);
+assert.equal([...homepage.matchAll(/<a class="insurer-logo-card"/g)].length,18,"Homepage must show all 18 supplied insurer logos");
+for(const name of ["GIG Egypt","Misr Takaful Insurance","Tokio Marine Egypt","MetLife","Mohandes Insurance","Delta Insurance","Orient Takaful","Wethaq","Arope Egypt","Sarwa Insurance","Kaf Insurance","AXA Egypt","Suez Canal Insurance","Iskan Insurance","Misr Life Insurance","Misr Insurance","Allianz Egypt","Al Wataniya Insurance"])assert.ok(homepage.includes('data-en="'+name+'"'),"Missing insurer "+name);
+assert.match(homepage,/لا يعني وجود شراكة أو اعتماد بينها وبين iNex/);
+assert.ok(fs.existsSync(path.join(root,"assets/insurance-companies-sprite.avif")),"Missing supplied insurer logo sprite");
+assert.match(homepage,/insurance-companies-sprite\.avif/);
+assert.match(read("assets/brand-system.css"),/\.insurer-logo-sprite/);
+assert.match(homepage,/id="insurance-knowledge"/);assert.match(homepage,/id="insurtech"/);
+assert.ok(fs.existsSync(path.join(root,"assets/insurance-illustration.svg")),"Missing insurance illustration");
+assert.ok(fs.existsSync(path.join(root,"assets/insurtech-illustration.svg")),"Missing InsurTech illustration");
+assert.match(css,/\.insurer-logo-grid/);assert.match(css,/\.insurance-knowledge/);assert.match(css,/\.insurtech-feature/);
 const brandCss=read("assets/brand-system.css");
 assert.ok(fs.existsSync(path.join(root,"assets/brand-system.css")),"Missing shared iNex brand system stylesheet");
 for(const page of ["index.html","platform.html","solutions.html","awareness.html","company.html","contact.html","resources.html","404.html"])assert.ok(read(page).includes("assets/brand-system.css"),page+" must load the shared brand system");
