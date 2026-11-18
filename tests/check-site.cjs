@@ -26,7 +26,7 @@ assert.equal([...homepage.matchAll(/<a class="insurer-logo-card"/g)].length,18,"
 for(const name of ["GIG Egypt","Misr Takaful Insurance","Tokio Marine Egypt","MetLife","Mohandes Insurance","Delta Insurance","Orient Takaful","Wethaq","Arope Egypt","Sarwa Insurance","Kaf Insurance","AXA Egypt","Suez Canal Insurance","Iskan Insurance","Misr Life Insurance","Misr Insurance","Allianz Egypt","Al Wataniya Insurance"])assert.ok(homepage.includes('data-en="'+name+'"'),"Missing insurer "+name);
 assert.match(homepage,/لا يعني وجود شراكة أو اعتماد بينها وبين iNex/);
 assert.ok(fs.existsSync(path.join(root,"assets/insurance-companies-sprite.avif")),"Missing supplied insurer logo sprite");
-assert.match(homepage,/insurance-companies-sprite\.avif/);
+assert.match(read("assets/brand-system.css"),/insurance-companies-sprite\.avif/);
 assert.match(read("assets/brand-system.css"),/\.insurer-logo-sprite/);
 assert.match(homepage,/id="insurance-knowledge"/);assert.match(homepage,/id="insurtech"/);
 assert.ok(fs.existsSync(path.join(root,"assets/insurance-illustration.svg")),"Missing insurance illustration");
