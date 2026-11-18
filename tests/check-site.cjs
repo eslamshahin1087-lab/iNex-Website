@@ -22,12 +22,16 @@ assert.match(css,/\.ceo-profile-photo\.portrait-fallback:before/,"Company portra
 for(const page of pages){const html=read(page);assert.ok(html.includes("https://www.facebook.com/profile.php?id=61592318504674"),page+" must link to the official iNex Facebook page");assert.ok(html.includes("https://insurnex-8a9df.web.app/?view=desktop"),page+" must link to the InsurNex desktop application");}assert.ok(read("index.html").includes('id="product-ecosystem"'));assert.ok(read("index.html").includes('id="insurnex-partner"'));for(const file of ["index.html","company.html"]){const html=read(file);assert.ok(html.includes("https://www.linkedin.com/in/islam-ibrahim-mba-%F0%9F%8E%A0-188832210/"));assert.ok(html.includes("https://www.linkedin.com/in/fawzya-hesham-4315a119b/"));}
 const homepage=read("index.html");
 assert.match(homepage,/id="insurer-network"/);assert.match(homepage,/جمعنالك/);
-assert.equal([...homepage.matchAll(/<a class="insurer-logo-card"/g)].length,18,"Homepage must show all 18 supplied insurer logos");
+const primaryLogos=homepage.match(/<div class="insurer-logo-set" data-logo-copy="primary">([\\s\\S]*?)<\\/div>/)?.[1]||"";
+assert.equal([...primaryLogos.matchAll(/<a class="insurer-logo-card"/g)].length,18,"Primary logo set must contain 18 logos");
+assert.equal([...homepage.matchAll(/<a class="insurer-logo-card"/g)].length,36,"Marquee must contain a duplicated visual set");
+assert.match(homepage,/data-logo-copy="duplicate" aria-hidden="true" inert/);
 for(const name of ["GIG Egypt","Misr Takaful Insurance","Tokio Marine Egypt","MetLife","Mohandes Insurance","Delta Insurance","Orient Takaful","Wethaq","Arope Egypt","Sarwa Insurance","Kaf Insurance","AXA Egypt","Suez Canal Insurance","Iskan Insurance","Misr Life Insurance","Misr Insurance","Allianz Egypt","Al Wataniya Insurance"])assert.ok(homepage.includes('data-en="'+name+'"'),"Missing insurer "+name);
 assert.match(homepage,/لا يعني وجود شراكة أو اعتماد بينها وبين iNex/);
 assert.ok(fs.existsSync(path.join(root,"assets/insurance-companies-sprite.avif")),"Missing supplied insurer logo sprite");
 assert.match(read("assets/brand-system.css"),/insurance-companies-sprite\.avif/);
 assert.match(read("assets/brand-system.css"),/\.insurer-logo-sprite/);
+for(const token of [".insurer-logo-viewport",".insurer-logo-track","inex-insurer-marquee","animation-play-state:paused","prefers-reduced-motion"])assert.ok(read("assets/brand-system.css").includes(token),"Marquee must support "+token);
 assert.match(homepage,/id="insurance-knowledge"/);assert.match(homepage,/id="insurtech"/);
 assert.ok(fs.existsSync(path.join(root,"assets/insurance-illustration.svg")),"Missing insurance illustration");
 assert.ok(fs.existsSync(path.join(root,"assets/insurtech-illustration.svg")),"Missing InsurTech illustration");

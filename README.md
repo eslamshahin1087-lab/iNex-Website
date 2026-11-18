@@ -88,3 +88,8 @@ All public HTML pages load `assets/brand-system.css` after the existing componen
 ## Supplied insurance company logo directory
 
 The homepage insurer directory uses the 18 company logo images supplied for this project, combined into an optimized AVIF sprite at `assets/insurance-companies-sprite.avif`. The display is an informational directory with links to company websites. It is not a ranking, recommendation, endorsement, or statement that the named insurers have partnered with iNex or that their products are available through the platform.
+
+
+## Insurer logo marquee
+
+The 18 supplied company logos are shown in a continuous horizontal marquee. The animation runs at a moderate pace, pauses while the pointer is over the logo viewport or keyboard focus is within it, and respects `prefers-reduced-motion`. The visual duplicate set is hidden from assistive technology and made inert so it does not create duplicate keyboard stops.

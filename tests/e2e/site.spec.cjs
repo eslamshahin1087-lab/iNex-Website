@@ -46,9 +46,16 @@ test("homepage leadership link opens the visible company section",async({page})=
 test("product partnership copy switches in both languages",async({page})=>{await page.addInitScript(()=>localStorage.removeItem("inex-site-language"));await page.goto("/");const partner=page.locator("#insurnex-partner");await page.getByRole("button",{name:"Switch language to English"}).click();await expect(partner).toContainText("Explore InsurNex");await expect(page.locator("html")).toHaveAttribute("dir","ltr");await page.getByRole("button",{name:"التبديل إلى العربية"}).click();await expect(partner).toContainText("اكتشف InsurNex");await expect(page.locator("html")).toHaveAttribute("dir","rtl");});test("homepage insurer logo directory renders all supplied logos in Arabic and English",async({page})=>{
  await page.addInitScript(()=>localStorage.removeItem("inex-site-language"));
  await page.goto("/");
- const cards=page.locator("#insurer-network .insurer-logo-card");
+ const viewport=page.locator("#insurer-network .insurer-logo-viewport");
+ const track=page.locator("#insurer-network .insurer-logo-track");
+ const cards=page.locator('#insurer-network .insurer-logo-set[data-logo-copy="primary"] .insurer-logo-card');
  await expect(cards).toHaveCount(18);
- await expect(page.locator("#insurer-network .insurer-logo-sprite")).toHaveCount(18);
+ await expect(page.locator('#insurer-network .insurer-logo-set[data-logo-copy="duplicate"]')).toHaveAttribute("aria-hidden","true");
+ await expect(page.locator("#insurer-network .insurer-logo-sprite")).toHaveCount(36);
+ await cards.first().hover();
+ await expect(track).toHaveCSS("animation-play-state","paused");
+ await page.mouse.move(0,0);
+ await expect(track).toHaveCSS("animation-play-state","running");
  for(const name of ["جي آي جي مصر","مصر للتكافل للتأمين","طوكيو مارين مصر","ميتلايف","المهندس للتأمين","الدلتا للتأمين","أورينت للتأمين التكافلي","وثاق للتأمين التكافلي","أروب مصر","ثروة للتأمين","كاف للتأمين","أكسا مصر","قناة السويس للتأمين","إسكان للتأمين","مصر لتأمينات الحياة","مصر للتأمين","أليانز مصر","الوطنية للتأمين"])await expect(page.locator("#insurer-network")).toContainText(name);
  await expect(page.locator("#insurer-network")).toContainText("لا يعني وجود شراكة أو اعتماد بينها وبين iNex");
  await expect(page.locator("#insurer-network .insurer-logo-sprite").first()).toHaveCSS("background-image",/insurance-companies-sprite\.avif/);

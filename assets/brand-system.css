@@ -297,3 +297,17 @@ html[dir=ltr] .eyebrow{letter-spacing:.11em}
 @media(max-width:760px){.insurer-logo-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.insurer-logo-card{min-height:124px;padding:9px 8px}.insurer-name{font-size:10px}}
 @media(max-width:480px){.insurer-logo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.insurer-logo-card{min-height:125px}.insurer-logo-sprite{max-width:170px}}
 @media(prefers-reduced-motion:reduce){.insurer-logo-card{transition:none}.insurer-logo-card:hover{transform:none}}
+
+
+/* Horizontal insurer-logo marquee: continuous, medium pace, hover/focus pause */
+.insurer-logo-viewport{position:relative;width:100%;overflow:hidden;padding:8px 0 13px;isolation:isolate;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 3%,#000 97%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 3%,#000 97%,transparent 100%)}
+.insurer-logo-track{display:flex;align-items:stretch;width:max-content;direction:ltr;animation:inex-insurer-marquee 46s linear infinite;will-change:transform}
+.insurer-logo-set{display:flex;flex:0 0 auto;align-items:stretch;gap:14px;padding-inline-end:14px;direction:ltr}
+.insurer-logo-card{flex:0 0 clamp(148px,15.6vw,190px);width:clamp(148px,15.6vw,190px);min-height:142px}
+.insurer-logo-sprite{width:100%;max-width:180px;aspect-ratio:16/9;background-color:#fff;border-radius:8px}
+@keyframes inex-insurer-marquee{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+.insurer-logo-viewport:hover .insurer-logo-track,.insurer-logo-viewport:focus-within .insurer-logo-track{animation-play-state:paused}
+.insurer-logo-card:focus-visible{outline:3px solid var(--brand-digital);outline-offset:3px;border-color:var(--gold)}
+@media(max-width:760px){.insurer-logo-track{animation-duration:40s}.insurer-logo-set{gap:10px;padding-inline-end:10px}.insurer-logo-card{flex-basis:clamp(142px,42vw,174px);width:clamp(142px,42vw,174px);min-height:128px}}
+@media(max-width:420px){.insurer-logo-track{animation-duration:36s}}
+@media(prefers-reduced-motion:reduce){.insurer-logo-viewport{overflow-x:auto;-webkit-mask-image:none;mask-image:none}.insurer-logo-track{animation:none;transform:none}.insurer-logo-set[data-logo-copy="duplicate"]{display:none}}
