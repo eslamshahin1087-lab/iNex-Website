@@ -35,7 +35,7 @@ iNex is a technology and awareness platform connected to insurance brokerage ser
 
 ## Application access
 
-The iNex customer application is maintained in the separate `iNex-App` repository. Its registration entry point is `https://eslamshahin1087-lab.github.io/iNex-App/wathiqati-app.html?screen=signup` and opens the account creation screen for signed-out visitors. The strategic partner InsurNex app is available at `https://insurnex-8a9df.web.app/welcome`. Do not use the obsolete `/iNex/` path in website navigation or calls to action.
+The iNex customer application is maintained in the separate `iNex-App` repository. Its registration entry point is `https://eslamshahin1087-lab.github.io/iNex-App/wathiqati-app.html` and opens the account creation screen for signed-out visitors. The strategic partner InsurNex app is available at `https://insurnex-8a9df.web.app/?view=desktop`. Do not use the obsolete `/iNex/` path in website navigation or calls to action.
 
 ## Project boundaries
 
