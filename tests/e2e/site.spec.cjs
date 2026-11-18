@@ -30,10 +30,10 @@ test("homepage leadership cards remain usable on mobile",async({page})=>{
   await expect(page.locator(".leadership-preview-grid .leader-preview-card")).toHaveCount(2);
   await expect(page.locator(".leadership-preview-grid")).toBeVisible();
 });
-test("all app launch links use the current iNex-App GitHub Pages path",async({page})=>{
+test("all app launch links use the current iNex application entry point",async({page})=>{
   for(const path of ["/","/platform.html","/solutions.html","/awareness.html","/company.html","/contact.html","/resources.html"]){
     await page.goto(path);
-    const links=page.locator('a[href="https://eslamshahin1087-lab.github.io/iNex-App/wathiqati-app.html?screen=signup"]');
+    const links=page.locator('a[href="https://eslamshahin1087-lab.github.io/iNex-App/wathiqati-app.html"]');
     await expect(links.first()).toBeAttached();
     await expect(page.locator('a[href="https://eslamshahin1087-lab.github.io/iNex/"]')).toHaveCount(0);
   }
