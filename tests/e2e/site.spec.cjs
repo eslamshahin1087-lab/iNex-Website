@@ -1,86 +1,125 @@
 const {test,expect}=require("@playwright/test");
-const routes=[["/","التأمين أوضح"],["/platform.html","من المعرفة إلى"],["/solutions.html","احتياجات مختلفة"],["/awareness.html","اسأل. افهم."],["/company.html","نؤمن أن الوعي"],["/contact.html","لديك سؤال عن التأمين"]];
-test("all customer-facing pages load with shared navigation",async({page})=>{for(const [path,heading] of routes){await page.goto(path,{waitUntil:"domcontentloaded"});await expect(page.locator("main h1")).toContainText(heading);await expect(page.locator(".desktop-nav")).toBeVisible();await expect(page.locator("#langBtn")).toBeVisible();await expect(page.locator(".brand img").first()).toBeVisible();}});
-test("Arabic-English switching updates copy, metadata, title and direction",async({page})=>{await page.addInitScript(()=>localStorage.removeItem("inex-site-language"));await page.goto("/",{waitUntil:"domcontentloaded"});await expect(page.locator("html")).toHaveAttribute("lang","ar");await expect(page.locator("html")).toHaveAttribute("dir","rtl");await expect(page).toHaveTitle("الرئيسية | iNex");await expect(page.locator("main h1")).toContainText("التأمين أوضح");const ar=await page.locator('meta[name="description"]').getAttribute("content");await page.getByRole("button",{name:"Switch language to English"}).click();await expect(page.locator("html")).toHaveAttribute("lang","en");await expect(page.locator("html")).toHaveAttribute("dir","ltr");await expect(page).toHaveTitle("Home | iNex");await expect(page.locator("main h1")).toContainText("Insurance makes sense");const en=await page.locator('meta[name="description"]').getAttribute("content");expect(en).not.toBe(ar);await expect(page.locator(".desktop-nav a").nth(3)).toHaveText("Awareness");await page.getByRole("button",{name:"التبديل إلى العربية"}).click();await expect(page.locator("html")).toHaveAttribute("dir","rtl");});
-test("English translations contain no Arabic strings across all pages",async({page})=>{await page.addInitScript(()=>localStorage.removeItem("inex-site-language"));for(const [path] of routes){await page.goto(path);await page.getByRole("button",{name:"Switch language to English"}).click();const arabic=await page.locator("[data-en]").evaluateAll(nodes=>nodes.map(n=>n.dataset.en).filter(v=>[...v].some(c=>{const n=c.codePointAt(0);return n>=0x0600&&n<=0x06ff})));expect(arabic,path+" Arabic strings in English").toEqual([]);}});
-test("mobile menu opens, closes with Escape and restores focus",async({page})=>{await page.setViewportSize({width:390,height:844});await page.goto("/");const trigger=page.locator("#menuBtn"),menu=page.locator("#mobileMenu");await expect(menu).toBeHidden();await trigger.click();await expect(menu).toBeVisible();await expect(trigger).toHaveAttribute("aria-expanded","true");await page.keyboard.press("Escape");await expect(menu).toBeHidden();await expect(trigger).toBeFocused();});
-test("desktop navigation is visible and mobile menu is hidden",async({page})=>{await page.setViewportSize({width:1440,height:900});await page.goto("/");await expect(page.locator(".desktop-nav")).toBeVisible();await expect(page.locator("#menuBtn")).toBeHidden();await expect(page.locator("#mobileMenu")).toBeHidden();});
-test("404 page remains branded and noindex",async({page})=>{await page.goto("/404.html");await expect(page).toHaveTitle("404 | iNex");await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content","noindex,follow");await expect(page.locator(".not-found-logo")).toBeVisible();});
+const routes=[
+ ["/","Insurance makes sense"],
+ ["/platform.html","From knowledge to"],
+ ["/solutions.html","Different needs"],
+ ["/awareness.html","Ask. Understand."],
+ ["/company.html","We believe awareness"],
+ ["/contact.html","Have an insurance question"],
+ ["/resources.html","Perspectives for understanding"]
+];
+const clearLanguage=()=>sessionStorage.removeItem("inex-site-language");
+
+test("all customer-facing pages load in English with shared navigation",async({page})=>{
+ await page.addInitScript(clearLanguage);
+ for(const [path,heading] of routes){
+  await page.goto(path,{waitUntil:"domcontentloaded"});
+  await expect(page.locator("html")).toHaveAttribute("lang","en");
+  await expect(page.locator("html")).toHaveAttribute("dir","ltr");
+  await expect(page.locator("main h1")).toContainText(heading);
+  await expect(page.locator(".desktop-nav")).toBeVisible();
+  await expect(page.locator("#langBtn")).toBeVisible();
+  await expect(page.locator(".brand img").first()).toBeVisible();
+ }
+});
+test("English is the default and Arabic-English switching updates copy, metadata, fonts and direction",async({page})=>{
+ await page.addInitScript(clearLanguage);await page.goto("/",{waitUntil:"domcontentloaded"});
+ await expect(page.locator("html")).toHaveAttribute("lang","en");await expect(page.locator("html")).toHaveAttribute("dir","ltr");
+ await expect(page).toHaveTitle("Home | iNex");await expect(page.locator("main h1")).toContainText("Insurance makes sense");
+ const englishDescription=await page.locator('meta[name="description"]').getAttribute("content");
+ await page.locator("#langBtn").click();
+ await expect(page.locator("html")).toHaveAttribute("lang","ar");await expect(page.locator("html")).toHaveAttribute("dir","rtl");
+ await expect(page).toHaveTitle("الرئيسية | iNex");await expect(page.locator("main h1")).toContainText("التأمين أوضح");
+ expect(await page.locator('meta[name="description"]').getAttribute("content")).not.toBe(englishDescription);
+ await expect(page.locator("body")).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
+ await expect(page.locator("main h1")).toHaveCSS("font-family",/Alexandria/);
+ await expect(page.locator(".desktop-nav a").nth(3)).toHaveText("التوعية");
+ await page.locator("#langBtn").click();await expect(page.locator("html")).toHaveAttribute("lang","en");
+ await expect(page.locator("html")).toHaveAttribute("dir","ltr");await expect(page).toHaveTitle("Home | iNex");
+});
+test("English translations contain no Arabic strings across all public pages",async({page})=>{
+ await page.addInitScript(clearLanguage);
+ for(const path of [...routes.map(route=>route[0]),"/404.html"]){
+  await page.goto(path);await expect(page.locator("html")).toHaveAttribute("lang","en");
+  const arabic=await page.locator("[data-en]").evaluateAll(nodes=>nodes.map(node=>node.dataset.en).filter(value=>[...value].some(character=>{const code=character.codePointAt(0);return code>=0x0600&&code<=0x06ff;})));
+  expect(arabic,path+" Arabic strings in English translations").toEqual([]);
+ }
+});
+test("mobile menu opens, closes with Escape and restores focus",async({page})=>{
+ await page.addInitScript(clearLanguage);await page.setViewportSize({width:390,height:844});await page.goto("/");
+ const trigger=page.locator("#menuBtn"),menu=page.locator("#mobileMenu");await expect(menu).toBeHidden();
+ await trigger.click();await expect(menu).toBeVisible();await expect(trigger).toHaveAttribute("aria-expanded","true");
+ await page.keyboard.press("Escape");await expect(menu).toBeHidden();await expect(trigger).toBeFocused();
+});
+test("desktop navigation is visible and mobile menu is hidden",async({page})=>{
+ await page.addInitScript(clearLanguage);await page.setViewportSize({width:1440,height:900});await page.goto("/");
+ await expect(page.locator(".desktop-nav")).toBeVisible();await expect(page.locator("#menuBtn")).toBeHidden();await expect(page.locator("#mobileMenu")).toBeHidden();
+});
+test("404 page remains branded, English-first and noindex",async({page})=>{
+ await page.addInitScript(clearLanguage);await page.goto("/404.html");await expect(page).toHaveTitle("Page not found | iNex");
+ await expect(page.locator("html")).toHaveAttribute("lang","en");
+ await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content","noindex,follow");
+ await expect(page.locator(".not-found-logo")).toBeVisible();
+});
 test("founding leadership portraits and bilingual titles render",async({page})=>{
-  await page.goto("/");
-  await page.getByRole("button",{name:"التبديل إلى العربية"}).click();
-  await expect(page.locator(".leadership-preview-grid .leader-preview-card")).toHaveCount(2);
-  await expect(page.locator(".leadership-preview-grid")).toContainText("إسلام إبراهيم");
-  await expect(page.locator(".leadership-preview-grid")).toContainText("فوزية هشام");
-  const cofounderPortrait=page.locator('.leadership-preview-grid img[src="/assets/fawzya-hesham.jpg"]');
-  await cofounderPortrait.scrollIntoViewIfNeeded();
-  await expect(cofounderPortrait).toBeVisible();
-  await expect(cofounderPortrait).toHaveJSProperty("complete",true);
-  await page.goto("/company.html#leadership");
-  await expect(page.locator("#leadership")).toHaveClass(/is-visible/);
-  await expect(page.locator("#leadership .leader-card")).toHaveCount(2);
-  await expect(page.locator("#leadership")).toContainText("إسلام إبراهيم");
-  await expect(page.locator("#leadership")).toContainText("فوزية هشام");
-  await expect(page.locator("#leadership img[alt*=Fawzya]")).toHaveAttribute("src","/assets/fawzya-hesham.jpg");
-  await page.getByRole("button",{name:"Switch language to English"}).click();
-  await expect(page.locator("#leadership")).toContainText("Islam Ibrahim");
-  await expect(page.locator("#leadership")).toContainText("Fawzya Hesham");
-  await expect(page.locator("#leadership")).toContainText("COO & Co-Founder");
+ await page.addInitScript(clearLanguage);await page.goto("/");await page.locator("#langBtn").click();
+ await expect(page.locator(".leadership-preview-grid .leader-preview-card")).toHaveCount(2);
+ await expect(page.locator(".leadership-preview-grid")).toContainText("إسلام إبراهيم");await expect(page.locator(".leadership-preview-grid")).toContainText("فوزية هشام");
+ const portrait=page.locator('.leadership-preview-grid img[src="/assets/fawzya-hesham.jpg"]');await portrait.scrollIntoViewIfNeeded();
+ await expect(portrait).toBeVisible();await expect(portrait).toHaveJSProperty("complete",true);
+ await page.goto("/company.html#leadership");await expect(page.locator("#leadership")).toHaveClass(/is-visible/);
+ await expect(page.locator("#leadership .leader-card")).toHaveCount(2);await expect(page.locator("#leadership")).toContainText("إسلام إبراهيم");
+ await expect(page.locator("#leadership")).toContainText("فوزية هشام");await expect(page.locator("#leadership img[alt*=Fawzya]")).toHaveAttribute("src","/assets/fawzya-hesham.jpg");
+ await page.locator("#langBtn").click();await expect(page.locator("#leadership")).toContainText("Islam Ibrahim");
+ await expect(page.locator("#leadership")).toContainText("Fawzya Hesham");await expect(page.locator("#leadership")).toContainText("COO & Co-Founder");
 });
 test("homepage leadership cards remain usable on mobile",async({page})=>{
-  await page.setViewportSize({width:390,height:844});
-  await page.goto("/");
-  await expect(page.locator(".leadership-preview-grid .leader-preview-card")).toHaveCount(2);
-  await expect(page.locator(".leadership-preview-grid")).toBeVisible();
+ await page.addInitScript(clearLanguage);await page.setViewportSize({width:390,height:844});await page.goto("/");
+ await expect(page.locator(".leadership-preview-grid .leader-preview-card")).toHaveCount(2);await expect(page.locator(".leadership-preview-grid")).toBeVisible();
 });
 test("all app launch links use the current iNex application entry point",async({page})=>{
-  for(const path of ["/","/platform.html","/solutions.html","/awareness.html","/company.html","/contact.html","/resources.html"]){
-    await page.goto(path);
-    const links=page.locator('a[href="https://eslamshahin1087-lab.github.io/iNex-App/wathiqati-app.html"]');
-    await expect(links.first()).toBeAttached();
-    await expect(page.locator('a[href="https://eslamshahin1087-lab.github.io/iNex/"]')).toHaveCount(0);
-  }
+ await page.addInitScript(clearLanguage);
+ for(const [path] of routes){await page.goto(path);const links=page.locator('a[href="https://eslamshahin1087-lab.github.io/iNex-App/wathiqati-app.html"]');await expect(links.first()).toBeAttached();await expect(page.locator('a[href="https://eslamshahin1087-lab.github.io/iNex/"]')).toHaveCount(0);}
 });
-test("scroll progress indicator is available without blocking page content",async({page})=>{await page.goto("/");await expect(page.locator("#scrollProgress")).toBeAttached();await expect(page.locator("main")).toBeVisible();});
-
-test("homepage leadership link opens the visible company section",async({page})=>{await page.goto("/");await page.locator(".leadership-link").click();await expect(page).toHaveURL(/\/company(?:\.html)?\/?#leadership$/);await expect(page.locator("#leadership")).toHaveClass(/is-visible/);await expect(page.locator("#leadership .leader-card")).toHaveCount(2);});
-test("product partnership copy switches in both languages",async({page})=>{await page.addInitScript(()=>localStorage.removeItem("inex-site-language"));await page.goto("/");const partner=page.locator("#insurnex-partner");await page.getByRole("button",{name:"Switch language to English"}).click();await expect(partner).toContainText("Explore InsurNex");await expect(page.locator("html")).toHaveAttribute("dir","ltr");await page.getByRole("button",{name:"التبديل إلى العربية"}).click();await expect(partner).toContainText("اكتشف InsurNex");await expect(page.locator("html")).toHaveAttribute("dir","rtl");});test("homepage insurer logo directory renders all supplied logos in Arabic and English",async({page})=>{
- await page.addInitScript(()=>localStorage.removeItem("inex-site-language"));
- await page.goto("/");
- await expect(page.locator("body")).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
- await expect(page.locator("#main h1")).toHaveCSS("font-family",/Alexandria/);
- const viewport=page.locator("#insurer-network .insurer-logo-viewport");
- const track=page.locator("#insurer-network .insurer-logo-track");
- const cards=page.locator('#insurer-network .insurer-logo-set[data-logo-copy="primary"] .insurer-logo-card');
- await expect(cards).toHaveCount(18);
- await expect(page.locator('#insurer-network .insurer-logo-set[data-logo-copy="duplicate"]')).toHaveAttribute("aria-hidden","true");
- await expect(page.locator("#insurer-network .insurer-logo-sprite")).toHaveCount(36);
- await expect(page.locator("#insurer-network").locator("xpath=following-sibling::section[@id='insurance-knowledge']")).toHaveCount(1);
- await expect(track).toHaveCSS("animation-name","inex-insurer-marquee");
- await expect(track).toHaveCSS("animation-play-state","running");
- const hasVisibleLogo=await page.locator("#insurer-network .insurer-logo-card").evaluateAll((elements)=>{
-   const viewport=document.querySelector("#insurer-network .insurer-logo-viewport").getBoundingClientRect();
-   return elements.some((element)=>{
-     const rect=element.getBoundingClientRect();
-     return rect.width>0&&rect.height>0&&rect.right>viewport.left&&rect.left<viewport.right&&rect.bottom>viewport.top&&rect.top<viewport.bottom;
-   });
- });
- expect(hasVisibleLogo,"At least one insurer logo must intersect the visible marquee viewport").toBeTruthy();
-
- await viewport.hover();
- await expect(track).toHaveCSS("animation-play-state","paused");
- await cards.first().hover();
- await expect(track).toHaveCSS("animation-play-state","paused");
- await page.mouse.move(0,0);
- await expect(track).toHaveCSS("animation-play-state","running");
+test("scroll progress indicator is available without blocking page content",async({page})=>{
+ await page.addInitScript(clearLanguage);await page.goto("/");await expect(page.locator("#scrollProgress")).toBeAttached();await expect(page.locator("main")).toBeVisible();
+});
+test("homepage leadership link opens the visible company section",async({page})=>{
+ await page.addInitScript(clearLanguage);await page.goto("/");await page.locator(".leadership-link").click();
+ await expect(page).toHaveURL(/\/company(?:\.html)?\/?#leadership$/);await expect(page.locator("#leadership")).toHaveClass(/is-visible/);
+ await expect(page.locator("#leadership .leader-card")).toHaveCount(2);
+});
+test("product partnership copy switches in both languages",async({page})=>{
+ await page.addInitScript(clearLanguage);await page.goto("/");const partner=page.locator("#insurnex-partner");await expect(partner).toContainText("Explore InsurNex");
+ await page.locator("#langBtn").click();await expect(partner).toContainText("اكتشف InsurNex");await expect(page.locator("html")).toHaveAttribute("dir","rtl");
+ await page.locator("#langBtn").click();await expect(partner).toContainText("Explore InsurNex");
+});
+test("insurer logo marquee runs and pauses in English LTR and Arabic RTL",async({page})=>{
+ await page.addInitScript(clearLanguage);await page.goto("/");
+ const viewport=page.locator("#insurer-network .insurer-logo-viewport"),track=page.locator("#insurer-network .insurer-logo-track");
+ const cards=page.locator('#insurer-network .insurer-logo-set[data-logo-copy="primary"] .insurer-logo-card');await viewport.scrollIntoViewIfNeeded();
+ await expect(page.locator("html")).toHaveAttribute("lang","en");await expect(cards).toHaveCount(18);await expect(page.locator("#insurer-network .insurer-logo-sprite")).toHaveCount(36);
+ await expect(track).toHaveCSS("animation-name","inex-insurer-marquee");await expect(track).toHaveCSS("animation-play-state","running");await expect(viewport).toHaveCSS("direction","ltr");
+ const visibleCount=async()=>page.locator("#insurer-network .insurer-logo-card").evaluateAll(elements=>{const box=document.querySelector("#insurer-network .insurer-logo-viewport").getBoundingClientRect();return elements.filter(element=>{const r=element.getBoundingClientRect();return r.width>0&&r.height>0&&r.right>box.left&&r.left<box.right&&r.bottom>box.top&&r.top<box.bottom;}).length;});
+ expect(await visibleCount()).toBeGreaterThan(0);
+ await viewport.hover();await expect(track).toHaveCSS("animation-play-state","paused");
+ const paused=await track.evaluate(element=>getComputedStyle(element).transform);await page.waitForTimeout(350);
+ expect(await track.evaluate(element=>getComputedStyle(element).transform)).toBe(paused);
+ await page.mouse.move(0,0);await expect(track).toHaveCSS("animation-play-state","running");
+ const beforeEn=await track.evaluate(element=>getComputedStyle(element).transform);await page.waitForTimeout(900);
+ expect(await track.evaluate(element=>getComputedStyle(element).transform)).not.toBe(beforeEn);
+ await page.locator("#langBtn").click();await expect(page.locator("html")).toHaveAttribute("lang","ar");await expect(page.locator("html")).toHaveAttribute("dir","rtl");
+ await expect(viewport).toHaveCSS("direction","ltr");await expect(track).toHaveCSS("animation-name","inex-insurer-marquee");await expect(track).toHaveCSS("animation-play-state","running");
+ expect(await visibleCount()).toBeGreaterThan(0);
+ const beforeAr=await track.evaluate(element=>getComputedStyle(element).transform);await page.waitForTimeout(900);
+ expect(await track.evaluate(element=>getComputedStyle(element).transform)).not.toBe(beforeAr);
+ await viewport.hover();await expect(track).toHaveCSS("animation-play-state","paused");
+ await page.mouse.move(0,0);await expect(track).toHaveCSS("animation-play-state","running");
  for(const name of ["جي آي جي مصر","مصر للتكافل للتأمين","طوكيو مارين مصر","ميتلايف","المهندس للتأمين","الدلتا للتأمين","أورينت للتأمين التكافلي","وثاق للتأمين التكافلي","أروب مصر","ثروة للتأمين","كاف للتأمين","أكسا مصر","قناة السويس للتأمين","إسكان للتأمين","مصر لتأمينات الحياة","مصر للتأمين","أليانز مصر","الوطنية للتأمين"])await expect(page.locator("#insurer-network")).toContainText(name);
  await expect(page.locator("#insurer-network")).toContainText("لا يعني وجود شراكة أو اعتماد بينها وبين iNex");
  await expect(page.locator("#insurer-network .insurer-logo-sprite").first()).toHaveCSS("background-image",/insurance-companies-sprite\.avif/);
- await expect(page.locator("#insurance-knowledge img")).toBeVisible();
- await expect(page.locator("#insurtech img")).toBeVisible();
- await page.getByRole("button",{name:"Switch language to English"}).click();
- await expect(page.locator("html")).toHaveAttribute("dir","ltr");
+ await expect(page.locator("#insurance-knowledge img")).toBeVisible();await expect(page.locator("#insurtech img")).toBeVisible();
+ await page.locator("#langBtn").click();await expect(page.locator("html")).toHaveAttribute("lang","en");
  for(const name of ["GIG Egypt","Misr Takaful Insurance","Tokio Marine Egypt","MetLife","Mohandes Insurance","Delta Insurance","Orient Takaful","Wethaq","Arope Egypt","Sarwa Insurance","Kaf Insurance","AXA Egypt","Suez Canal Insurance","Iskan Insurance","Misr Life Insurance","Misr Insurance","Allianz Egypt","Al Wataniya Insurance"])await expect(page.locator("#insurer-network")).toContainText(name);
- await expect(page.locator("#insurer-network")).toContainText("this is not a ranking or recommendation");
  await expect(page.locator("#insurtech")).toContainText("Technology that");
 });

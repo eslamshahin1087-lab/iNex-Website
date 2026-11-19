@@ -65,3 +65,7 @@ assert.ok(css.includes("animation-play-state:paused!important"),"Marquee must pa
 for(const [page,id] of [["index.html","decision-framework"],["platform.html","platform-journey"],["solutions.html","solutions-journey"],["awareness.html","awareness-checklist"],["company.html","company-principles"],["contact.html","contact-guidance"],["resources.html","resources-starter-guides"]]){
  assert.ok(read(page).includes('id="'+id+'"'),page+" is missing expanded section "+id);
 }
+
+assert.ok(read("resources.html").includes('<html lang="en" dir="ltr">'),"Resources page must now be English-first");
+assert.ok(read("resources.html").includes('id="resources-starter-guides"'),"Resources page must include practical starter guides");
+assert.ok(!read("resources.html").includes('data-en="الشركة"'),"Resources navigation must use English copy");

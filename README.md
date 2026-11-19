@@ -113,3 +113,8 @@ The logo marquee uses a pure-CSS half-track translation. Because the track conta
 - The insurer logo marquee is explicitly isolated as an LTR horizontal track regardless of the page's language direction. It restarts on language changes, retains hover/focus pause behavior and respects reduced-motion preferences.
 - New bilingual sections add practical decision prompts on the home page, an explanation of the platform journey, customer-use-case guidance, an insurance-awareness checklist, company principles, contact routing and introductory knowledge guides.
 - Product positioning distinguishes iNex (customer awareness and digital services) from InsurNex (broker-facing software). The content does not imply that iNex underwrites risk or issues insurance policies.
+
+
+## English-first and expanded insurance knowledge content
+
+The Resources page now opens in English and contains practical starter guidance on reading a policy, comparing offers on a like-for-like basis, and preparing for a claim. The language control's accessible label follows the active language. Browser tests now start in English, switch to Arabic, validate Arabic fonts and verify that the insurer marquee continues moving and pauses on hover in both LTR and RTL page states.
