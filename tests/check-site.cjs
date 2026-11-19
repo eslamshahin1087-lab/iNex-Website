@@ -69,3 +69,8 @@ for(const [page,id] of [["index.html","decision-framework"],["platform.html","pl
 assert.ok(read("resources.html").includes('<html lang="en" dir="ltr">'),"Resources page must now be English-first");
 assert.ok(read("resources.html").includes('id="resources-starter-guides"'),"Resources page must include practical starter guides");
 assert.ok(!read("resources.html").includes('data-en="الشركة"'),"Resources navigation must use English copy");
+
+assert.ok(read("assets/brand-system.css").includes('font-family:"IBM Plex Sans Arabic",sans-serif!important'),"Arabic typography must use one consistent family");
+assert.ok(read("assets/brand-system.css").includes("text-align:right!important"),"Arabic hero copy must be explicitly right aligned");
+assert.ok(read("assets/brand-system.css").includes("text-wrap:pretty"),"Arabic paragraphs must avoid awkward final-line breaks");
+assert.ok(read("index.html").includes("خدمات العملاء الرقمية في تجربة واحدة واضحة"),"Homepage Arabic hero copy should avoid an isolated trailing word");

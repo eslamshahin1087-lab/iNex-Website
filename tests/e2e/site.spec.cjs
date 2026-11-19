@@ -90,6 +90,38 @@ await page.goto("/");const partner=page.locator("#insurnex-partner");await expec
  await page.locator("#langBtn").click();await expect(partner).toContainText("اكتشف InsurNex");await expect(page.locator("html")).toHaveAttribute("dir","rtl");
  await page.locator("#langBtn").click();await expect(partner).toContainText("Explore InsurNex");
 });
+
+test("Arabic typography is consistent, right-aligned and balanced on mobile",async({page})=>{
+ await page.setViewportSize({width:540,height:900});
+ await page.goto("/");
+ await page.locator("#langBtn").click();
+ await expect(page.locator("html")).toHaveAttribute("lang","ar");
+ const heading=page.locator(".hero h1");
+ const lead=page.locator(".hero .lead");
+ await expect(heading).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
+ await expect(lead).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
+ await expect(heading).toHaveCSS("font-weight","700");
+ await expect(lead).toHaveCSS("text-align","right");
+ await expect(lead).toHaveCSS("letter-spacing","normal");
+ const lineWidths=await lead.evaluate(element=>{
+  const range=document.createRange();
+  range.selectNodeContents(element);
+  const rects=[...range.getClientRects()];
+  const lines=new Map();
+  for(const rect of rects){
+   const key=Math.round(rect.top);
+   const old=lines.get(key);
+   if(old)old.right=Math.max(old.right,rect.right),old.left=Math.min(old.left,rect.left);
+   else lines.set(key,{left:rect.left,right:rect.right});
+  }
+  return [...lines.values()].map(line=>line.right-line.left);
+ });
+ expect(lineWidths.length).toBeGreaterThan(1);
+ const widest=Math.max(...lineWidths);
+ const lastLine=lineWidths[lineWidths.length-1];
+ expect(lastLine/widest).toBeGreaterThan(0.28);
+});
+
 test("insurer logo marquee runs and pauses in English LTR and Arabic RTL",async({page})=>{
 await page.goto("/");
  const viewport=page.locator("#insurer-network .insurer-logo-viewport"),track=page.locator("#insurer-network .insurer-logo-track");

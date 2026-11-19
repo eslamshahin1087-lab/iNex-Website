@@ -536,3 +536,137 @@ html[lang="ar"] .insurtech-copy h2{line-height:1.58;letter-spacing:0}
 html[lang="ar"] .eyebrow{font-family:"IBM Plex Sans Arabic",sans-serif;font-size:12px;letter-spacing:0;font-weight:700}
 html[lang="ar"] .insurer-name,
 html[lang="ar"] .insurer-disclaimer{font-family:"IBM Plex Sans Arabic",sans-serif;letter-spacing:0;line-height:1.9}
+
+
+/* Final Arabic typesetting system — one family, consistent weights and RTL rhythm.
+   Keep this block last so earlier legacy overrides cannot reintroduce mixed fonts. */
+html[lang="ar"] body{
+  font-family:"IBM Plex Sans Arabic",sans-serif!important;
+  font-size:16px;
+  font-weight:400;
+  line-height:1.95;
+  letter-spacing:normal!important;
+  word-spacing:normal!important;
+  font-kerning:normal;
+  font-feature-settings:normal;
+  font-synthesis:none;
+  text-rendering:optimizeLegibility;
+  text-align:right;
+}
+html[lang="ar"] :is(h1,h2,h3,h4,h5,h6,.desktop-nav,.mobile-menu,.button,.lang,.menu-btn,.eyebrow,.lead,.section-heading>p,.info-card p,.feature-card p,.solution-card p,.company-grid p,.contact-details p,.disclosure p,.leader-preview-copy p,.leader-card-content p,.leadership-preview-heading>p,.leadership-section-heading>p,.insurance-knowledge-copy>p,.insurtech-copy>p,.insurer-name,.insurer-disclaimer){
+  font-family:"IBM Plex Sans Arabic",sans-serif!important;
+  letter-spacing:normal!important;
+  word-spacing:normal!important;
+  font-kerning:normal;
+  font-feature-settings:normal;
+}
+html[lang="ar"] :is(h1,h2,h3,h4,h5,h6){
+  font-weight:700!important;
+  line-height:1.48;
+  text-align:right;
+  font-synthesis:none;
+}
+html[lang="ar"] .hero-copy,
+html[lang="ar"] .hero-copy .eyebrow,
+html[lang="ar"] .hero-copy h1,
+html[lang="ar"] .hero-copy .lead{
+  text-align:right!important;
+}
+html[lang="ar"] .hero h1{
+  max-width:100%;
+  margin-block:20px 18px;
+  font-size:clamp(43px,4.2vw,57px);
+  line-height:1.48;
+  font-weight:700!important;
+  text-wrap:balance;
+}
+html[lang="ar"] .hero .lead{
+  max-width:560px;
+  font-size:16px;
+  line-height:2.02;
+  font-weight:400;
+  text-align:right!important;
+  text-wrap:pretty;
+  overflow-wrap:normal;
+  word-break:normal;
+  hyphens:none;
+}
+html[lang="ar"] .page-hero h1{
+  max-width:900px;
+  font-size:clamp(38px,4vw,53px);
+  line-height:1.5;
+  text-wrap:balance;
+}
+html[lang="ar"] .page-hero .lead,
+html[lang="ar"] .section-heading>p,
+html[lang="ar"] .info-card p,
+html[lang="ar"] .feature-card p,
+html[lang="ar"] .solution-card p,
+html[lang="ar"] .company-grid p,
+html[lang="ar"] .contact-details p,
+html[lang="ar"] .disclosure p,
+html[lang="ar"] .leader-preview-copy p,
+html[lang="ar"] .leader-card-content p,
+html[lang="ar"] .leadership-preview-heading>p,
+html[lang="ar"] .leadership-section-heading>p,
+html[lang="ar"] .insurance-knowledge-copy>p,
+html[lang="ar"] .insurtech-copy>p{
+  font-size:15.5px;
+  line-height:2.05;
+  font-weight:400;
+  text-align:right;
+  text-wrap:pretty;
+  letter-spacing:normal!important;
+  word-spacing:normal!important;
+}
+html[lang="ar"] .eyebrow{
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:normal!important;
+  line-height:1.7;
+}
+html[lang="ar"] .button,
+html[lang="ar"] .lang,
+html[lang="ar"] .menu-btn,
+html[lang="ar"] .desktop-nav,
+html[lang="ar"] .mobile-menu{
+  font-size:13px;
+  font-weight:600;
+  line-height:1.7;
+}
+html[lang="ar"] .insurer-name,
+html[lang="ar"] .insurer-disclaimer{
+  font-size:12px;
+  line-height:1.9;
+  text-align:center;
+}
+@media(max-width:760px){
+  html[lang="ar"] body{font-size:15.5px;line-height:2}
+  html[lang="ar"] .hero h1{
+    font-size:clamp(35px,8vw,44px);
+    line-height:1.52;
+    margin-block:17px 15px;
+  }
+  html[lang="ar"] .hero .lead{
+    max-width:100%;
+    font-size:15.5px;
+    line-height:2.05;
+  }
+  html[lang="ar"] .page-hero h1{
+    font-size:clamp(33px,7.2vw,43px);
+    line-height:1.55;
+  }
+  html[lang="ar"] .page-hero .lead,
+  html[lang="ar"] .section-heading>p,
+  html[lang="ar"] .info-card p,
+  html[lang="ar"] .feature-card p,
+  html[lang="ar"] .solution-card p,
+  html[lang="ar"] .company-grid p,
+  html[lang="ar"] .contact-details p,
+  html[lang="ar"] .disclosure p,
+  html[lang="ar"] .leader-preview-copy p,
+  html[lang="ar"] .leader-card-content p{
+    font-size:15px;
+    line-height:2.08;
+  }
+}
