@@ -8,6 +8,7 @@ test("desktop navigation is visible and mobile menu is hidden",async({page})=>{a
 test("404 page remains branded and noindex",async({page})=>{await page.goto("/404.html");await expect(page).toHaveTitle("404 | iNex");await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content","noindex,follow");await expect(page.locator(".not-found-logo")).toBeVisible();});
 test("founding leadership portraits and bilingual titles render",async({page})=>{
   await page.goto("/");
+  await page.getByRole("button",{name:"التبديل إلى العربية"}).click();
   await expect(page.locator(".leadership-preview-grid .leader-preview-card")).toHaveCount(2);
   await expect(page.locator(".leadership-preview-grid")).toContainText("إسلام إبراهيم");
   await expect(page.locator(".leadership-preview-grid")).toContainText("فوزية هشام");

@@ -429,3 +429,110 @@ html[lang="ar"] .awareness-question{font-family:"Alexandria","IBM Plex Sans Arab
   .insurer-logo-viewport{overflow-x:auto;overflow-y:hidden;-webkit-mask-image:none;mask-image:none}
   .insurer-logo-set[data-logo-copy="duplicate"]{display:none!important}
 }
+
+
+/* Locale-independent insurer marquee: the page may switch RTL/LTR,
+   but the logo track always remains a left-to-right horizontal conveyor. */
+#insurer-network .insurer-logo-viewport,
+#insurer-network .insurer-logo-track,
+#insurer-network .insurer-logo-set{
+  direction:ltr!important;
+  writing-mode:horizontal-tb!important;
+  unicode-bidi:isolate!important;
+}
+#insurer-network .insurer-logo-viewport{
+  display:block;
+  position:relative;
+  width:100%;
+  min-height:156px;
+  overflow:hidden;
+}
+#insurer-network .insurer-logo-track{
+  display:flex!important;
+  flex-flow:row nowrap!important;
+  align-items:stretch;
+  justify-content:flex-start;
+  width:max-content!important;
+  min-width:max-content!important;
+  max-width:none!important;
+  animation-name:inex-insurer-marquee!important;
+  animation-direction:normal!important;
+  animation-timing-function:linear!important;
+  animation-iteration-count:infinite!important;
+  animation-play-state:running;
+}
+#insurer-network .insurer-logo-set{
+  display:flex!important;
+  flex:0 0 auto!important;
+  flex-flow:row nowrap!important;
+  align-items:stretch;
+  justify-content:flex-start;
+  width:max-content!important;
+  min-width:max-content!important;
+  max-width:none!important;
+  white-space:nowrap;
+}
+#insurer-network .insurer-logo-viewport:hover .insurer-logo-track,
+#insurer-network .insurer-logo-viewport:focus-within .insurer-logo-track{
+  animation-play-state:paused!important;
+}
+@media(max-width:760px){
+  #insurer-network .insurer-logo-viewport{min-height:140px}
+}
+@media(prefers-reduced-motion:reduce){
+  #insurer-network .insurer-logo-track{animation:none!important;transform:none!important}
+  #insurer-network .insurer-logo-viewport{overflow-x:auto;overflow-y:hidden;-webkit-mask-image:none;mask-image:none}
+  #insurer-network .insurer-logo-set[data-logo-copy="duplicate"]{display:none!important}
+}
+
+/* Arabic typography: a comfortable reading face, a distinct display face,
+   neutral letter spacing and line heights that respect Arabic shaping. */
+html[lang="ar"] body{
+  font-family:"IBM Plex Sans Arabic","Cairo",sans-serif;
+  font-size:15.5px;
+  line-height:2;
+  letter-spacing:0;
+  word-spacing:0;
+  font-kerning:normal;
+  font-feature-settings:"kern" 1,"liga" 1,"calt" 1;
+  text-rendering:optimizeLegibility;
+}
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3,
+html[lang="ar"] h4,
+html[lang="ar"] .desktop-nav,
+html[lang="ar"] .mobile-menu,
+html[lang="ar"] .button,
+html[lang="ar"] .lang,
+html[lang="ar"] .menu-btn{
+  font-family:"Alexandria","IBM Plex Sans Arabic",sans-serif;
+  letter-spacing:0;
+  word-spacing:0;
+  font-kerning:normal;
+  font-feature-settings:"kern" 1,"liga" 1,"calt" 1;
+}
+html[lang="ar"] .lead,
+html[lang="ar"] .section-heading>p,
+html[lang="ar"] .info-card p,
+html[lang="ar"] .feature-card p,
+html[lang="ar"] .solution-card p,
+html[lang="ar"] .insurance-knowledge-copy>p,
+html[lang="ar"] .insurtech-copy>p{
+  font-family:"IBM Plex Sans Arabic",sans-serif;
+  font-size:15px;
+  line-height:2.12;
+  letter-spacing:0;
+  word-spacing:0;
+}
+html[lang="ar"] .hero h1{font-size:clamp(40px,4.3vw,59px);line-height:1.46;letter-spacing:0}
+html[lang="ar"] .page-hero h1{font-size:clamp(36px,4vw,54px);line-height:1.5;letter-spacing:0}
+html[lang="ar"] .section h2,
+html[lang="ar"] .band-inner h2,
+html[lang="ar"] .company-grid h2,
+html[lang="ar"] .insurer-network-heading h2,
+html[lang="ar"] .insurance-knowledge-copy h2,
+html[lang="ar"] .insurtech-copy h2{line-height:1.58;letter-spacing:0}
+html[lang="ar"] .eyebrow{font-family:"IBM Plex Sans Arabic",sans-serif;font-size:12px;letter-spacing:0;font-weight:700}
+html[lang="ar"] .insurer-name,
+html[lang="ar"] .insurer-disclaimer{font-family:"IBM Plex Sans Arabic",sans-serif;letter-spacing:0;line-height:1.9}

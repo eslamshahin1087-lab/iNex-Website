@@ -103,3 +103,13 @@ The homepage now uses IBM Plex Sans Arabic for reading and Alexandria for headin
 ## Marquee rendering reliability
 
 The logo marquee uses a pure-CSS half-track translation. Because the track contains two identical, non-shrinking logo groups, `translateX(-50%)` advances exactly one complete group and loops seamlessly without relying on JavaScript width measurements. Browser smoke tests also verify that at least one logo card intersects the visible marquee viewport.
+
+
+## English-first and bilingual content expansion
+
+- The default page source language is English (`lang="en"`, `dir="ltr"`) across the public pages, including the branded 404 page.
+- Visitors can switch to Arabic; the selected language is retained within the current browser tab using `sessionStorage`, while a fresh tab starts in English.
+- Arabic reading copy uses IBM Plex Sans Arabic, with Alexandria for headings and navigation, and language-specific spacing and line-height rules.
+- The insurer logo marquee is explicitly isolated as an LTR horizontal track regardless of the page's language direction. It restarts on language changes, retains hover/focus pause behavior and respects reduced-motion preferences.
+- New bilingual sections add practical decision prompts on the home page, an explanation of the platform journey, customer-use-case guidance, an insurance-awareness checklist, company principles, contact routing and introductory knowledge guides.
+- Product positioning distinguishes iNex (customer awareness and digital services) from InsurNex (broker-facing software). The content does not imply that iNex underwrites risk or issues insurance policies.
