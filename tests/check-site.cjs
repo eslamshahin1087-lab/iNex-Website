@@ -59,9 +59,9 @@ for(const page of ["index.html","platform.html","solutions.html","awareness.html
  assert.ok(html.includes("data-description-en="),page+" must define an English meta description");
 }
 assert.ok(js.includes('sessionStorage.setItem("inex-site-language",next)'),"Language preference should remain scoped to the current tab");
-assert.ok(css.includes("#insurer-network .insurer-logo-track"),"Marquee direction must be isolated from the document direction");
-assert.ok(css.includes("direction:ltr!important"),"Marquee track must remain LTR while the page is RTL");
-assert.ok(css.includes("animation-play-state:paused!important"),"Marquee must pause on hover/focus in both languages");
+assert.ok(read("assets/brand-system.css").includes("#insurer-network .insurer-logo-track"),"Marquee direction must be isolated from the document direction");
+assert.ok(read("assets/brand-system.css").includes("direction:ltr!important"),"Marquee track must remain LTR while the page is RTL");
+assert.ok(read("assets/brand-system.css").includes("animation-play-state:paused!important"),"Marquee must pause on hover/focus in both languages");
 for(const [page,id] of [["index.html","decision-framework"],["platform.html","platform-journey"],["solutions.html","solutions-journey"],["awareness.html","awareness-checklist"],["company.html","company-principles"],["contact.html","contact-guidance"],["resources.html","resources-starter-guides"]]){
  assert.ok(read(page).includes('id="'+id+'"'),page+" is missing expanded section "+id);
 }
