@@ -30,7 +30,7 @@ await page.goto("/",{waitUntil:"domcontentloaded"});
  await expect(page).toHaveTitle("الرئيسية | iNex");await expect(page.locator("main h1")).toContainText("التأمين أوضح");
  expect(await page.locator('meta[name="description"]').getAttribute("content")).not.toBe(englishDescription);
  await expect(page.locator("body")).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
- await expect(page.locator("main h1")).toHaveCSS("font-family",/Alexandria/);
+ await expect(page.locator("main h1")).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
  await expect(page.locator(".desktop-nav a").nth(3)).toHaveText("التوعية");
  await page.locator("#langBtn").click();await expect(page.locator("html")).toHaveAttribute("lang","en");
  await expect(page.locator("html")).toHaveAttribute("dir","ltr");await expect(page).toHaveTitle("Home | iNex");
