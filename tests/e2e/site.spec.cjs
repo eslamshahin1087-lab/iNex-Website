@@ -200,3 +200,22 @@ test("public CMS hooks have safe static fallbacks when no backend is configured"
  await expect(page.locator("[data-cms-image-key]").first()).toBeAttached();
  await expect(page.locator('[data-cms-region="custom-content"]')).toBeAttached();
 });
+
+
+test("CMS administration is private and login-gated",async({page})=>{
+ await page.goto("/admin/",{waitUntil:"domcontentloaded"});
+ await expect(page).toHaveTitle("إدارة محتوى iNex");
+ await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content","noindex,nofollow");
+ await expect(page.locator("#loginPanel")).toBeVisible();
+ await expect(page.locator("#dashboard")).toBeHidden();
+ await expect(page.locator("#password")).toHaveAttribute("type","password");
+ const configNotice=page.locator("#configNotice");
+ if(await configNotice.isVisible()){
+  await expect(page.locator("#email")).toBeDisabled();
+  await expect(page.locator("#password")).toBeDisabled();
+  await expect(page.locator('#loginForm button[type="submit"]')).toBeDisabled();
+ }else{
+  await expect(page.locator("#email")).toBeEnabled();
+  await expect(page.locator("#password")).toBeEnabled();
+ }
+});
