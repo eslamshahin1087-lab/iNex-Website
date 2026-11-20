@@ -111,7 +111,7 @@ assert.ok(read("_headers").includes("https://esm.sh"),"CSP must allow the pinned
 
 
 /* iNex CMS inventory, security boundary and deployment-readiness checks. */
-const cmsSql=read("supabase/setup-cms.sql");
+const cmsSql=read("supabase/setup-cms.sql");\nconst cmsSqlCompact=cmsSql.replace(/\\s+/g,"");
 const cmsPublic=read("assets/cms-public.js");
 const cmsAdmin=read("assets/admin.js");
 const cmsPages=["index.html","platform.html","solutions.html","awareness.html","company.html","contact.html","resources.html"];
@@ -129,8 +129,8 @@ for(const page of cmsPages){
  assert.ok(html.includes('assets/cms-config.js')&&html.includes('assets/cms-public.js'),page+" must load the optional public CMS layer");
  for(const [attribute,type] of [["data-cms-key","text"],["data-cms-image-key","image"]]){
   for(const match of html.matchAll(new RegExp(attribute+'="([^"]+)"',"g"))){
-   const seedRow="('"+slug+"', '"+match[1]+"', '"+type+"'";
-   assert.ok(cmsSql.includes(seedRow),page+" CMS key has no matching "+type+" seed: "+match[1]);
+   const seedRow="('"+slug+"','"+match[1]+"','"+type+"'";
+   assert.ok(cmsSqlCompact.includes(seedRow),page+" CMS key has no matching "+type+" seed: "+match[1]);
   }
  }
 }
