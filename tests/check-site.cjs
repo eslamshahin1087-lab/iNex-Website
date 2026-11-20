@@ -151,3 +151,45 @@ assert.ok(cmsAdmin.includes("file.size>8*1024*1024"),"CMS uploads must enforce t
 assert.ok(cmsAdmin.includes('user.id+"/"+page'),"Uploaded media must be scoped to the authenticated admin");
 assert.ok(!cmsAdmin.includes("signUp("),"The CMS must not expose public account registration");
 assert.doesNotMatch(cmsAdmin+cmsPublic+read("assets/cms-config.js"),/service_role|sb_secret_/i,"No privileged Supabase key may be shipped to the browser");
+
+
+/* iNex editorial visuals, page backgrounds and CMS-managed image inventory. */
+const visualPages=["index.html","platform.html","solutions.html","awareness.html","company.html","contact.html","resources.html"];
+const visualAssets=["insurance-protection.webp","digital-policy.webp","insurance-transformation.webp","digital-platform.webp"];
+for(const asset of visualAssets){
+ const assetPath=path.join(root,"assets",asset);
+ assert.ok(fs.existsSync(assetPath),"Missing editorial image asset: "+asset);
+ assert.ok(fs.statSync(assetPath).size>5000,"Editorial image appears unexpectedly small: "+asset);
+}
+const pageBackgrounds=read("assets/page-backgrounds.css");
+assert.ok(pageBackgrounds.includes('url("/assets/inex-logo.png")'),"Page background must use the iNex mark as a subtle watermark");
+assert.ok(pageBackgrounds.includes("var(--nx-bg-rotation)"),"Page background should vary its mark treatment by page");
+for(const slug of ["index","platform","solutions","awareness","company","contact","resources"]){
+ const html=read(slug+".html");
+ assert.ok(html.includes('href="/assets/page-backgrounds.css"'),slug+" must load its iNex page background");
+ assert.ok(pageBackgrounds.includes('body[data-cms-page="'+slug+'"]'),slug+" must have its own background treatment");
+}
+assert.ok(read("404.html").includes('href="/assets/page-backgrounds.css"'),"404 page must inherit the iNex background system");
+assert.ok(read("assets/site.js").includes('image.dataset.altAr')&&read("assets/site.js").includes('image.dataset.altEn'),"Image alternative text must switch with the page language");
+const homepageVisual=read("index.html");
+assert.ok(homepageVisual.includes('id="insurance-visual-library"'),"Homepage must include the four-topic visual library");
+for(const key of ["index.image.06","index.image.07","index.image.08","index.image.09"])assert.ok(homepageVisual.includes('data-cms-image-key="'+key+'"'),"Homepage visual image is missing CMS key "+key);
+for(const [page,id,key] of [
+ ["platform.html","platform-visual-story","platform.image.03"],
+ ["solutions.html","solutions-visual-story","solutions.image.03"],
+ ["awareness.html","awareness-visual-story","awareness.image.03"],
+ ["company.html","company-visual-story","company.image.06"],
+ ["contact.html","contact-visual-story","contact.image.03"],
+ ["resources.html","resources-visual-story","resources.image.03"]
+]){
+ const html=read(page);
+ assert.ok(html.includes('id="'+id+'"'),page+" must include its topic-specific visual story");
+ assert.ok(html.includes('data-cms-image-key="'+key+'"'),page+" visual image must be editable through CMS");
+}
+for(const key of [
+ "index.text.801","index.text.802","index.text.803","index.text.804","index.text.805","index.text.806","index.text.807","index.text.808",
+ "platform.text.801","platform.text.802","solutions.text.801","solutions.text.802","awareness.text.801","awareness.text.802",
+ "company.text.801","company.text.802","contact.text.801","contact.text.802","resources.text.801","resources.text.802"
+])assert.ok(cmsSql.includes("'"+key+"'"),"CMS seed is missing editorial text key "+key);
+for(const asset of visualAssets)assert.ok(cmsSql.includes("/assets/"+asset),"CMS seed must map the image asset "+asset);
+assert.ok(new Set(cmsImageKeys).size>=48,"CMS must include the original inventory and 10 new editable editorial images");
