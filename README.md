@@ -135,3 +135,8 @@ The Resources page now opens in English and contains practical starter guidance 
 A private CMS interface is available at `/admin/`. It is designed to manage the existing bilingual text inventory, page imagery and the 18 insurer logos individually, as well as add new text, image and card blocks to each public page. Existing static elements can be hidden without removing their original HTML; newly created CMS blocks can be deleted.
 
 The CMS uses a separate Supabase project, Auth, Row Level Security and a public site-media bucket. Its database setup and first-admin provisioning steps are documented in [CMS_SETUP.md](CMS_SETUP.md). Run the SQL in `supabase/setup-cms.sql` only in the dedicated iNex CMS project, then configure `assets/cms-config.js` with that project's URL and publishable key. Never place a service-role or secret key in browser code.
+
+
+## Editorial imagery and page backgrounds
+
+The public pages now include original WebP editorial imagery covering protection, digital policies, insurance transformation and connected platforms. Each page also receives a subtle iNex-inspired background using the navy, champagne-gold and digital-blue palette. New image assets and the associated bilingual copy are included in the CMS seed inventory so admins can replace or edit them after the dedicated iNex-CMS project is configured.
