@@ -182,3 +182,21 @@ test("reduced-motion preference disables decorative motion while keeping story c
  await expect(page.locator("#inex-difference .info-card").first()).toBeVisible();
  await context.close();
 });
+
+test("CMS admin is private and shows setup guidance until a backend is configured",async({page})=>{
+ await page.goto("/admin/");
+ await expect(page).toHaveTitle("إدارة محتوى iNex");
+ await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content","noindex,nofollow");
+ await expect(page.locator("#loginPanel")).toBeVisible();
+ await expect(page.locator("#configNotice")).toBeVisible();
+ await expect(page.locator("#email")).toBeDisabled();
+ await expect(page.locator("#password")).toBeDisabled();
+ await expect(page.locator("#dashboard")).toBeHidden();
+});
+test("public CMS hooks have safe static fallbacks when no backend is configured",async({page})=>{
+ await page.goto("/");
+ await expect(page.locator("main h1")).toContainText("Insurance makes sense");
+ await expect(page.locator("[data-cms-key]").first()).toBeAttached();
+ await expect(page.locator("[data-cms-image-key]").first()).toBeAttached();
+ await expect(page.locator('[data-cms-region="custom-content"]')).toBeAttached();
+});

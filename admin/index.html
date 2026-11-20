@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#07182e">
+  <title>إدارة محتوى iNex</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/admin.css">
+  <script defer src="/assets/cms-config.js"></script>
+  <script type="module" src="/assets/admin.js"></script>
+</head>
+<body>
+  <main class="admin-shell">
+    <section id="loginPanel" class="login-panel">
+      <a class="admin-brand" href="/" aria-label="iNex home">
+        <img src="/assets/inex-logo.png" alt="iNex">
+        <span><b>iNex</b><small>CONTENT MANAGEMENT</small></span>
+      </a>
+      <div class="login-copy">
+        <span class="eyebrow">PRIVATE ADMINISTRATION</span>
+        <h1>إدارة محتوى موقع iNex</h1>
+        <p>سجّل الدخول لإدارة النصوص والصور والأقسام في صفحات الموقع.</p>
+      </div>
+      <div id="configNotice" class="notice notice-warning" hidden>
+        لوحة الإدارة تحتاج إلى ربط مشروع CMS أولًا. أضف رابط المشروع ومفتاح Publishable في الملف <code>assets/cms-config.js</code> بعد إعداد قاعدة البيانات.
+      </div>
+      <form id="loginForm" class="login-form">
+        <label for="email">البريد الإلكتروني</label>
+        <input id="email" name="email" type="email" autocomplete="username" required>
+        <label for="password">كلمة المرور</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <button class="primary-button" type="submit">تسجيل الدخول</button>
+        <button class="link-button" id="forgotPassword" type="button">نسيت كلمة المرور؟</button>
+        <p id="loginMessage" class="form-message" role="status" aria-live="polite"></p>
+      </form>
+      <p class="login-footnote">الدخول للمسؤولين المصرح لهم فقط. لا يوجد تسجيل عام.</p>
+    </section>
+
+    <section id="dashboard" class="dashboard" hidden>
+      <header class="topbar">
+        <a class="admin-brand compact" href="/" aria-label="iNex home">
+          <img src="/assets/inex-logo.png" alt="iNex">
+          <span><b>iNex</b><small>CONTENT STUDIO</small></span>
+        </a>
+        <div class="topbar-right">
+          <span id="adminIdentity" class="admin-identity"></span>
+          <button id="logoutButton" class="secondary-button" type="button">تسجيل الخروج</button>
+        </div>
+      </header>
+
+      <div class="dashboard-layout">
+        <aside class="sidebar">
+          <div class="sidebar-label">إدارة الموقع</div>
+          <button class="nav-item active" type="button" data-view="content"><span>▤</span> المحتوى والصور</button>
+          <div class="sidebar-divider"></div>
+          <a class="nav-item nav-link" href="/" target="_blank" rel="noopener"><span>↗</span> معاينة الموقع</a>
+          <div class="sidebar-note">
+            <b>تذكير</b>
+            <p>التعديلات المنشورة تظهر على الموقع بعد حفظها. جرّبها على المعاينة قبل اعتماد أي تغيير كبير.</p>
+          </div>
+        </aside>
+
+        <section class="workspace">
+          <div class="workspace-heading">
+            <div>
+              <span class="eyebrow">WEBSITE CONTENT STUDIO</span>
+              <h1>المحتوى والصور</h1>
+              <p>تحكم في النصوص الحالية، واستبدل الصور، وأضف محتوى جديدًا لكل صفحة.</p>
+            </div>
+            <button id="toggleCreate" class="primary-button" type="button">＋ إضافة محتوى</button>
+          </div>
+
+          <div class="stats-row">
+            <article class="stat-card"><span>إجمالي العناصر</span><b id="totalCount">—</b></article>
+            <article class="stat-card"><span>عناصر منشورة</span><b id="publishedCount">—</b></article>
+            <article class="stat-card"><span>الصور</span><b id="imageCount">—</b></article>
+            <article class="stat-card"><span>صفحات الموقع</span><b>7</b></article>
+          </div>
+
+          <section id="createPanel" class="create-panel" hidden>
+            <div class="panel-heading">
+              <div><span class="eyebrow">NEW WEBSITE ELEMENT</span><h2>إضافة محتوى جديد</h2></div>
+              <button id="closeCreate" class="icon-button" type="button" aria-label="إغلاق">×</button>
+            </div>
+            <form id="createForm" class="create-form">
+              <div class="form-grid">
+                <div><label for="newPage">الصفحة</label><select id="newPage" required>
+                  <option value="index">الرئيسية</option><option value="platform">المنصة</option><option value="solutions">الحلول</option><option value="awareness">التوعية</option><option value="company">عن iNex</option><option value="contact">تواصل معنا</option><option value="resources">المعرفة</option>
+                </select></div>
+                <div><label for="newType">نوع المحتوى</label><select id="newType"><option value="card">بطاقة محتوى</option><option value="text">نص</option><option value="image">صورة</option></select></div>
+                <div><label for="newSection">اسم القسم (اختياري)</label><input id="newSection" type="text" placeholder="مثال: لماذا iNex؟"></div>
+                <div><label for="newOrder">ترتيب الظهور</label><input id="newOrder" type="number" value="9000"></div>
+              </div>
+              <div class="form-grid">
+                <div><label for="newTitleEn">العنوان بالإنجليزية</label><input id="newTitleEn" type="text"></div>
+                <div><label for="newTitleAr">العنوان بالعربية</label><input id="newTitleAr" type="text"></div>
+              </div>
+              <div class="form-grid">
+                <div><label for="newBodyEn">المحتوى بالإنجليزية</label><textarea id="newBodyEn" rows="4"></textarea></div>
+                <div><label for="newBodyAr">المحتوى بالعربية</label><textarea id="newBodyAr" rows="4"></textarea></div>
+              </div>
+              <div id="newImageFields" class="form-grid" hidden>
+                <div><label for="newAltEn">وصف الصورة بالإنجليزية</label><input id="newAltEn" type="text"></div>
+                <div><label for="newAltAr">وصف الصورة بالعربية</label><input id="newAltAr" type="text"></div>
+                <div class="full-width"><label for="newImage">اختيار صورة</label><input id="newImage" type="file" accept="image/jpeg,image/png,image/webp,image/avif"><small>JPEG أو PNG أو WebP أو AVIF – بحد أقصى 8MB.</small></div>
+              </div>
+              <div class="form-actions"><button class="primary-button" type="submit">إضافة إلى الموقع</button><span id="createMessage" class="form-message" role="status"></span></div>
+            </form>
+          </section>
+
+          <section class="content-panel">
+            <div class="filters">
+              <div class="filter-field"><label for="pageFilter">اختر الصفحة</label><select id="pageFilter">
+                <option value="index">الرئيسية</option><option value="platform">المنصة</option><option value="solutions">الحلول</option><option value="awareness">التوعية</option><option value="company">عن iNex</option><option value="contact">تواصل معنا</option><option value="resources">المعرفة</option>
+              </select></div>
+              <div class="filter-field search-field"><label for="searchInput">بحث</label><input id="searchInput" type="search" placeholder="ابحث في العناوين أو المحتوى..."></div>
+              <div class="filter-field"><label for="typeFilter">نوع العنصر</label><select id="typeFilter"><option value="all">الكل</option><option value="text">نصوص</option><option value="image">صور</option><option value="card">بطاقات</option></select></div>
+            </div>
+            <div id="contentStatus" class="content-status" role="status" aria-live="polite"></div>
+            <div id="contentList" class="content-list"></div>
+          </section>
+        </section>
+      </div>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

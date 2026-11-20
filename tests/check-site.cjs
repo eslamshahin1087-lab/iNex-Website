@@ -85,3 +85,26 @@ assert.match(read("assets/brand-system.css"),/@keyframes inex-page-enter/);
 assert.match(read("assets/brand-system.css"),/prefers-reduced-motion:reduce/);
 assert.ok(read("assets/brand-system.css").includes("main:before"),"All pages should use the digital background layer");
 assert.ok(read("index.html").includes("From information to clearer decisions"),"Homepage should explain the iNex value proposition");
+
+/* iNex CMS structure and safe admin boundary. */
+for(const page of ["index.html","platform.html","solutions.html","awareness.html","company.html","contact.html","resources.html"]){
+ const html=read(page);
+ assert.ok(html.includes('data-cms-page="'+page.replace(".html","")+'"'),page+" must identify its CMS page slug");
+ assert.ok(html.includes('data-cms-region="custom-content"'),page+" must provide a custom content region");
+ assert.match(html,/data-cms-key="[^"]+"/,page+" must expose editable translated content");
+ assert.match(html,/data-cms-image-key="[^"]+"/,page+" must expose editable images");
+}
+assert.ok(read("admin/index.html").includes('id="loginForm"'),"CMS admin must provide a login form");
+assert.ok(read("admin/index.html").includes('name="robots" content="noindex,nofollow"'),"CMS admin must not be indexed");
+assert.ok(read("assets/cms-public.js").includes("is_published"),"Public CMS layer must respect publication state");
+assert.ok(read("assets/admin.js").includes("signInWithPassword"),"CMS access must use authenticated login");
+assert.ok(!/service_role|sb_secret_/i.test(read("assets/admin.js")+read("assets/cms-public.js")+read("assets/cms-config.js")),"No privileged Supabase key may be shipped to the browser");
+assert.match(read("supabase/setup-cms.sql"),/enable row level security/i);
+assert.match(read("supabase/setup-cms.sql"),/cms_admins/i);
+assert.match(read("supabase/setup-cms.sql"),/inex-site-media/i);
+
+assert.ok(read("index.html").includes('data-cms-image-key="index.logo.18"'),"Insurer logos must be individually manageable in the CMS");
+assert.ok(read("supabase/setup-cms.sql").includes("'index.logo.18'"),"CMS setup must seed all 18 insurer logo records");
+assert.ok(read("supabase/setup-cms.sql").includes("image_mode"),"CMS schema must support cropped sprite and uploaded image assets");
+assert.ok(read("assets/cms-public.js").includes("row.image_mode==="),"CMS renderer must preserve sprite crops and support individual logo uploads");
+assert.ok(read("_headers").includes("https://esm.sh"),"CSP must allow the pinned Supabase browser SDK import");
