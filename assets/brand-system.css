@@ -675,3 +675,81 @@ html[lang="ar"] .insurer-disclaimer{
 .inex-story-section .info-card:before,
 .inex-story-section .info-card:after{z-index:0;pointer-events:none}
 .inex-story-section .info-card>*{position:relative;z-index:1}
+
+/* InsurTech digital atmosphere: soft data grids, connected light and layered surfaces. */
+body{
+  background-color:#f4f7fa;
+  background-image:radial-gradient(ellipse at 8% 8%,rgba(74,157,194,.10),transparent 31%),radial-gradient(ellipse at 92% 16%,rgba(201,161,93,.10),transparent 28%),radial-gradient(ellipse at 50% 82%,rgba(26,75,117,.055),transparent 42%),linear-gradient(135deg,#f8fafc 0%,#f1f5f8 52%,#f7f8fa 100%);
+  background-attachment:fixed;
+}
+main{position:relative;isolation:isolate;overflow:clip}
+main:before{
+  content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;opacity:.38;
+  background-image:linear-gradient(rgba(18,55,88,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(18,55,88,.045) 1px,transparent 1px),radial-gradient(circle,rgba(190,146,73,.26) 1px,transparent 1.7px);
+  background-size:44px 44px,44px 44px,88px 88px;
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.68),transparent 90%);
+}
+.page-hero.wrap,.hero.wrap{
+  background-image:radial-gradient(circle at 82% 14%,rgba(83,168,202,.16),transparent 30%),radial-gradient(circle at 8% 90%,rgba(202,161,91,.12),transparent 34%),linear-gradient(125deg,rgba(255,255,255,.96),rgba(245,249,252,.96) 55%,rgba(232,241,247,.94));
+  box-shadow:0 28px 78px rgba(7,24,46,.085),inset 0 1px rgba(255,255,255,.96);
+}
+.section-soft{background:radial-gradient(ellipse at 7% 5%,rgba(75,157,193,.075),transparent 35%),radial-gradient(ellipse at 94% 95%,rgba(204,164,99,.075),transparent 32%),linear-gradient(135deg,rgba(238,243,247,.92),rgba(247,249,251,.88))!important}
+.section:not(.section-soft){background-color:transparent}
+.proof-strip{background:linear-gradient(110deg,rgba(255,255,255,.96),rgba(241,246,249,.94),rgba(255,255,255,.96));backdrop-filter:blur(12px)}
+.insurtech-feature{position:relative;isolation:isolate;overflow:hidden}
+.insurtech-feature:before{
+  content:"";position:absolute;z-index:-1;inset:0;opacity:.38;pointer-events:none;
+  background:radial-gradient(circle at 12% 18%,rgba(105,190,215,.35),transparent 24%),radial-gradient(circle at 91% 80%,rgba(201,161,93,.23),transparent 25%),linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);
+  background-size:auto,auto,34px 34px,34px 34px;
+}
+.product-ecosystem{background:radial-gradient(ellipse at 12% 35%,rgba(82,159,193,.09),transparent 32%),radial-gradient(ellipse at 88% 75%,rgba(202,161,92,.10),transparent 34%)}
+.inex-story-section .info-card{
+  position:relative;isolation:isolate;overflow:hidden;border-color:rgba(216,226,235,.94);
+  background:linear-gradient(150deg,rgba(255,255,255,.98),rgba(249,251,253,.95));
+  box-shadow:0 12px 30px rgba(7,24,46,.045);
+}
+.inex-story-section .info-card:before{
+  content:"";position:absolute;z-index:0;pointer-events:none;inset-inline-start:0;top:0;width:100%;height:3px;
+  background:linear-gradient(90deg,rgba(81,155,190,.75),rgba(201,161,93,.8),transparent 88%);
+  transform:scaleX(.24);transform-origin:left;transition:transform .45s cubic-bezier(.2,.75,.25,1);
+}
+.inex-story-section .info-card:after{
+  content:"";position:absolute;z-index:0;pointer-events:none;width:170px;height:170px;inset-inline-end:-92px;top:-105px;border-radius:50%;
+  background:radial-gradient(circle,rgba(91,169,198,.11),transparent 70%);opacity:.5;transition:transform .55s ease,opacity .55s ease;
+}
+.inex-story-section .info-card>*{position:relative;z-index:1}
+.inex-story-section .info-card:hover:before{transform:scaleX(1)}
+.inex-story-section .info-card:hover:after{transform:scale(1.55);opacity:1}
+.card-icon,.type-icon{transform-origin:center;animation:inex-icon-drift 7s ease-in-out infinite;transition:transform .42s cubic-bezier(.2,.75,.25,1),box-shadow .42s ease,background .42s ease;will-change:transform}
+.info-card:nth-child(3n+2) .card-icon{animation-delay:-2.2s}
+.info-card:nth-child(3n) .card-icon{animation-delay:-4.1s}
+.info-card:hover .card-icon,.feature-card:hover .card-icon,.solution-card:hover .card-icon{animation-play-state:paused;transform:translate3d(0,-6px,0) rotate(-7deg) scale(1.1);box-shadow:0 10px 22px rgba(201,161,93,.16)}
+.insurance-type-card .type-icon{animation-duration:8.5s}
+.insurance-type-card:hover .type-icon{animation-play-state:paused;transform:translateY(-5px) rotate(6deg) scale(1.08)}
+.hero-visual .visual-orbit{animation:inex-orbit-turn 44s linear infinite;transform-origin:center}
+.hero-visual .orbit-two{animation-direction:reverse;animation-duration:58s}
+.insurance-visual img,.insurtech-art img{transform:translateZ(0);animation:inex-art-float 8s ease-in-out infinite;will-change:transform}
+.insurtech-art img{animation-delay:-2.8s}
+.ecosystem-card{position:relative;isolation:isolate;overflow:hidden;transition:transform .38s cubic-bezier(.2,.75,.25,1),box-shadow .38s ease,border-color .38s ease}
+.ecosystem-card:after{content:"";position:absolute;z-index:-1;inset:-60% -40%;opacity:0;background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.36) 50%,transparent 62%);transform:translateX(-28%);transition:opacity .3s ease,transform .7s ease}
+.ecosystem-card:hover{transform:translateY(-7px);border-color:rgba(201,161,93,.58);box-shadow:0 24px 50px rgba(7,24,46,.11)}
+.ecosystem-card:hover:after{opacity:1;transform:translateX(28%)}
+.motion-ready .inex-story-section .info-card.reveal{opacity:0;transform:translateY(22px) scale(.985);transition:opacity .65s ease,transform .7s cubic-bezier(.2,.7,.2,1),box-shadow .3s ease,border-color .3s ease}
+.motion-ready .inex-story-section .info-card.reveal.is-visible{opacity:1;transform:translateY(0) scale(1)}
+.motion-ready .inex-story-section .info-card.reveal:nth-child(2){transition-delay:.08s}
+.motion-ready .inex-story-section .info-card.reveal:nth-child(3){transition-delay:.16s}
+.motion-ready .inex-story-section .info-card.reveal:nth-child(4){transition-delay:.24s}
+.inex-story-section .info-card .card-index{display:inline-flex;min-width:28px;height:25px;align-items:center;justify-content:center;border-radius:8px;background:#f5efe4;color:#966b32;letter-spacing:.08em}
+@keyframes inex-icon-drift{0%,100%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(0,-4px,0) rotate(2deg)}}
+@keyframes inex-orbit-turn{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes inex-art-float{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-7px,0)}}
+@keyframes inex-page-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+body:not(.no-motion) main{animation:inex-page-enter .62s ease both}
+@media(max-width:760px){.inex-story-section .section-heading{gap:12px}.inex-story-section .info-card{padding:23px}.hero-visual .visual-orbit{animation-duration:58s}}
+@media(prefers-reduced-motion:reduce){
+  body:not(.no-motion) main{animation:none!important}
+  .card-icon,.type-icon,.hero-visual .visual-orbit,.insurance-visual img,.insurtech-art img{animation:none!important;will-change:auto}
+  .ecosystem-card,.ecosystem-card:after,.inex-story-section .info-card,.inex-story-section .info-card:before,.inex-story-section .info-card:after{transition:none!important}
+  .ecosystem-card:hover,.info-card:hover .card-icon,.insurance-type-card:hover .type-icon{transform:none!important}
+  .motion-ready .inex-story-section .info-card.reveal{opacity:1;transform:none}
+}
