@@ -108,3 +108,45 @@ assert.ok(read("supabase/setup-cms.sql").includes("'index.logo.18'"),"CMS setup 
 assert.ok(read("supabase/setup-cms.sql").includes("image_mode"),"CMS schema must support cropped sprite and uploaded image assets");
 assert.ok(read("assets/cms-public.js").includes("row.image_mode==="),"CMS renderer must preserve sprite crops and support individual logo uploads");
 assert.ok(read("_headers").includes("https://esm.sh"),"CSP must allow the pinned Supabase browser SDK import");
+
+
+/* iNex CMS inventory, security boundary and deployment-readiness checks. */
+const cmsSql=read("supabase/setup-cms.sql");
+const cmsPublic=read("assets/cms-public.js");
+const cmsAdmin=read("assets/admin.js");
+const cmsPages=["index.html","platform.html","solutions.html","awareness.html","company.html","contact.html","resources.html"];
+const cmsTypeCounts={};
+for(const match of cmsSql.matchAll(/\\('([a-z]+)',\\s*'[^']+',\\s*'(text|image|card)'/g))cmsTypeCounts[match[2]]=(cmsTypeCounts[match[2]]||0)+1;
+assert.ok((cmsTypeCounts.text||0)>=624,"CMS seed must retain the bilingual page text inventory");
+assert.ok((cmsTypeCounts.image||0)>=38,"CMS seed must retain page imagery and individually managed insurer logos");
+assert.ok((cmsTypeCounts.card||0)>=1,"CMS seed must include the initial card inventory");
+assert.equal([...cmsSql.matchAll(/\\('index',\\s*'index\\.logo\\.\\d{2}',\\s*'image'/g)].length,18,"All 18 insurer logos must remain individually manageable");
+for(const page of cmsPages){
+ const slug=page.replace(".html","");
+ const html=read(page);
+ assert.ok(html.includes('data-cms-page="'+slug+'"'),page+" must identify its CMS page slug");
+ assert.ok(html.includes('data-cms-region="custom-content"'),page+" must provide a custom-content region");
+ assert.ok(html.includes('assets/cms-config.js')&&html.includes('assets/cms-public.js'),page+" must load the optional public CMS layer");
+ for(const [attribute,type] of [["data-cms-key","text"],["data-cms-image-key","image"]]){
+  for(const match of html.matchAll(new RegExp(attribute+'="([^"]+)"',"g"))){
+   const key=match[1].replace(/[.*+?^${}()|[\\]\\\\]/g,"\\\\$&");
+   const seedPattern=new RegExp("\\\\('"+slug+"',\\\\s*'"+key+"',\\\\s*'"+type+"'");
+   assert.match(cmsSql,seedPattern,page+" CMS key has no matching "+type+" seed: "+match[1]);
+  }
+ }
+}
+assert.match(cmsPublic,/new DOMParser\\(\\)/,"Public CMS content must be parsed before rendering");
+assert.match(cmsPublic,/const allowed=new Set\\(\\["BR","STRONG","B","EM","I","U","SMALL","SPAN","SUB","SUP"\\]\\)/,"Public CMS content must allow only the documented safe inline elements");
+assert.match(cmsPublic,/url\\.protocol!=="https:"/,"Remote CMS image URLs must require HTTPS");
+assert.match(cmsPublic,/eq\\("is_published",true\\)/,"Public pages must never load unpublished CMS content");
+assert.match(cmsPublic,/row\\.is_custom&&row\\.is_visible/,"Custom CMS blocks must respect their visibility state");
+assert.match(cmsSql,/alter table public\\.cms_admins enable row level security/i);
+assert.match(cmsSql,/alter table public\\.cms_content enable row level security/i);
+assert.match(cmsSql,/create policy "CMS admins can update content"[\\s\\S]*?using \\(\\(select public\\.is_cms_admin\\(\\)\\)\\)[\\s\\S]*?with check \\(\\(select public\\.is_cms_admin\\(\\)\\)\\)/i,"CMS content updates must enforce admin authorization on both old and new rows");
+for(const policy of ["iNex CMS admins can upload media","iNex CMS admins can replace media","iNex CMS admins can delete media"])assert.ok(cmsSql.includes(policy),"Storage operation must be restricted: "+policy);
+assert.match(cmsAdmin,/signInWithPassword/,"CMS must use authenticated password login");
+assert.match(cmsAdmin,/cms_admins/,"CMS must verify admin membership");
+assert.match(cmsAdmin,/file\\.size>8\\*1024\\*1024/,"CMS uploads must enforce the 8MB limit");
+assert.match(cmsAdmin,/user\\.id\\+"\\/"\\+page/,"Uploaded media must be scoped to the authenticated admin");
+assert.doesNotMatch(cmsAdmin,/signUp\\s*\\(/,"The CMS must not expose public account registration");
+assert.doesNotMatch(cmsAdmin+cmsPublic+read("assets/cms-config.js"),/service_role|sb_secret_/i,"No privileged Supabase key may be shipped to the browser");
