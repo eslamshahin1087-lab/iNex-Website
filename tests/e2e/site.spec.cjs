@@ -219,3 +219,36 @@ test("CMS administration is private and login-gated",async({page})=>{
   await expect(page.locator("#password")).toBeEnabled();
  }
 });
+
+
+test("editorial insurance imagery loads and alternative text follows the selected language",async({page})=>{
+ const routes=[
+  ["/","insurance-visual-library"],
+  ["/platform.html","platform-visual-story"],
+  ["/solutions.html","solutions-visual-story"],
+  ["/awareness.html","awareness-visual-story"],
+  ["/company.html","company-visual-story"],
+  ["/contact.html","contact-visual-story"],
+  ["/resources.html","resources-visual-story"]
+ ];
+ for(const [path,sectionId] of routes){
+  await page.goto(path,{waitUntil:"domcontentloaded"});
+  await expect(page.locator('link[href="/assets/page-backgrounds.css"]')).toBeAttached();
+  const background=await page.locator("body").evaluate(node=>getComputedStyle(node,"::before").backgroundImage);
+  expect(background).toContain("radial-gradient");
+  const section=page.locator("#"+sectionId);
+  await expect(section).toBeAttached();
+  const images=section.locator("img[data-cms-image-key]");
+  const count=await images.count();
+  expect(count,path+" must expose its editorial images").toBeGreaterThan(0);
+  const image=images.first();
+  await image.scrollIntoViewIfNeeded();
+  await expect.poll(()=>image.evaluate(node=>node.complete&&node.naturalWidth>0)).toBe(true);
+  const altAr=await image.getAttribute("data-alt-ar");
+  const altEn=await image.getAttribute("data-alt-en");
+  await page.locator("#langBtn").click();
+  await expect(image).toHaveAttribute("alt",altAr);
+  await page.locator("#langBtn").click();
+  await expect(image).toHaveAttribute("alt",altEn);
+ }
+});
