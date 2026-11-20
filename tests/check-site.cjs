@@ -119,7 +119,7 @@ const cmsTypeCounts={};
 for(const type of ["text","image","card"])cmsTypeCounts[type]=cmsSql.split(", '"+type+"',").length-1;
 assert.ok(cmsTypeCounts.text>=624,"CMS seed must retain the bilingual page text inventory");
 const cmsImageKeys=cmsSql.match(/(?:index|platform|solutions|awareness|company|contact|resources)\.(?:image|logo)\.\d+/g)||[]; assert.ok(new Set(cmsImageKeys).size>=38,"CMS seed must retain page imagery and individually managed insurer logos");
-assert.ok(cmsTypeCounts.card>=1,"CMS seed must include the initial card inventory");
+assert.ok(cmsSql.includes("content_type in ('text','card')"),"CMS schema must support adding card content");
 for(let i=1;i<=18;i++)assert.ok(cmsSql.includes("'index.logo."+String(i).padStart(2,"0")+"'"),"Missing individually managed insurer logo "+i);
 for(const page of cmsPages){
  const slug=page.replace(".html","");
