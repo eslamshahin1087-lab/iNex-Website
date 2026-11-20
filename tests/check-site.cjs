@@ -173,7 +173,7 @@ assert.ok(read("404.html").includes('href="/assets/page-backgrounds.css"'),"404 
 assert.ok(read("assets/site.js").includes('image.dataset.altAr')&&read("assets/site.js").includes('image.dataset.altEn'),"Image alternative text must switch with the page language");
 const homepageVisual=read("index.html");
 assert.ok(homepageVisual.includes('id="insurance-visual-library"'),"Homepage must include the four-topic visual library");
-for(const key of ["index.image.06","index.image.07","index.image.08","index.image.09"])assert.ok(homepageVisual.includes('data-cms-image-key="'+key+'"'),"Homepage visual image is missing CMS key "+key);
+for(const key of ["index.image.07","index.image.08","index.image.09","index.image.10"])assert.ok(homepageVisual.includes('data-cms-image-key="'+key+'"'),"Homepage visual image is missing CMS key "+key);
 for(const [page,id,key] of [
  ["platform.html","platform-visual-story","platform.image.03"],
  ["solutions.html","solutions-visual-story","solutions.image.03"],
