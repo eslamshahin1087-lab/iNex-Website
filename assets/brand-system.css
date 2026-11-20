@@ -670,3 +670,8 @@ html[lang="ar"] .insurer-disclaimer{
     line-height:2.08;
   }
 }
+
+/* Keep the decorative card glows above the card surface and below its content. */
+.inex-story-section .info-card:before,
+.inex-story-section .info-card:after{z-index:0;pointer-events:none}
+.inex-story-section .info-card>*{position:relative;z-index:1}

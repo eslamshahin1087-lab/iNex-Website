@@ -118,3 +118,13 @@ The logo marquee uses a pure-CSS half-track translation. Because the track conta
 ## English-first and expanded insurance knowledge content
 
 The Resources page now opens in English and contains practical starter guidance on reading a policy, comparing offers on a like-for-like basis, and preparing for a claim. The language control's accessible label follows the active language. Browser tests now start in English, switch to Arabic, validate Arabic fonts and verify that the insurer marquee continues moving and pauses on hover in both LTR and RTL page states.
+
+
+## InsurTech content and visual experience refresh
+
+- Expanded bilingual, benefits-led content explains how iNex connects insurance awareness, needs review, policy information and customer-service requests.
+- Added dedicated customer-story sections to the homepage, platform, solutions, awareness, company, contact and resources pages.
+- Clarified that iNex and InsurNex are distinct products with separate audiences: iNex is customer-facing and InsurNex is broker-facing.
+- Added a site-wide abstract InsurTech background using low-contrast digital grids, data-like nodes, layered radial light and restrained navy, gold and blue depth. The treatment is CSS-based and does not add heavy image assets.
+- Added subtle motion for icon cues, homepage orbits, editorial illustrations, ecosystem cards and page entry. Motion is disabled or reduced for visitors who request reduced motion.
+- Added browser coverage for the motion/background system and reduced-motion accessibility.

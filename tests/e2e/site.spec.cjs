@@ -151,3 +151,34 @@ await page.goto("/");
  for(const name of ["GIG Egypt","Misr Takaful Insurance","Tokio Marine Egypt","MetLife","Mohandes Insurance","Delta Insurance","Orient Takaful","Wethaq","Arope Egypt","Sarwa Insurance","Kaf Insurance","AXA Egypt","Suez Canal Insurance","Iskan Insurance","Misr Life Insurance","Misr Insurance","Allianz Egypt","Al Wataniya Insurance"])await expect(page.locator("#insurer-network")).toContainText(name);
  await expect(page.locator("#insurtech")).toContainText("Technology that");
 });
+
+test("InsurTech backgrounds and icon motion render while keeping content readable",async({page})=>{
+ await page.goto("/");
+ await expect(page.locator("main")).toBeVisible();
+ await expect(page.locator("main")).toHaveCSS("animation-name","inex-page-enter");
+ await expect(page.locator("main")).toHaveCSS("isolation","isolate");
+ const hero=page.locator(".hero.wrap");
+ await expect(hero).toBeVisible();
+ const background=await hero.evaluate(element=>getComputedStyle(element).backgroundImage);
+ expect(background).toContain("radial-gradient");
+ const card=page.locator("#inex-difference .info-card").first();
+ await card.scrollIntoViewIfNeeded();
+ const icon=card.locator(".card-icon");
+ await expect(icon).toHaveCSS("animation-name","inex-icon-drift");
+ await card.hover();
+ await expect(icon).toHaveCSS("animation-play-state","paused");
+ await expect(card).toBeVisible();
+ await page.setViewportSize({width:390,height:844});
+ await expect(page.locator("#inex-difference")).toBeVisible();
+});
+test("reduced-motion preference disables decorative motion while keeping story content visible",async({browser})=>{
+ const context=await browser.newContext({reducedMotion:"reduce"});
+ const page=await context.newPage();
+ await page.goto("/");
+ await expect(page.locator("main")).toHaveCSS("animation-name","none");
+ const icon=page.locator("#inex-difference .card-icon").first();
+ await icon.scrollIntoViewIfNeeded();
+ await expect(icon).toHaveCSS("animation-name","none");
+ await expect(page.locator("#inex-difference .info-card").first()).toBeVisible();
+ await context.close();
+});

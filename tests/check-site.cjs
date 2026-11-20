@@ -74,3 +74,14 @@ assert.ok(read("assets/brand-system.css").includes('font-family:"IBM Plex Sans A
 assert.ok(read("assets/brand-system.css").includes("text-align:right!important"),"Arabic hero copy must be explicitly right aligned");
 assert.ok(read("assets/brand-system.css").includes("text-wrap:pretty"),"Arabic paragraphs must avoid awkward final-line breaks");
 assert.ok(read("index.html").includes("خدمات العملاء الرقمية في تجربة واحدة واضحة"),"Homepage Arabic hero copy should avoid an isolated trailing word");
+
+/* InsurTech visual language and customer-story sections. */
+for(const [page,id] of [["index.html","inex-difference"],["platform.html","platform-in-practice"],["solutions.html","solutions-better-conversations"],["awareness.html","awareness-policy-language"],["company.html","company-digital-principles"],["contact.html","contact-preparation"],["resources.html","resources-digital-insurance"]]){
+ const html=read(page);
+ assert.ok(html.includes('id="'+id+'"'),page+" must include its expanded customer story section");
+}
+assert.match(read("assets/brand-system.css"),/@keyframes inex-icon-drift/);
+assert.match(read("assets/brand-system.css"),/@keyframes inex-page-enter/);
+assert.match(read("assets/brand-system.css"),/prefers-reduced-motion:reduce/);
+assert.ok(read("assets/brand-system.css").includes("main:before"),"All pages should use the digital background layer");
+assert.ok(read("index.html").includes("From information to clearer decisions"),"Homepage should explain the iNex value proposition");
