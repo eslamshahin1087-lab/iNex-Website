@@ -111,7 +111,8 @@ assert.ok(read("_headers").includes("https://esm.sh"),"CSP must allow the pinned
 
 
 /* iNex CMS inventory, security boundary and deployment-readiness checks. */
-const cmsSql=read("supabase/setup-cms.sql");\nconst cmsSqlCompact=cmsSql.replace(/\\s+/g,"");
+const cmsSql=read("supabase/setup-cms.sql");
+const cmsSqlCompact=cmsSql.replace(/\s+/g,"");
 const cmsPublic=read("assets/cms-public.js");
 const cmsAdmin=read("assets/admin.js");
 const cmsPages=["index.html","platform.html","solutions.html","awareness.html","company.html","contact.html","resources.html"];
