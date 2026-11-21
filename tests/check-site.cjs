@@ -307,3 +307,6 @@ assert.ok(adminEdgeMiddleware.includes("env.INEX_ADMIN_EMAIL.trim().toLowerCase(
 const pagesWranglerConfig=read("wrangler.toml");
 assert.ok(pagesWranglerConfig.includes('name = "inex-website"'),"Keep the project name for local Wrangler development");
 assert.ok(!/^pages_build_output_dir\s*=/m.test(pagesWranglerConfig),"Do not opt the Pages project into Wrangler-managed production configuration; keep dashboard Production variables and secrets authoritative");
+
+assert.ok(adminEdgeAuth.includes("isSameOriginAdminRequest"),"Admin form posts must use the robust same-origin validator");
+assert.ok(adminEdgeMiddleware.includes("isSameOriginAdminRequest(request, url)"),"Both admin login and logout must use the robust same-origin validator");
