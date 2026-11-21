@@ -155,11 +155,12 @@ assert.doesNotMatch(cmsAdmin+cmsPublic+read("assets/cms-config.js"),/service_rol
 
 /* iNex editorial visuals, page backgrounds and CMS-managed image inventory. */
 const visualPages=["index.html","platform.html","solutions.html","awareness.html","company.html","contact.html","resources.html"];
-const visualAssets=["insurance-protection.webp","digital-policy.webp","insurance-transformation.webp","digital-platform.webp"];
+const visualAssets=["insurance-protection.svg","digital-policy.svg","insurance-transformation.svg","digital-platform.svg"];
 for(const asset of visualAssets){
  const assetPath=path.join(root,"assets",asset);
  assert.ok(fs.existsSync(assetPath),"Missing editorial image asset: "+asset);
- assert.ok(fs.statSync(assetPath).size>30000,"Editorial image appears unexpectedly small: "+asset);
+ assert.ok(fs.statSync(assetPath).size>3500,"Editorial SVG asset is unexpectedly small: "+asset);
+ assert.ok(fs.readFileSync(assetPath,"utf8").includes(`width="1200" height="800" viewBox="0 0 1200 800"`),"Editorial SVG must declare a full-resolution 3:2 canvas: "+asset);
 }
 const pageBackgrounds=read("assets/page-backgrounds.css");
 assert.ok(pageBackgrounds.includes('url("/assets/inex-logo.png")'),"Page background must use the iNex mark as a subtle watermark");
