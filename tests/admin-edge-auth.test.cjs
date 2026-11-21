@@ -36,7 +36,7 @@ test("rejects altered session payloads and signatures", async () => {
   const token = await auth.createAdminSession(email, sessionSecret, fixedNow);
   const [payload, signature] = token.split(".");
   const changedPayload = (payload[0] === "A" ? "B" : "A") + payload.slice(1);
-  const changedSignature = signature.slice(0, -1) + (signature.endsWith("A") ? "B" : "A");
+  const changedSignature = (signature[0] === "A" ? "B" : "A") + signature.slice(1);
   assert.equal(await auth.verifyAdminSession(changedPayload + "." + signature, email, sessionSecret, fixedNow), false);
   assert.equal(await auth.verifyAdminSession(payload + "." + changedSignature, email, sessionSecret, fixedNow), false);
 });
