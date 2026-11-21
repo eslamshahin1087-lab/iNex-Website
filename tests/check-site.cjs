@@ -302,3 +302,8 @@ assert.deepEqual(functionRoutes,{version:1,include:["/admin","/admin/*"],exclude
 assert.ok(adminEdgeAuth.includes("getAdminConfigurationIssues"),"Admin configuration must expose only safe, non-secret diagnostics");
 assert.ok(adminEdgeMiddleware.includes("configurationErrorPage(configurationIssues)"),"Misconfigured admin runtime must identify missing binding names without showing their values");
 assert.ok(adminEdgeMiddleware.includes("env.INEX_ADMIN_EMAIL.trim().toLowerCase()"),"Admin email must be normalized consistently when validating and issuing sessions");
+
+/* Cloudflare Pages dashboard configuration remains authoritative for Production bindings. */
+const pagesWranglerConfig=read("wrangler.toml");
+assert.ok(pagesWranglerConfig.includes('name = "inex-website"'),"Keep the project name for local Wrangler development");
+assert.ok(!/^pages_build_output_dir\s*=/m.test(pagesWranglerConfig),"Do not opt the Pages project into Wrangler-managed production configuration; keep dashboard Production variables and secrets authoritative");
