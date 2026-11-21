@@ -197,3 +197,15 @@ for(const key of [
 ])assert.ok(cmsSql.includes("'"+key+"'"),"CMS seed is missing editorial text key "+key);
 for(const asset of visualAssets)assert.ok(cmsSql.includes("/assets/"+asset),"CMS seed must map the image asset "+asset);
 assert.ok(new Set(cmsImageKeys).size>=48,"CMS must include the original inventory and 10 new editable editorial images");
+
+
+/* Readability and contrast regression checks for both site languages. */
+const typeSystem=read("assets/brand-system.css");
+assert.ok(typeSystem.includes("iNex readable type & contrast system"),"The site-wide readability system must be present");
+assert.ok(typeSystem.includes("--nx-text-secondary:#4b6076"),"Secondary copy must use a high-contrast slate tone");
+assert.ok(typeSystem.includes("--nx-heading-dark:#ffffff"),"Dark surfaces must use white headings");
+assert.ok(typeSystem.includes("--nx-gold-on-dark:#f1d49b"),"Gold emphasis on dark surfaces must use the light-gold token");
+assert.ok(typeSystem.includes("html[lang=\"ar\"] body :is(p,li,dd,figcaption"),"Arabic reading copy must receive explicit typography rules");
+assert.ok(typeSystem.includes("font-size:16px;")&&typeSystem.includes("font-weight:500;"),"Arabic body copy must be readable in size and weight");
+assert.ok(typeSystem.includes(".dark-band :is(h1,h2,h3,h4,h5,h6)")||typeSystem.includes(":is(.dark-band,.insurtech-feature"),"Dark section headings must be explicitly protected from dark text colours");
+assert.ok(typeSystem.includes("-webkit-text-fill-color:currentColor!important"),"Emphasis text must not become transparent on dark surfaces");
