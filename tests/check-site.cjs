@@ -298,3 +298,7 @@ assert.ok(read("assets/admin.js").includes("/admin/__logout"),"Dashboard logout 
 
 const functionRoutes=JSON.parse(read("_routes.json"));
 assert.deepEqual(functionRoutes,{version:1,include:["/admin","/admin/*"],exclude:[]},"Cloudflare Pages Functions must run only for the admin route");
+
+assert.ok(adminEdgeAuth.includes("getAdminConfigurationIssues"),"Admin configuration must expose only safe, non-secret diagnostics");
+assert.ok(adminEdgeMiddleware.includes("configurationErrorPage(configurationIssues)"),"Misconfigured admin runtime must identify missing binding names without showing their values");
+assert.ok(adminEdgeMiddleware.includes("env.INEX_ADMIN_EMAIL.trim().toLowerCase()"),"Admin email must be normalized consistently when validating and issuing sessions");
