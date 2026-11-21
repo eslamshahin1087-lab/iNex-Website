@@ -286,7 +286,7 @@ assert.ok(adminEdgeMiddleware.includes("INEX_ADMIN_EMAIL")&&adminEdgeMiddleware.
 assert.ok(adminEdgeMiddleware.includes("return htmlResponse(loginPage())"),"Unauthenticated admin requests must receive a login gate");
 assert.ok(adminEdgeMiddleware.includes("return htmlResponse(")&&adminEdgeMiddleware.includes("503"),"Admin gate must fail closed when secrets are missing");
 assert.ok(adminEdgeMiddleware.includes("HttpOnly; SameSite=Strict")&&adminEdgeMiddleware.includes("Secure"),"Admin sessions must use Secure, HttpOnly and SameSite=Strict cookies");
-assert.ok(adminEdgeMiddleware.includes("isSameOrigin(request, url)"),"Admin login and logout must enforce same-origin POSTs");
+assert.ok(adminEdgeMiddleware.includes("isSameOriginAdminRequest(request, url)"),"Admin login and logout must enforce same-origin POSTs");
 assert.ok(adminEdgeMiddleware.includes("context.next()"),"Authenticated requests must continue to the existing static admin UI");
 assert.ok(adminEdgeMiddleware.includes("Max-Age=")&&adminEdgeMiddleware.includes("SESSION_TTL_SECONDS"),"Admin sessions must expire automatically");
 assert.ok(adminEdgeAuth.includes("crypto.subtle.sign")&&adminEdgeAuth.includes("crypto.subtle.verify"),"Admin sessions must use HMAC signatures");
@@ -307,3 +307,6 @@ assert.ok(adminEdgeMiddleware.includes("env.INEX_ADMIN_EMAIL.trim().toLowerCase(
 const pagesWranglerConfig=read("wrangler.toml");
 assert.ok(pagesWranglerConfig.includes('name = "inex-website"'),"Keep the project name for local Wrangler development");
 assert.ok(!/^pages_build_output_dir\s*=/m.test(pagesWranglerConfig),"Do not opt the Pages project into Wrangler-managed production configuration; keep dashboard Production variables and secrets authoritative");
+
+assert.ok(adminEdgeAuth.includes("isSameOriginAdminRequest"),"Admin form posts must use the robust same-origin validator");
+assert.ok(adminEdgeMiddleware.includes("isSameOriginAdminRequest(request, url)"),"Both admin login and logout must use the robust same-origin validator");

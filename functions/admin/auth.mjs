@@ -104,3 +104,39 @@ export function getAdminConfigurationIssues(env = {}) {
   }
   return issues;
 }
+
+
+export function isSameOriginAdminRequest(request, requestUrl) {
+  let expectedOrigin;
+  try {
+    expectedOrigin = requestUrl instanceof URL ? requestUrl.origin : new URL(requestUrl).origin;
+  } catch {
+    return false;
+  }
+
+  const originHeader = request.headers.get("Origin");
+  if (originHeader && originHeader !== "null") {
+    try {
+      return new URL(originHeader).origin === expectedOrigin;
+    } catch {
+      return false;
+    }
+  }
+
+  // Chrome and other modern browsers send Fetch Metadata even when Origin
+  // is omitted from a same-origin HTML form POST.
+  if (request.headers.get("Sec-Fetch-Site") === "same-origin") return true;
+
+  // Fallback for older browsers. The login page should permit a same-origin
+  // referrer; cross-origin or missing referrers remain rejected.
+  const referer = request.headers.get("Referer");
+  if (referer) {
+    try {
+      return new URL(referer).origin === expectedOrigin;
+    } catch {
+      return false;
+    }
+  }
+
+  return false;
+}
