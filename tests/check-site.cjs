@@ -295,3 +295,6 @@ assert.ok(!/INEX_ADMIN_PASSWORD\s*[:=]\s*["'][^"']+["']/.test(adminEdgeMiddlewar
 assert.ok(read("functions/admin/index.js").includes("context.next()"),"/admin must pass through its access middleware before static content");
 assert.ok(read("functions/admin/[[path]].js").includes("context.next()"),"Nested /admin routes must pass through their access middleware");
 assert.ok(read("assets/admin.js").includes("/admin/__logout"),"Dashboard logout must clear the edge session");
+
+const functionRoutes=JSON.parse(read("_routes.json"));
+assert.deepEqual(functionRoutes,{version:1,include:["/admin","/admin/*"],exclude:[]},"Cloudflare Pages Functions must run only for the admin route");
