@@ -914,3 +914,59 @@ html[lang="ar"] body :is(.dark-band,.insurtech-feature,.ecosystem-card-inex,.vis
   html[lang="ar"] body :is(p,li,dd,figcaption,.lead,.section-heading>p,.visual-gallery-heading>p,.visual-feature-copy>p,.contact-details p,.info-card p,.feature-card p,.solution-card p,.company-grid p,.leader-preview-copy p,.leader-card-content p,.ecosystem-heading>p){font-size:15.5px;line-height:2.08}
   html[lang="ar"] body :is(h1,h2,h3,h4,h5,h6){line-height:1.58}
 }
+
+
+/* Strategic partnership panel: explicit light-on-navy contrast.
+   This component lives on company.html and is intentionally a dark surface. */
+.partner-section{
+  color:#e4edf5;
+}
+.partner-section-copy .eyebrow,
+.partner-section-copy .eyebrow span{
+  color:#f1d49b!important;
+}
+.partner-section-copy h2{
+  color:#ffffff!important;
+  font-weight:750;
+}
+.partner-section-copy h2 em{
+  color:#f1d49b!important;
+  background:none!important;
+  -webkit-background-clip:initial!important;
+  background-clip:border-box!important;
+  -webkit-text-fill-color:currentColor!important;
+}
+.partner-section-copy p{
+  color:#e4edf5!important;
+  opacity:1!important;
+  font-weight:500;
+  line-height:2;
+}
+.partner-section .partner-mark{
+  color:#ffffff!important;
+}
+.partner-section .partner-mark i{
+  color:#f1d49b!important;
+}
+html[lang="ar"] .partner-section-copy h2,
+html[lang="ar"] .partner-section-copy p,
+html[lang="ar"] .partner-section-copy .eyebrow,
+html[lang="ar"] .partner-section-copy .eyebrow span{
+  font-family:"IBM Plex Sans Arabic",sans-serif!important;
+  letter-spacing:normal!important;
+  word-spacing:normal!important;
+}
+html[lang="ar"] .partner-section-copy h2{
+  font-weight:700!important;
+  line-height:1.58;
+}
+html[lang="ar"] .partner-section-copy p{
+  font-size:16px;
+  line-height:2.08;
+  font-weight:500;
+}
+@media(max-width:760px){
+  .partner-section-copy h2{line-height:1.5}
+  .partner-section-copy p{font-size:14.5px}
+  html[lang="ar"] .partner-section-copy p{font-size:15.5px;line-height:2.05}
+}
