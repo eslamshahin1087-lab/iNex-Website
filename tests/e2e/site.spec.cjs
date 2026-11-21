@@ -306,3 +306,33 @@ test("bilingual typography and light/dark text contrast remain readable",async({
  const paragraphColor=await arabicParagraph.evaluate(node=>getComputedStyle(node).color);
  expect(paragraphColor).toBe("rgb(67, 88, 110)");
 });
+
+
+test("strategic partnership panel keeps readable contrast in English and Arabic",async({page})=>{
+ await page.setViewportSize({width:1351,height:900});
+ await page.goto("/company.html",{waitUntil:"domcontentloaded"});
+ const panel=page.locator(".partner-section");
+ const heading=panel.locator(".partner-section-copy h2");
+ const emphasis=heading.locator("em");
+ const paragraph=panel.locator(".partner-section-copy p");
+ const eyebrow=panel.locator(".partner-section-copy .eyebrow span");
+ await expect(panel).toBeVisible();
+ await expect(heading).toHaveCSS("color","rgb(255, 255, 255)");
+ await expect(emphasis).toHaveCSS("-webkit-text-fill-color","rgb(241, 212, 155)");
+ await expect(paragraph).toHaveCSS("color","rgb(228, 237, 245)");
+ await expect(eyebrow).toHaveCSS("color","rgb(241, 212, 155)");
+ await expect(paragraph).toHaveCSS("opacity","1");
+ await page.locator("#langBtn").click();
+ await expect(page.locator("html")).toHaveAttribute("lang","ar");
+ await expect(heading).toHaveCSS("color","rgb(255, 255, 255)");
+ await expect(emphasis).toHaveCSS("-webkit-text-fill-color","rgb(241, 212, 155)");
+ await expect(paragraph).toHaveCSS("color","rgb(228, 237, 245)");
+ await expect(paragraph).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
+ await expect(paragraph).toHaveCSS("font-weight","500");
+ expect(parseFloat(await paragraph.evaluate(node=>getComputedStyle(node).fontSize))).toBeGreaterThanOrEqual(15);
+ await page.setViewportSize({width:390,height:844});
+ await expect(heading).toBeVisible();
+ await expect(paragraph).toBeVisible();
+ await expect(heading).toHaveCSS("color","rgb(255, 255, 255)");
+ await expect(paragraph).toHaveCSS("color","rgb(228, 237, 245)");
+});
