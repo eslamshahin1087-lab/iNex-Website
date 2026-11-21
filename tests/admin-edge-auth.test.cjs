@@ -53,3 +53,36 @@ test("compares credentials without an early character-by-character exit", async 
   assert.equal(await auth.constantTimeStringEqual("administrator@example.com", "attacker@example.com"), false);
   assert.equal(await auth.constantTimeStringEqual(null, "administrator@example.com"), false);
 });
+
+
+test("identifies missing or undersized runtime bindings without exposing their values", () => {
+  const valid = {
+    INEX_ADMIN_EMAIL: "administrator@example.com",
+    INEX_ADMIN_PASSWORD: "a".repeat(32),
+    INEX_ADMIN_SESSION_SECRET: "b".repeat(64)
+  };
+  assert.deepEqual(auth.getAdminConfigurationIssues(valid), []);
+
+  assert.deepEqual(
+    auth.getAdminConfigurationIssues({ ...valid, INEX_ADMIN_EMAIL: "" }),
+    ["INEX_ADMIN_EMAIL is missing or invalid in the Production runtime."]
+  );
+  assert.deepEqual(
+    auth.getAdminConfigurationIssues({ ...valid, INEX_ADMIN_PASSWORD: "short" }),
+    ["INEX_ADMIN_PASSWORD is missing or shorter than the required 24 characters."]
+  );
+  assert.deepEqual(
+    auth.getAdminConfigurationIssues({ ...valid, INEX_ADMIN_SESSION_SECRET: "short" }),
+    ["INEX_ADMIN_SESSION_SECRET is missing or shorter than the required 32 characters."]
+  );
+  assert.deepEqual(
+    auth.getAdminConfigurationIssues({}),
+    [
+      "INEX_ADMIN_EMAIL is missing or invalid in the Production runtime.",
+      "INEX_ADMIN_PASSWORD is missing or shorter than the required 24 characters.",
+      "INEX_ADMIN_SESSION_SECRET is missing or shorter than the required 32 characters."
+    ]
+  );
+  assert.equal(JSON.stringify(auth.getAdminConfigurationIssues(valid)).includes(valid.INEX_ADMIN_PASSWORD), false);
+  assert.equal(JSON.stringify(auth.getAdminConfigurationIssues(valid)).includes(valid.INEX_ADMIN_SESSION_SECRET), false);
+});
