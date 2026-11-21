@@ -209,3 +209,10 @@ assert.ok(typeSystem.includes("html[lang=\"ar\"] body :is(p,li,dd,figcaption"),"
 assert.ok(typeSystem.includes("font-size:16px;")&&typeSystem.includes("font-weight:500;"),"Arabic body copy must be readable in size and weight");
 assert.ok(typeSystem.includes(".dark-band :is(h1,h2,h3,h4,h5,h6)")||typeSystem.includes(":is(.dark-band,.insurtech-feature"),"Dark section headings must be explicitly protected from dark text colours");
 assert.ok(typeSystem.includes("-webkit-text-fill-color:currentColor!important"),"Emphasis text must not become transparent on dark surfaces");
+
+
+/* Company partnership panel contrast regression checks. */
+assert.ok(typeSystem.includes("Strategic partnership panel: explicit light-on-navy contrast"),"The strategic partnership panel must have dedicated dark-surface typography");
+assert.ok(typeSystem.includes(".partner-section-copy h2{\n  color:#ffffff!important"),"Partnership heading must remain white on navy");
+assert.ok(typeSystem.includes(".partner-section-copy h2 em{\n  color:#f1d49b!important"),"Partnership heading emphasis must use light gold");
+assert.ok(typeSystem.includes(".partner-section-copy p{\n  color:#e4edf5!important"),"Partnership paragraph must remain light and readable");
