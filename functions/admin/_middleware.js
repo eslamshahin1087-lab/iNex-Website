@@ -3,7 +3,8 @@ import {
   createAdminSession,
   verifyAdminSession,
   SESSION_TTL_SECONDS,
-  getAdminConfigurationIssues
+  getAdminConfigurationIssues,
+  isSameOriginAdminRequest
 } from "./auth.mjs";
 
 const COOKIE_NAME = "__Secure-iNexAdminSession";
@@ -113,11 +114,6 @@ function configurationErrorPage(issues) {
 </html>`;
 }
 
-function isSameOrigin(request, url) {
-  const origin = request.headers.get("Origin");
-  return Boolean(origin) && origin === url.origin;
-}
-
 function sessionCookie(value) {
   return `${COOKIE_NAME}=${value}; Max-Age=${SESSION_TTL_SECONDS}; Path=/admin; Secure; HttpOnly; SameSite=Strict`;
 }
@@ -147,7 +143,7 @@ export async function onRequest(context) {
 
   if (path === LOGOUT_PATH) {
     if (request.method !== "POST") return new Response("Method not allowed", { status: 405, headers: responseHeaders("text/plain; charset=utf-8") });
-    if (!isSameOrigin(request, url)) return new Response("Forbidden", { status: 403, headers: responseHeaders("text/plain; charset=utf-8") });
+    if (!isSameOriginAdminRequest(request, url)) return new Response("Forbidden", { status: 403, headers: responseHeaders("text/plain; charset=utf-8") });
     return redirectResponse("/admin/", expiredCookie());
   }
 
@@ -157,7 +153,7 @@ export async function onRequest(context) {
       return htmlResponse(loginPage());
     }
     if (request.method !== "POST") return new Response("Method not allowed", { status: 405, headers: responseHeaders("text/plain; charset=utf-8") });
-    if (!isSameOrigin(request, url)) return new Response("Forbidden", { status: 403, headers: responseHeaders("text/plain; charset=utf-8") });
+    if (!isSameOriginAdminRequest(request, url)) return new Response("Forbidden", { status: 403, headers: responseHeaders("text/plain; charset=utf-8") });
 
     const contentType = request.headers.get("Content-Type") || "";
     if (!contentType.toLowerCase().startsWith("application/x-www-form-urlencoded")) {
