@@ -2,7 +2,8 @@ import {
   constantTimeStringEqual,
   createAdminSession,
   verifyAdminSession,
-  SESSION_TTL_SECONDS
+  SESSION_TTL_SECONDS,
+  getAdminConfigurationIssues
 } from "./auth.mjs";
 
 const COOKIE_NAME = "__Secure-iNexAdminSession";
@@ -40,17 +41,6 @@ function redirectResponse(path, cookie) {
   });
   if (cookie) headers.append("Set-Cookie", cookie);
   return new Response(null, { status: 303, headers });
-}
-
-function configured(env) {
-  return (
-    typeof env.INEX_ADMIN_EMAIL === "string" &&
-    env.INEX_ADMIN_EMAIL.includes("@") &&
-    typeof env.INEX_ADMIN_PASSWORD === "string" &&
-    env.INEX_ADMIN_PASSWORD.length >= 24 &&
-    typeof env.INEX_ADMIN_SESSION_SECRET === "string" &&
-    env.INEX_ADMIN_SESSION_SECRET.length >= 32
-  );
 }
 
 function getCookie(request, name) {
@@ -107,6 +97,22 @@ function loginPage(error = false) {
 </html>`;
 }
 
+function configurationErrorPage(issues) {
+  const items = issues.map((issue) => `<li>${issue}</li>`).join("");
+  return `<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin configuration required</title></head>
+<body>
+<main>
+<h1>Admin access is not configured</h1>
+<p>The admin gate is safely closed. Check these Production runtime bindings in Cloudflare Pages:</p>
+<ul>${items}</ul>
+<p>After correcting the listed binding(s), create a new Production deployment.</p>
+</main>
+</body>
+</html>`;
+}
+
 function isSameOrigin(request, url) {
   const origin = request.headers.get("Origin");
   return Boolean(origin) && origin === url.origin;
@@ -134,11 +140,9 @@ export async function onRequest(context) {
   // This handler is attached only to Pages routes under /admin.
   if (path !== "/admin" && !path.startsWith("/admin/")) return context.next();
 
-  if (!configured(env)) {
-    return htmlResponse(
-      "<!doctype html><html lang='en'><meta charset='utf-8'><title>Admin unavailable</title><body><h1>Admin access is not configured</h1><p>Set the required encrypted Cloudflare secrets, then redeploy.</p></body></html>",
-      503
-    );
+  const configurationIssues = getAdminConfigurationIssues(env);
+  if (configurationIssues.length > 0) {
+    return htmlResponse(configurationErrorPage(configurationIssues), 503);
   }
 
   if (path === LOGOUT_PATH) {
@@ -172,13 +176,13 @@ export async function onRequest(context) {
     const submittedEmail = String(form.get("email") || "").trim().toLowerCase();
     const submittedPassword = String(form.get("password") || "");
     const [emailMatches, passwordMatches] = await Promise.all([
-      constantTimeStringEqual(submittedEmail, env.INEX_ADMIN_EMAIL.toLowerCase()),
+      constantTimeStringEqual(submittedEmail, env.INEX_ADMIN_EMAIL.trim().toLowerCase()),
       constantTimeStringEqual(submittedPassword, env.INEX_ADMIN_PASSWORD)
     ]);
 
     if (!emailMatches || !passwordMatches) return htmlResponse(loginPage(true), 401);
 
-    const token = await createAdminSession(env.INEX_ADMIN_EMAIL, env.INEX_ADMIN_SESSION_SECRET);
+    const token = await createAdminSession(env.INEX_ADMIN_EMAIL.trim(), env.INEX_ADMIN_SESSION_SECRET);
     return redirectResponse("/admin/", sessionCookie(token));
   }
 

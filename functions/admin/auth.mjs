@@ -89,3 +89,18 @@ export async function constantTimeStringEqual(left, right) {
 }
 
 export { SESSION_TTL_SECONDS };
+
+
+export function getAdminConfigurationIssues(env = {}) {
+  const issues = [];
+  if (typeof env.INEX_ADMIN_EMAIL !== "string" || !env.INEX_ADMIN_EMAIL.trim().includes("@")) {
+    issues.push("INEX_ADMIN_EMAIL is missing or invalid in the Production runtime.");
+  }
+  if (typeof env.INEX_ADMIN_PASSWORD !== "string" || env.INEX_ADMIN_PASSWORD.length < 24) {
+    issues.push("INEX_ADMIN_PASSWORD is missing or shorter than the required 24 characters.");
+  }
+  if (typeof env.INEX_ADMIN_SESSION_SECRET !== "string" || env.INEX_ADMIN_SESSION_SECRET.length < 32) {
+    issues.push("INEX_ADMIN_SESSION_SECRET is missing or shorter than the required 32 characters.");
+  }
+  return issues;
+}
