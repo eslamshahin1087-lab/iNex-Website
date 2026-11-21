@@ -4,7 +4,7 @@ const SESSION_TTL_SECONDS = 8 * 60 * 60;
 function toBase64Url(bytes) {
   let binary = "";
   for (const byte of bytes) binary += String.fromCharCode(byte);
-  return btoa(binary).replace(/=/g, "").replace(/\\+/g, "-").replace(/\\//g, "_");
+  return btoa(binary).replace(/=/g, "").replaceAll("+", "-").replaceAll("/", "_");
 }
 
 function fromBase64Url(value) {
