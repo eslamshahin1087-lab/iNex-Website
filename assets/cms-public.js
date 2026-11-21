@@ -6,7 +6,7 @@ const config=window.INEX_CMS_CONFIG||{};
  const region=document.querySelector('[data-cms-region="custom-content"]');
  if(!page)return;
  try{
-  const {createClient}=await import("https://esm.sh/@supabase/supabase-js@2.119.0");
+  const {createClient}=await import("https://esm.sh/@supabase/supabase-js@2.119.2");
   const client=createClient(config.supabaseUrl,config.publishableKey,{auth:{persistSession:false,autoRefreshToken:false}});
   const {data,error}=await client.from("cms_content").select("*").eq("page_slug",page).eq("is_published",true).order("sort_order");
   if(error)throw error;
