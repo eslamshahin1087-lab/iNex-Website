@@ -276,3 +276,22 @@ assert.ok(dependabot.includes("interval: weekly"),"Dependency updates must be ch
 assert.ok(responseHeaders.includes("https://:version.inex-website.pages.dev/*\n  X-Robots-Tag: noindex, nofollow"),"Versioned preview deployments must not be indexed; the stable public project host remains indexable");
 
 assert.ok(read(".github/workflows/browser-quality.yml").includes("npm audit --audit-level=high"),"Browser CI must fail on high-severity dependency advisories");
+
+
+/* Cloudflare Pages Functions admin edge gate regression checks. */
+const adminEdgeMiddleware=read("functions/admin/_middleware.js");
+const adminEdgeAuth=read("functions/admin/auth.mjs");
+assert.ok(adminEdgeMiddleware.includes("export async function onRequest(context)"),"Admin edge middleware must be executable by Cloudflare Pages");
+assert.ok(adminEdgeMiddleware.includes("INEX_ADMIN_EMAIL")&&adminEdgeMiddleware.includes("INEX_ADMIN_PASSWORD")&&adminEdgeMiddleware.includes("INEX_ADMIN_SESSION_SECRET"),"Admin edge gate must require all three Cloudflare environment bindings");
+assert.ok(adminEdgeMiddleware.includes("return htmlResponse(loginPage())"),"Unauthenticated admin requests must receive a login gate");
+assert.ok(adminEdgeMiddleware.includes("return htmlResponse(")&&adminEdgeMiddleware.includes("503"),"Admin gate must fail closed when secrets are missing");
+assert.ok(adminEdgeMiddleware.includes("HttpOnly; SameSite=Strict")&&adminEdgeMiddleware.includes("Secure"),"Admin sessions must use Secure, HttpOnly and SameSite=Strict cookies");
+assert.ok(adminEdgeMiddleware.includes("isSameOrigin(request, url)"),"Admin login and logout must enforce same-origin POSTs");
+assert.ok(adminEdgeMiddleware.includes("context.next()"),"Authenticated requests must continue to the existing static admin UI");
+assert.ok(adminEdgeMiddleware.includes("Max-Age=")&&adminEdgeMiddleware.includes("SESSION_TTL_SECONDS"),"Admin sessions must expire automatically");
+assert.ok(adminEdgeAuth.includes("crypto.subtle.sign")&&adminEdgeAuth.includes("crypto.subtle.verify"),"Admin sessions must use HMAC signatures");
+assert.ok(adminEdgeAuth.includes("crypto.subtle.digest"),"Credential comparisons must not exit early on the first differing character");
+assert.ok(!/INEX_ADMIN_PASSWORD\s*[:=]\s*["'][^"']+["']/.test(adminEdgeMiddleware),"Admin password must not be hardcoded in the repository");
+assert.ok(read("functions/admin/index.js").includes("context.next()"),"/admin must pass through its access middleware before static content");
+assert.ok(read("functions/admin/[[path]].js").includes("context.next()"),"Nested /admin routes must pass through their access middleware");
+assert.ok(read("assets/admin.js").includes("/admin/__logout"),"Dashboard logout must clear the edge session");
