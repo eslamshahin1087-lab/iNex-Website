@@ -47,7 +47,7 @@ function configured(env) {
     typeof env.INEX_ADMIN_EMAIL === "string" &&
     env.INEX_ADMIN_EMAIL.includes("@") &&
     typeof env.INEX_ADMIN_PASSWORD === "string" &&
-    env.INEX_ADMIN_PASSWORD.length >= 20 &&
+    env.INEX_ADMIN_PASSWORD.length >= 24 &&
     typeof env.INEX_ADMIN_SESSION_SECRET === "string" &&
     env.INEX_ADMIN_SESSION_SECRET.length >= 32
   );
@@ -55,9 +55,13 @@ function configured(env) {
 
 function getCookie(request, name) {
   const cookies = request.headers.get("Cookie") || "";
-  const escapedName = name.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\\\$&");
-  const match = cookies.match(new RegExp(`(?:^|;\\s*)${escapedName}=([^;]*)`));
-  return match ? match[1] : "";
+  for (const part of cookies.split(";")) {
+    const separator = part.indexOf("=");
+    if (separator < 0) continue;
+    const key = part.slice(0, separator).trim();
+    if (key === name) return part.slice(separator + 1).trim();
+  }
+  return "";
 }
 
 function loginPage(error = false) {
@@ -92,7 +96,7 @@ function loginPage(error = false) {
       <label for="email">البريد الإلكتروني</label>
       <input id="email" name="email" type="email" autocomplete="username" inputmode="email" maxlength="254" required>
       <label for="password">كلمة المرور</label>
-      <input id="password" name="password" type="password" autocomplete="current-password" minlength="20" maxlength="256" required>
+      <input id="password" name="password" type="password" autocomplete="current-password" minlength="24" maxlength="256" required>
       <button type="submit">دخول آمن</button>
     </form>
     <p class="gate-footnote">تُحمى الجلسة بملف ارتباط آمن وتنتهي تلقائيًا بعد 8 ساعات.</p>
@@ -151,16 +155,20 @@ export async function onRequest(context) {
     if (request.method !== "POST") return new Response("Method not allowed", { status: 405, headers: responseHeaders("text/plain; charset=utf-8") });
     if (!isSameOrigin(request, url)) return new Response("Forbidden", { status: 403, headers: responseHeaders("text/plain; charset=utf-8") });
 
-    const contentLength = Number(request.headers.get("Content-Length") || "0");
-    if (contentLength > 4096) return htmlResponse(loginPage(true), 413);
+    const contentType = request.headers.get("Content-Type") || "";
+    if (!contentType.toLowerCase().startsWith("application/x-www-form-urlencoded")) {
+      return htmlResponse(loginPage(true), 415);
+    }
 
-    let form;
+    let body;
     try {
-      form = await request.formData();
+      body = await request.text();
     } catch {
       return htmlResponse(loginPage(true), 400);
     }
+    if (new TextEncoder().encode(body).byteLength > 4096) return htmlResponse(loginPage(true), 413);
 
+    const form = new URLSearchParams(body);
     const submittedEmail = String(form.get("email") || "").trim().toLowerCase();
     const submittedPassword = String(form.get("password") || "");
     const [emailMatches, passwordMatches] = await Promise.all([
