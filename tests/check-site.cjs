@@ -216,3 +216,63 @@ assert.ok(typeSystem.includes("Strategic partnership panel: explicit light-on-na
 assert.ok(typeSystem.includes(".partner-section-copy h2{\n  color:#ffffff!important"),"Partnership heading must remain white on navy");
 assert.ok(typeSystem.includes(".partner-section-copy h2 em{\n  color:#f1d49b!important"),"Partnership heading emphasis must use light gold");
 assert.ok(typeSystem.includes(".partner-section-copy p{\n  color:#e4edf5!important"),"Partnership paragraph must remain light and readable");
+
+
+/* Production security hardening regression checks. */
+const responseHeaders=read("_headers");
+for(const header of [
+ "X-Content-Type-Options: nosniff",
+ "X-Frame-Options: DENY",
+ "Referrer-Policy: strict-origin-when-cross-origin",
+ "Strict-Transport-Security: max-age=31536000",
+ "X-Permitted-Cross-Domain-Policies: none",
+ "Permissions-Policy:"
+])assert.ok(responseHeaders.includes(header),"Missing security response header: "+header);
+assert.ok(responseHeaders.includes("default-src 'self'"),"CSP must default to same-origin resources");
+assert.ok(responseHeaders.includes("script-src 'self' https://esm.sh"),"CSP must allow only local scripts and the pinned Supabase SDK host");
+assert.ok(responseHeaders.includes("frame-ancestors 'none'"),"CSP must prevent framing");
+assert.ok(responseHeaders.includes("object-src 'none'"),"CSP must disable legacy plugin objects");
+assert.ok(responseHeaders.includes("upgrade-insecure-requests"),"CSP must upgrade accidental insecure requests");
+assert.doesNotMatch(responseHeaders,/script-src[^;]*'unsafe-inline'/,"CSP must not allow inline JavaScript");
+assert.doesNotMatch(responseHeaders,/script-src[^;]*'unsafe-eval'/,"CSP must not allow eval-based JavaScript");
+assert.ok(responseHeaders.includes("/admin/*\n  X-Robots-Tag: noindex, nofollow, noarchive\n  Cache-Control: no-store, max-age=0"),"Admin pages must not be indexed or cached");
+assert.ok(responseHeaders.includes("https://*.supabase.co"),"CSP must allow only the expected Supabase project host pattern for CMS content");
+assert.doesNotMatch(responseHeaders,/Access-Control-Allow-Origin:\s*\*/i,"The website must not publish a wildcard CORS policy");
+
+const cmsAdminSql=cmsSql.slice(cmsSql.indexOf("create table if not exists public.cms_admins"),cmsSql.indexOf("-- Initial editable inventory"));
+assert.ok(cmsAdminSql.includes("alter table public.cms_admins enable row level security"),"CMS admin membership must use RLS");
+assert.ok(cmsAdminSql.includes("user_id = (select auth.uid())"),"Admins may only read their own membership record");
+assert.match(cmsAdminSql,/security invoker/i,"The admin-check function must run with invoker privileges");
+assert.doesNotMatch(cmsAdminSql,/security definer/i,"CMS authorization must not bypass RLS via SECURITY DEFINER");
+assert.ok(cmsAdminSql.includes("alter table public.cms_content enable row level security"),"CMS content must use RLS");
+assert.ok(cmsAdminSql.includes("using (is_published = true)"),"Anonymous content reads must be limited to published content");
+assert.ok(cmsAdminSql.includes("with check ((select public.is_cms_admin()))"),"CMS inserts and updates must require an active CMS admin");
+assert.ok(cmsAdminSql.includes("bucket_id = 'inex-site-media' and (select public.is_cms_admin())"),"Storage writes must be restricted to active CMS admins and the dedicated bucket");
+assert.ok(cmsAdmin.includes("signInWithPassword"),"CMS must authenticate administrators with Supabase Auth");
+assert.ok(!/signUp\s*\(/.test(cmsAdmin),"CMS must not allow public sign-up");
+assert.ok(cmsAdmin.includes("cms_admins")&&cmsAdmin.includes("is_active"),"CMS must verify active membership before showing the dashboard");
+const publicCmsConfig=read("assets/cms-config.js");
+assert.ok(publicCmsConfig.includes('supabaseUrl: ""')&&publicCmsConfig.includes('publishableKey: ""'),"CMS must stay disconnected until a dedicated database is deliberately provisioned");
+assert.doesNotMatch(publicCmsConfig,/service_role|sb_secret_|SUPABASE_SERVICE_ROLE_KEY/i,"No privileged Supabase credential may be included in public configuration");
+
+const publicSourceFiles=[...pages,"resources.html","404.html"].map(read).concat([
+ read("assets/site.js"),read("assets/admin.js"),read("assets/cms-public.js"),publicCmsConfig,
+ read("assets/site.css"),read("assets/brand-system.css"),read("assets/admin.css")
+]);
+const secretPattern=/(sb_secret_[A-Za-z0-9_-]+|gh[pousr]_[A-Za-z0-9]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:RSA |EC )?PRIVATE KEY-----)/i;
+for(let i=0;i<publicSourceFiles.length;i++)assert.doesNotMatch(publicSourceFiles[i],secretPattern,"Public source file "+i+" appears to contain a private credential");
+for(const page of [...pages,"resources.html","404.html"]){
+ const html=read(page);
+ assert.doesNotMatch(html,/\son[a-z]+\s*=\s*["']/i,page+" must not contain inline event handlers");
+ assert.doesNotMatch(html,/href\s*=\s*["']\s*javascript:/i,page+" must not contain javascript: URLs");
+}
+const codeql=read(".github/workflows/codeql.yml");
+assert.ok(codeql.includes("github/codeql-action/init@v4")&&codeql.includes("github/codeql-action/analyze@v4"),"CodeQL v4 analysis must be configured");
+assert.ok(codeql.includes("security-events: write"),"CodeQL must have the minimum permission needed to upload scan results");
+const dependabot=read(".github/dependabot.yml");
+assert.ok(dependabot.includes("package-ecosystem: npm")&&dependabot.includes("package-ecosystem: github-actions"),"Dependabot must monitor application and workflow dependencies");
+assert.ok(dependabot.includes("interval: weekly"),"Dependency updates must be checked weekly");
+
+assert.ok(responseHeaders.includes("https://:version.inex-website.pages.dev/*\n  X-Robots-Tag: noindex, nofollow"),"Versioned preview deployments must not be indexed; the stable public project host remains indexable");
+
+assert.ok(read(".github/workflows/browser-quality.yml").includes("npm audit --audit-level=high"),"Browser CI must fail on high-severity dependency advisories");
