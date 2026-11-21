@@ -12,3 +12,6 @@
 /admin/*
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-store, max-age=0
+
+https://:version.inex-website.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
