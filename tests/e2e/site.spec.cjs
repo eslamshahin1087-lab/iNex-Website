@@ -256,6 +256,16 @@ test("editorial insurance imagery loads and alternative text follows the selecte
   expect(watermark.opacity).toBeLessThanOrEqual(.04);
   expect(watermark.width).toBeLessThanOrEqual(220);
   expect(watermark.backgroundImage).toContain("inex-logo.png");
+  const viewport=page.viewportSize()||{width:1280,height:720};
+  await page.setViewportSize({width:390,height:844});
+  const mobileWatermark=await page.locator("body").evaluate(node=>{
+   const style=getComputedStyle(node,"::after");
+   return {position:style.position,opacity:Number(style.opacity),width:parseFloat(style.width)};
+  });
+  expect(mobileWatermark.position).toBe("fixed");
+  expect(mobileWatermark.opacity).toBeLessThanOrEqual(.03);
+  expect(mobileWatermark.width).toBeLessThanOrEqual(138);
+  await page.setViewportSize(viewport);
   const image=images.first();
   const altAr=await image.getAttribute("data-alt-ar");
   const altEn=await image.getAttribute("data-alt-en");
