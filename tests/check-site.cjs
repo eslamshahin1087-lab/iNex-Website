@@ -274,3 +274,5 @@ assert.ok(dependabot.includes("package-ecosystem: npm")&&dependabot.includes("pa
 assert.ok(dependabot.includes("interval: weekly"),"Dependency updates must be checked weekly");
 
 assert.ok(responseHeaders.includes("https://:version.inex-website.pages.dev/*\n  X-Robots-Tag: noindex, nofollow"),"Versioned preview deployments must not be indexed; the stable public project host remains indexable");
+
+assert.ok(read(".github/workflows/browser-quality.yml").includes("npm audit --audit-level=high"),"Browser CI must fail on high-severity dependency advisories");
