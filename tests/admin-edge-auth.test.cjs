@@ -86,3 +86,39 @@ test("identifies missing or undersized runtime bindings without exposing their v
   assert.equal(JSON.stringify(auth.getAdminConfigurationIssues(valid)).includes(valid.INEX_ADMIN_PASSWORD), false);
   assert.equal(JSON.stringify(auth.getAdminConfigurationIssues(valid)).includes(valid.INEX_ADMIN_SESSION_SECRET), false);
 });
+
+
+test("accepts an explicit same-origin header", () => {
+  const target = new URL("https://inex-website.pages.dev/admin/__login");
+  const request = new Request(target, { method: "POST", headers: { Origin: target.origin } });
+  assert.equal(auth.isSameOriginAdminRequest(request, target), true);
+});
+
+test("rejects an explicitly cross-origin request even if Fetch Metadata claims same-origin", () => {
+  const target = new URL("https://inex-website.pages.dev/admin/__login");
+  const request = new Request(target, {
+    method: "POST",
+    headers: { Origin: "https://attacker.example", "Sec-Fetch-Site": "same-origin" }
+  });
+  assert.equal(auth.isSameOriginAdminRequest(request, target), false);
+});
+
+test("accepts same-origin Fetch Metadata when a browser omits Origin", () => {
+  const target = new URL("https://inex-website.pages.dev/admin/__login");
+  const request = new Request(target, { method: "POST", headers: { "Sec-Fetch-Site": "same-origin" } });
+  assert.equal(auth.isSameOriginAdminRequest(request, target), true);
+});
+
+test("uses a same-origin Referer only when Origin and Fetch Metadata are absent", () => {
+  const target = new URL("https://inex-website.pages.dev/admin/__login");
+  const good = new Request(target, { method: "POST", headers: { Referer: "https://inex-website.pages.dev/admin/" } });
+  const bad = new Request(target, { method: "POST", headers: { Referer: "https://attacker.example/" } });
+  assert.equal(auth.isSameOriginAdminRequest(good, target), true);
+  assert.equal(auth.isSameOriginAdminRequest(bad, target), false);
+});
+
+test("rejects requests with no verifiable same-origin signal", () => {
+  const target = new URL("https://inex-website.pages.dev/admin/__login");
+  const request = new Request(target, { method: "POST" });
+  assert.equal(auth.isSameOriginAdminRequest(request, target), false);
+});
