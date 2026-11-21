@@ -272,3 +272,5 @@ assert.ok(codeql.includes("security-events: write"),"CodeQL must have the minimu
 const dependabot=read(".github/dependabot.yml");
 assert.ok(dependabot.includes("package-ecosystem: npm")&&dependabot.includes("package-ecosystem: github-actions"),"Dependabot must monitor application and workflow dependencies");
 assert.ok(dependabot.includes("interval: weekly"),"Dependency updates must be checked weekly");
+
+assert.ok(responseHeaders.includes("https://:version.inex-website.pages.dev/*\n  X-Robots-Tag: noindex, nofollow"),"Versioned preview deployments must not be indexed; the stable public project host remains indexable");
