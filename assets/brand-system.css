@@ -762,3 +762,155 @@ body:not(.no-motion) main{animation:inex-page-enter .62s ease both}
 .cms-created-block img{display:block;width:100%;max-width:900px;max-height:540px;object-fit:contain;margin-inline:auto;border-radius:16px}
 .cms-created-block:before{content:"";position:absolute;inset-inline-start:0;top:0;width:100%;height:2px;background:linear-gradient(90deg,var(--brand-digital),var(--gold),transparent 82%)}
 @media(max-width:760px){.cms-custom-region{width:calc(100% - 32px)}.cms-created-block{padding:20px;border-radius:16px}}
+
+
+/* =========================================================
+   iNex readable type & contrast system
+   Shared by Arabic and English content on every public page.
+   ========================================================= */
+:root{
+  --ink:#10243a;
+  --muted:#4b6076;
+  --gold-deep:#805a25;
+  --nx-text-primary:#10243a;
+  --nx-text-secondary:#4b6076;
+  --nx-text-dark:#e4edf5;
+  --nx-heading-dark:#ffffff;
+  --nx-gold-on-dark:#f1d49b;
+}
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+body{
+  color:var(--nx-text-primary);
+  font-size:16px;
+  line-height:1.88;
+  font-weight:500;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+html[lang="en"] body{
+  font-family:"Plus Jakarta Sans",Arial,sans-serif;
+  font-size:15.5px;
+}
+body :is(h1,h2,h3,h4,h5,h6){
+  color:var(--nx-text-primary);
+  font-weight:750;
+  text-wrap:balance;
+}
+body :is(p,li,dd,figcaption){
+  color:var(--nx-text-secondary);
+  font-weight:500;
+  line-height:1.9;
+}
+body .lead,
+body .section-heading>p,
+body .company-grid p,
+body .visual-gallery-heading>p,
+body .visual-feature-copy>p,
+body .ecosystem-heading>p,
+body .contact-details p,
+body .leader-preview-copy p,
+body .leader-card-content p,
+body .cms-created-block p{
+  color:var(--nx-text-secondary);
+  font-size:15px;
+  font-weight:500;
+  line-height:1.95;
+}
+body :is(.info-card p,.feature-card p,.solution-card p,.solution-card li){
+  color:var(--nx-text-secondary);
+  font-size:14.5px;
+  font-weight:500;
+  line-height:1.95;
+}
+body :is(.eyebrow,.card-index,.ecosystem-kicker,.leader-role,.visual-gallery-card-copy>span){
+  color:var(--gold-deep);
+  font-weight:750;
+}
+body .text-link,
+body .leader-social-link{color:#79551f;font-weight:750}
+body .insurer-disclaimer,
+body .ecosystem-note{
+  color:#52677c;
+  font-size:12.5px;
+  font-weight:500;
+  line-height:1.9;
+}
+body :is(.hero h1,.page-hero h1,.section h2,.ecosystem-heading h2,.leadership-preview-heading h2,.leadership-section-heading h2,.visual-gallery-heading h2,.visual-feature-copy h2) em{
+  color:#805a25;
+  background:none;
+  -webkit-background-clip:initial;
+  background-clip:border-box;
+  -webkit-text-fill-color:currentColor;
+}
+/* Dark surfaces must never inherit dark ink or the light-surface gold. */
+:is(.dark-band,.insurtech-feature,.ecosystem-card-inex,.visual-feature--dark,.footer) :is(h1,h2,h3,h4,h5,h6){
+  color:var(--nx-heading-dark)!important;
+}
+:is(.dark-band,.insurtech-feature,.ecosystem-card-inex,.visual-feature--dark,.footer) :is(p,li,small,span:not(.card-index),.lead,.section-heading>p){
+  color:var(--nx-text-dark);
+}
+:is(.dark-band,.insurtech-feature,.ecosystem-card-inex,.visual-feature--dark,.footer) :is(h1,h2,h3,h4,h5,h6) em{
+  color:var(--nx-gold-on-dark)!important;
+  background:none!important;
+  -webkit-background-clip:initial!important;
+  background-clip:border-box!important;
+  -webkit-text-fill-color:currentColor!important;
+}
+.dark-band .eyebrow,
+.insurtech-feature .eyebrow,
+.ecosystem-card-inex .ecosystem-kicker,
+.footer .eyebrow{color:var(--nx-gold-on-dark)!important}
+.dark-band .button-gold,
+.ecosystem-card-inex .ecosystem-link{color:#10243a!important}
+.dark-band .band-inner p,
+.insurtech-feature :is(p,li),
+.ecosystem-card-inex p,
+.footer p{color:#e4edf5!important}
+
+/* Arabic: one dependable reading family, stronger weights and comfortable rhythm. */
+html[lang="ar"] body{
+  font-family:"IBM Plex Sans Arabic",sans-serif!important;
+  font-size:16.5px;
+  line-height:2;
+  font-weight:500;
+  letter-spacing:normal!important;
+  word-spacing:normal!important;
+}
+html[lang="ar"] body :is(h1,h2,h3,h4,h5,h6,p,li,dd,figcaption,span,a,button,label,small){
+  font-family:"IBM Plex Sans Arabic",sans-serif!important;
+  letter-spacing:normal!important;
+  word-spacing:normal!important;
+  font-kerning:normal;
+  font-feature-settings:normal;
+}
+html[lang="ar"] body :is(h1,h2,h3,h4,h5,h6){
+  font-weight:700!important;
+  line-height:1.55;
+}
+html[lang="ar"] body :is(p,li,dd,figcaption,.lead,.section-heading>p,.visual-gallery-heading>p,.visual-feature-copy>p,.contact-details p,.info-card p,.feature-card p,.solution-card p,.company-grid p,.leader-preview-copy p,.leader-card-content p,.ecosystem-heading>p){
+  color:#43586e;
+  font-size:16px;
+  font-weight:500;
+  line-height:2.05;
+}
+html[lang="ar"] body :is(.hero h1,.page-hero h1,.section h2,.ecosystem-heading h2,.leadership-preview-heading h2,.leadership-section-heading h2,.visual-gallery-heading h2,.visual-feature-copy h2){
+  font-weight:700!important;
+  line-height:1.55;
+}
+html[lang="ar"] body :is(.dark-band,.insurtech-feature,.ecosystem-card-inex,.visual-feature--dark,.footer) :is(h1,h2,h3,h4,h5,h6){
+  color:#fff!important;
+}
+html[lang="ar"] body :is(.dark-band,.insurtech-feature,.ecosystem-card-inex,.visual-feature--dark,.footer) :is(p,li,small){
+  color:#e4edf5!important;
+}
+html[lang="ar"] body :is(.dark-band,.insurtech-feature,.ecosystem-card-inex,.visual-feature--dark,.footer) :is(h1,h2,h3,h4,h5,h6) em{
+  color:#f1d49b!important;
+  -webkit-text-fill-color:currentColor!important;
+}
+@media(max-width:760px){
+  body{font-size:15.5px}
+  body .lead,body .section-heading>p,body .visual-gallery-heading>p,body .visual-feature-copy>p{font-size:14.5px}
+  html[lang="ar"] body{font-size:16px}
+  html[lang="ar"] body :is(p,li,dd,figcaption,.lead,.section-heading>p,.visual-gallery-heading>p,.visual-feature-copy>p,.contact-details p,.info-card p,.feature-card p,.solution-card p,.company-grid p,.leader-preview-copy p,.leader-card-content p,.ecosystem-heading>p){font-size:15.5px;line-height:2.08}
+  html[lang="ar"] body :is(h1,h2,h3,h4,h5,h6){line-height:1.58}
+}

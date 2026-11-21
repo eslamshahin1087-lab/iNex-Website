@@ -155,15 +155,19 @@ assert.doesNotMatch(cmsAdmin+cmsPublic+read("assets/cms-config.js"),/service_rol
 
 /* iNex editorial visuals, page backgrounds and CMS-managed image inventory. */
 const visualPages=["index.html","platform.html","solutions.html","awareness.html","company.html","contact.html","resources.html"];
-const visualAssets=["insurance-protection.webp","digital-policy.webp","insurance-transformation.webp","digital-platform.webp"];
+const visualAssets=["insurance-protection.svg","digital-policy.svg","insurance-transformation.svg","digital-platform.svg"];
 for(const asset of visualAssets){
  const assetPath=path.join(root,"assets",asset);
  assert.ok(fs.existsSync(assetPath),"Missing editorial image asset: "+asset);
- assert.ok(fs.statSync(assetPath).size>5000,"Editorial image appears unexpectedly small: "+asset);
+ assert.ok(fs.statSync(assetPath).size>3500,"Editorial SVG asset is unexpectedly small: "+asset);
+ assert.ok(fs.readFileSync(assetPath,"utf8").includes(`width="1200" height="800" viewBox="0 0 1200 800"`),"Editorial SVG must declare a full-resolution 3:2 canvas: "+asset);
 }
 const pageBackgrounds=read("assets/page-backgrounds.css");
 assert.ok(pageBackgrounds.includes('url("/assets/inex-logo.png")'),"Page background must use the iNex mark as a subtle watermark");
-assert.ok(pageBackgrounds.includes("var(--nx-bg-rotation)"),"Page background should vary its mark treatment by page");
+assert.ok(pageBackgrounds.includes("position:fixed")&&pageBackgrounds.includes("opacity:.035"),"iNex mark must read as a restrained site-wide watermark");
+assert.ok(pageBackgrounds.includes("filter:grayscale(1)"),"The watermark must be monochrome rather than a full-colour logo");
+assert.ok(pageBackgrounds.includes(".page-hero:after{content:none!important"),"The oversized page-hero monogram must not compete with the watermark");
+assert.ok(pageBackgrounds.includes(".visual-feature-media img")&&pageBackgrounds.includes("aspect-ratio:3/2"),"Editorial images must retain their complete native 3:2 composition");
 for(const slug of ["index","platform","solutions","awareness","company","contact","resources"]){
  const html=read(slug+".html");
  assert.ok(html.includes('href="/assets/page-backgrounds.css"'),slug+" must load its iNex page background");
@@ -193,3 +197,15 @@ for(const key of [
 ])assert.ok(cmsSql.includes("'"+key+"'"),"CMS seed is missing editorial text key "+key);
 for(const asset of visualAssets)assert.ok(cmsSql.includes("/assets/"+asset),"CMS seed must map the image asset "+asset);
 assert.ok(new Set(cmsImageKeys).size>=48,"CMS must include the original inventory and 10 new editable editorial images");
+
+
+/* Readability and contrast regression checks for both site languages. */
+const typeSystem=read("assets/brand-system.css");
+assert.ok(typeSystem.includes("iNex readable type & contrast system"),"The site-wide readability system must be present");
+assert.ok(typeSystem.includes("--nx-text-secondary:#4b6076"),"Secondary copy must use a high-contrast slate tone");
+assert.ok(typeSystem.includes("--nx-heading-dark:#ffffff"),"Dark surfaces must use white headings");
+assert.ok(typeSystem.includes("--nx-gold-on-dark:#f1d49b"),"Gold emphasis on dark surfaces must use the light-gold token");
+assert.ok(typeSystem.includes("html[lang=\"ar\"] body :is(p,li,dd,figcaption"),"Arabic reading copy must receive explicit typography rules");
+assert.ok(typeSystem.includes("font-size:16px;")&&typeSystem.includes("font-weight:500;"),"Arabic body copy must be readable in size and weight");
+assert.ok(typeSystem.includes(".dark-band :is(h1,h2,h3,h4,h5,h6)")||typeSystem.includes(":is(.dark-band,.insurtech-feature"),"Dark section headings must be explicitly protected from dark text colours");
+assert.ok(typeSystem.includes("-webkit-text-fill-color:currentColor!important"),"Emphasis text must not become transparent on dark surfaces");

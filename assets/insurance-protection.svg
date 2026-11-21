@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">Insurance protection for families and homes</title><desc id="desc">A modern home and a family protected by a luminous shield, surrounded by subtle insurance and wellbeing symbols.</desc>
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#07182c"/><stop offset=".56" stop-color="#0d2c47"/><stop offset="1" stop-color="#10243b"/></linearGradient>
+ <radialGradient id="glow"><stop stop-color="#47b8d0" stop-opacity=".32"/><stop offset="1" stop-color="#47b8d0" stop-opacity="0"/></radialGradient>
+ <linearGradient id="gold" x2="1" y2="1"><stop stop-color="#f9dfa0"/><stop offset=".48" stop-color="#d7a34d"/><stop offset="1" stop-color="#9d6a2b"/></linearGradient>
+ <linearGradient id="glass" x2="1" y2="1"><stop stop-color="#84d8ed" stop-opacity=".28"/><stop offset="1" stop-color="#1d6d8a" stop-opacity=".05"/></linearGradient>
+ <linearGradient id="shield" x2=".9" y2="1"><stop stop-color="#f9df9c" stop-opacity=".95"/><stop offset=".5" stop-color="#d3a04e" stop-opacity=".72"/><stop offset="1" stop-color="#54c2df" stop-opacity=".55"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="18"/></filter>
+ <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#91c9dc" stroke-opacity=".08"/></pattern>
+</defs>
+<rect width="1200" height="800" rx="34" fill="url(#bg)"/><rect width="1200" height="800" rx="34" fill="url(#grid)"/>
+<circle cx="590" cy="360" r="420" fill="url(#glow)"/><ellipse cx="575" cy="690" rx="470" ry="42" fill="#020d19" opacity=".45" filter="url(#shadow)"/>
+<path d="M75 642V355L295 190 515 355V642Z" fill="#102f48" stroke="#67c1d8" stroke-opacity=".65" stroke-width="5"/>
+<path d="M48 365 295 173 542 365" fill="none" stroke="url(#gold)" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M105 393 295 245 485 393" fill="none" stroke="#b9e7f1" stroke-opacity=".3" stroke-width="4"/>
+<rect x="133" y="410" width="115" height="118" rx="10" fill="#0a1c31" stroke="#72c5d9" stroke-opacity=".65" stroke-width="5"/>
+<rect x="342" y="410" width="115" height="118" rx="10" fill="#0a1c31" stroke="#72c5d9" stroke-opacity=".65" stroke-width="5"/>
+<path d="M190 410v118m209-118v118" stroke="#72c5d9" stroke-opacity=".28" stroke-width="4"/>
+<rect x="255" y="500" width="80" height="142" rx="8" fill="#091a2d" stroke="#d6ab67" stroke-width="5"/>
+<circle cx="317" cy="570" r="5" fill="#d6ab67"/>
+<path d="M295 236c-57 39-88 40-118 49v134c0 104 64 179 181 238 117-59 181-134 181-238V285c-30-9-61-10-118-49l-63-38Z" fill="#071c30" opacity=".65" stroke="#4fc0dd" stroke-width="4"/>
+<path d="M422 244c-40-24-68-44-64-45-23 17-51 34-83 50-29 14-53 23-83 30v112c0 93 53 157 155 213 102-56 155-120 155-213V279c-30-8-53-17-80-35Z" fill="url(#glass)" stroke="url(#shield)" stroke-width="11"/>
+<path d="m319 399 48 48 99-118" fill="none" stroke="#f7d994" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+<g transform="translate(685 310)">
+ <circle cx="92" cy="88" r="62" fill="#d7a16d"/><path d="M34 79c4-50 30-76 65-76 32 0 57 22 61 67-26-18-58-29-99-16Z" fill="#17263a"/>
+ <path d="M6 317c6-104 35-164 86-164 58 0 92 62 96 164Z" fill="#237b91"/><path d="M55 189 92 232l38-43" fill="none" stroke="#a6e3ec" stroke-width="9" opacity=".6"/>
+</g>
+<g transform="translate(870 365)">
+ <circle cx="90" cy="73" r="55" fill="#d8a77b"/><path d="M35 68c4-57 34-79 68-74 39 6 57 34 58 81-37-20-73-27-126-7Z" fill="#26324a"/>
+ <path d="M9 280c5-89 32-143 82-143 51 0 78 52 85 143Z" fill="#d2a04f"/>
+</g>
+<g transform="translate(780 570)"><circle cx="67" cy="48" r="43" fill="#c98f69"/><path d="M25 40c8-42 31-56 55-52 24 5 35 24 35 52-28-15-57-19-90 0Z" fill="#17243a"/><path d="M3 176c5-65 26-104 64-104s61 37 66 104Z" fill="#5abbd2"/></g>
+<g fill="none" stroke="#8ed7e8" stroke-opacity=".7" stroke-width="3"><circle cx="615" cy="152" r="42"/><path d="M615 132v40m-20-20h40"/><circle cx="1090" cy="255" r="33"/><path d="m1075 256 11 11 22-25"/><circle cx="638" cy="604" r="28"/><path d="M638 585v38m-19-19h38"/></g>
+<path d="M620 210 675 270M1048 292l-27 29M666 579l39-18" stroke="#e0b86c" stroke-opacity=".65" stroke-width="3" stroke-dasharray="7 9"/>
+</svg>

@@ -2,10 +2,7 @@
 :root{
   --nx-bg-blue:rgba(85,169,200,.105);
   --nx-bg-gold:rgba(200,155,85,.085);
-  --nx-bg-mark:rgba(7,24,46,.045);
-  --nx-bg-rotation:-14deg;
   --nx-bg-x:82%;
-  --nx-bg-y:130px;
 }
 body{position:relative;isolation:isolate;overflow-x:clip}
 body::before{
@@ -18,39 +15,38 @@ body::before{
   opacity:.9;
 }
 body::after{
-  content:"";position:absolute;z-index:-1;pointer-events:none;
-  inset-block-start:var(--nx-bg-y);inset-inline-end:-4.5vw;
-  width:clamp(250px,38vw,570px);aspect-ratio:1.32;
-  background:
-    radial-gradient(circle at 50% 14%,rgba(200,155,85,.22) 0 3px,transparent 4px),
-    linear-gradient(90deg,transparent 49.75%,rgba(85,169,200,.09) 49.9% 50.1%,transparent 50.25%),
-    radial-gradient(ellipse at center,transparent 50%,rgba(85,169,200,.095) 50.2% 50.45%,transparent 50.7%),
-    radial-gradient(ellipse at center,transparent 67%,rgba(200,155,85,.08) 67.2% 67.4%,transparent 67.7%),
-    url("/assets/inex-logo.png") center/48% auto no-repeat;
-  border-radius:50%;
-  opacity:.7;transform:rotate(var(--nx-bg-rotation));
-  filter:saturate(.82);
+  content:"";
+  position:fixed;
+  z-index:-1;
+  pointer-events:none;
+  inset-block-start:42vh;
+  inset-inline-end:clamp(22px,6.5vw,96px);
+  width:clamp(132px,17vw,220px);
+  aspect-ratio:1;
+  background:url("/assets/inex-logo.png") center/contain no-repeat;
+  opacity:.035;
+  filter:grayscale(1) contrast(.72) brightness(.78);
+  mix-blend-mode:multiply;
+  transform:translateZ(0);
 }
-body[data-cms-page="index"]{--nx-bg-blue:rgba(85,169,200,.15);--nx-bg-gold:rgba(200,155,85,.11);--nx-bg-rotation:-17deg;--nx-bg-x:86%;--nx-bg-y:95px}
-body[data-cms-page="platform"]{--nx-bg-blue:rgba(55,153,191,.14);--nx-bg-gold:rgba(200,155,85,.07);--nx-bg-rotation:12deg;--nx-bg-x:12%;--nx-bg-y:205px}
-body[data-cms-page="solutions"]{--nx-bg-blue:rgba(85,169,200,.10);--nx-bg-gold:rgba(200,155,85,.12);--nx-bg-rotation:-5deg;--nx-bg-x:88%;--nx-bg-y:280px}
-body[data-cms-page="awareness"]{--nx-bg-blue:rgba(58,152,191,.12);--nx-bg-gold:rgba(200,155,85,.065);--nx-bg-rotation:20deg;--nx-bg-x:8%;--nx-bg-y:145px}
-body[data-cms-page="company"]{--nx-bg-blue:rgba(85,169,200,.08);--nx-bg-gold:rgba(200,155,85,.15);--nx-bg-rotation:-23deg;--nx-bg-x:83%;--nx-bg-y:225px}
-body[data-cms-page="contact"]{--nx-bg-blue:rgba(67,171,198,.14);--nx-bg-gold:rgba(200,155,85,.10);--nx-bg-rotation:8deg;--nx-bg-x:18%;--nx-bg-y:165px}
-body[data-cms-page="resources"]{--nx-bg-blue:rgba(55,139,193,.13);--nx-bg-gold:rgba(200,155,85,.09);--nx-bg-rotation:-10deg;--nx-bg-x:90%;--nx-bg-y:300px}
-body:not([data-cms-page]){--nx-bg-blue:rgba(85,169,200,.08);--nx-bg-gold:rgba(200,155,85,.07);--nx-bg-rotation:15deg;--nx-bg-y:100px}
-body[data-cms-page="index"]::after{width:clamp(300px,45vw,680px);aspect-ratio:1.25}
-body[data-cms-page="awareness"]::after{inset-inline-end:auto;inset-inline-start:-8vw;width:clamp(280px,36vw,540px)}
-body[data-cms-page="company"]::after{width:clamp(260px,34vw,510px);aspect-ratio:1.4}
-body[data-cms-page="contact"]::after{inset-inline-end:auto;inset-inline-start:-7vw;width:clamp(260px,33vw,500px)}
-body[data-cms-page="resources"]::after{width:clamp(300px,41vw,620px);aspect-ratio:1.4}
+body[data-cms-page="index"]{--nx-bg-blue:rgba(85,169,200,.15);--nx-bg-gold:rgba(200,155,85,.11);--nx-bg-x:86%}
+body[data-cms-page="platform"]{--nx-bg-blue:rgba(55,153,191,.14);--nx-bg-gold:rgba(200,155,85,.07);--nx-bg-x:12%}
+body[data-cms-page="solutions"]{--nx-bg-blue:rgba(85,169,200,.10);--nx-bg-gold:rgba(200,155,85,.12);--nx-bg-x:88%}
+body[data-cms-page="awareness"]{--nx-bg-blue:rgba(58,152,191,.12);--nx-bg-gold:rgba(200,155,85,.065);--nx-bg-x:8%}
+body[data-cms-page="company"]{--nx-bg-blue:rgba(85,169,200,.08);--nx-bg-gold:rgba(200,155,85,.15);--nx-bg-x:83%}
+body[data-cms-page="contact"]{--nx-bg-blue:rgba(67,171,198,.14);--nx-bg-gold:rgba(200,155,85,.10);--nx-bg-x:18%}
+body[data-cms-page="resources"]{--nx-bg-blue:rgba(55,139,193,.13);--nx-bg-gold:rgba(200,155,85,.09);--nx-bg-x:90%}
+body:not([data-cms-page]){--nx-bg-blue:rgba(85,169,200,.08);--nx-bg-gold:rgba(200,155,85,.07)}
 body[data-cms-page="index"]::before{background-position:0 0,0 0,20px 30px}
 @media(max-width:760px){
-  body::after{inset-block-start:165px;inset-inline-end:-28vw;width:78vw;opacity:.42}
-  body[data-cms-page="awareness"]::after,body[data-cms-page="contact"]::after{inset-inline-start:-31vw}
+  body::after{
+    inset-block-start:36vh;
+    inset-inline-end:16px;
+    width:clamp(104px,24vw,138px);
+    opacity:.03;
+  }
   body::before{height:720px;background-size:auto,auto,32px 32px}
 }
-@media(prefers-reduced-motion:reduce){body::after{transform:none}}
 
 /* iNex editorial visual stories */
 .visual-gallery,.visual-feature{
@@ -106,3 +102,18 @@ body[data-cms-page="index"]::before{background-position:0 0,0 0,20px 30px}
  .visual-feature-copy p{font-size:12px}
 }
 @media(prefers-reduced-motion:reduce){.visual-gallery-card{transition:none}.visual-gallery-card:hover{transform:none}}
+
+
+/* Editorial images use the native 3:2 source ratio, keeping the complete artwork visible. */
+.visual-gallery-card img,.visual-feature-media img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:3/2;
+  object-fit:cover;
+  object-position:center;
+  background:#0a203a;
+  image-rendering:auto;
+  backface-visibility:hidden;
+}
+.page-hero:after{content:none!important;display:none!important}

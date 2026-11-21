@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">Connected digital insurance platform</title><desc id="desc">Desktop, tablet and mobile devices connected through a secure digital insurance ecosystem.</desc>
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#06182c"/><stop offset=".58" stop-color="#0d304b"/><stop offset="1" stop-color="#10223b"/></linearGradient>
+ <radialGradient id="glow"><stop stop-color="#4dbbd1" stop-opacity=".3"/><stop offset="1" stop-color="#4dbbd1" stop-opacity="0"/></radialGradient>
+ <linearGradient id="gold" x2="1" y2="1"><stop stop-color="#f8dda0"/><stop offset=".5" stop-color="#d6a24e"/><stop offset="1" stop-color="#94652d"/></linearGradient>
+ <linearGradient id="device" x2="1" y2="1"><stop stop-color="#214e69"/><stop offset="1" stop-color="#0b2038"/></linearGradient>
+ <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#9bd5e4" stroke-opacity=".075"/></pattern>
+ <filter id="shadow"><feGaussianBlur stdDeviation="18"/></filter>
+</defs>
+<rect width="1200" height="800" rx="34" fill="url(#bg)"/><rect width="1200" height="800" rx="34" fill="url(#grid)"/><circle cx="640" cy="375" r="445" fill="url(#glow)"/>
+<ellipse cx="610" cy="700" rx="440" ry="35" fill="#010a16" opacity=".6" filter="url(#shadow)"/>
+<g fill="none" stroke="#5fc4da" stroke-opacity=".48" stroke-width="4"><path d="M430 330 605 260 845 340 1005 260"/><path d="M435 520 635 585 830 490 1005 510"/><path d="M645 260 650 165"/></g>
+<g fill="#e7c17b"><circle cx="430" cy="330" r="9"/><circle cx="605" cy="260" r="9"/><circle cx="845" cy="340" r="9"/><circle cx="1005" cy="260" r="9"/><circle cx="435" cy="520" r="9"/><circle cx="635" cy="585" r="9"/><circle cx="830" cy="490" r="9"/><circle cx="1005" cy="510" r="9"/></g>
+<g transform="translate(118 168)">
+ <rect x="0" y="0" width="570" height="370" rx="28" fill="#020e1c" stroke="#68c8da" stroke-opacity=".75" stroke-width="5"/>
+ <rect x="17" y="17" width="536" height="330" rx="18" fill="url(#device)"/>
+ <rect x="40" y="40" width="492" height="48" rx="13" fill="#0b2035"/><circle cx="68" cy="64" r="12" fill="url(#gold)"/><rect x="94" y="57" width="112" height="8" rx="4" fill="#e1eff2"/>
+ <rect x="42" y="108" width="145" height="211" rx="16" fill="#0a1d32"/><rect x="65" y="132" width="90" height="8" rx="4" fill="#bedce3"/><rect x="65" y="157" width="76" height="6" rx="3" fill="#5d8ba0"/>
+ <g transform="translate(64 184)"><rect x="0" y="0" width="100" height="40" rx="10" fill="#174765"/><circle cx="20" cy="20" r="10" fill="url(#gold)"/><rect x="39" y="15" width="48" height="7" rx="3.5" fill="#c6e3e8"/><rect x="0" y="52" width="100" height="40" rx="10" fill="#174765"/><circle cx="20" cy="72" r="10" fill="#51b9d0"/><rect x="39" y="67" width="48" height="7" rx="3.5" fill="#c6e3e8"/></g>
+ <rect x="204" y="108" width="328" height="211" rx="16" fill="#0a1d32"/><rect x="226" y="130" width="130" height="8" rx="4" fill="#bedce3"/>
+ <path d="M230 278h276" stroke="#5c8298" stroke-opacity=".6" stroke-width="2"/><g><rect x="245" y="227" width="33" height="51" rx="7" fill="#267c96"/><rect x="295" y="194" width="33" height="84" rx="7" fill="#419db5"/><rect x="345" y="211" width="33" height="67" rx="7" fill="url(#gold)"/><rect x="395" y="173" width="33" height="105" rx="7" fill="#58b9ce"/><rect x="445" y="153" width="33" height="125" rx="7" fill="#277c96"/></g>
+ <path d="M245 167h80" stroke="#5fc5d9" stroke-width="5" stroke-linecap="round"/>
+ <path d="M235 370v36m215-36v36M190 406h330" stroke="#9cc3d1" stroke-opacity=".6" stroke-width="6" stroke-linecap="round"/>
+</g>
+<g transform="translate(720 368)">
+ <rect x="0" y="0" width="285" height="235" rx="25" fill="#020e1c" stroke="#73cbdc" stroke-width="5"/>
+ <rect x="15" y="15" width="255" height="205" rx="15" fill="url(#device)"/>
+ <rect x="34" y="37" width="215" height="35" rx="10" fill="#0a1d32"/><circle cx="52" cy="54" r="8" fill="url(#gold)"/><rect x="70" y="50" width="86" height="7" rx="3.5" fill="#d6e8eb"/>
+ <rect x="34" y="91" width="98" height="98" rx="13" fill="#0a1d32"/><circle cx="83" cy="140" r="28" fill="none" stroke="#57bcd2" stroke-width="8"/><path d="m72 140 9 10 17-23" stroke="url(#gold)" stroke-width="6" fill="none" stroke-linecap="round"/>
+ <rect x="146" y="91" width="103" height="44" rx="12" fill="#0a1d32"/><rect x="161" y="107" width="70" height="7" rx="3.5" fill="#b5d8e0"/><rect x="146" y="145" width="103" height="44" rx="12" fill="#0a1d32"/><rect x="161" y="161" width="55" height="7" rx="3.5" fill="#b5d8e0"/>
+</g>
+<g transform="translate(925 120) rotate(4 95 165)">
+ <rect x="0" y="0" width="190" height="340" rx="34" fill="#020b16" stroke="#73cbdc" stroke-width="5"/>
+ <rect x="13" y="14" width="164" height="311" rx="24" fill="url(#device)"/>
+ <rect x="55" y="24" width="80" height="9" rx="4.5" fill="#020b16"/>
+ <circle cx="95" cy="90" r="34" fill="#103d59" stroke="url(#gold)" stroke-width="3"/><path d="M95 67c-11 8-18 10-25 12v25c0 21 10 33 25 44 15-11 25-23 25-44V79c-7-2-14-4-25-12Z" fill="none" stroke="#ebcf89" stroke-width="5"/><path d="m83 100 9 9 17-21" stroke="#81d7e5" stroke-width="5" fill="none" stroke-linecap="round"/>
+ <rect x="32" y="150" width="126" height="17" rx="8.5" fill="#f1f5f2"/><rect x="32" y="180" width="126" height="7" rx="3.5" fill="#82a9b8"/><rect x="32" y="199" width="94" height="7" rx="3.5" fill="#82a9b8"/>
+ <rect x="32" y="229" width="126" height="52" rx="13" fill="#0b2035"/><rect x="48" y="248" width="73" height="8" rx="4" fill="#dfbd79"/><rect x="32" y="292" width="126" height="20" rx="10" fill="url(#gold)"/>
+</g>
+<g transform="translate(535 80)"><circle cx="72" cy="72" r="58" fill="#123a53" stroke="#4fb8ce" stroke-width="3"/><circle cx="72" cy="72" r="36" fill="none" stroke="url(#gold)" stroke-width="7"/><path d="M54 72h36M72 54v36" stroke="#d9eef1" stroke-width="6" stroke-linecap="round"/></g>
+<g transform="translate(105 585)"><circle cx="44" cy="44" r="34" fill="#143e57" stroke="#55b9d0" stroke-width="3"/><path d="m28 44 12 12 22-25" fill="none" stroke="url(#gold)" stroke-width="6" stroke-linecap="round"/></g>
+</svg>

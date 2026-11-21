@@ -241,9 +241,32 @@ test("editorial insurance imagery loads and alternative text follows the selecte
   const images=section.locator("img[data-cms-image-key]");
   const count=await images.count();
   expect(count,path+" must expose its editorial images").toBeGreaterThan(0);
+  for(let i=0;i<count;i++){
+   const candidate=images.nth(i);
+   await candidate.scrollIntoViewIfNeeded();
+   await expect.poll(()=>candidate.evaluate(node=>node.complete&&node.naturalWidth>=700&&node.naturalHeight>=460)).toBe(true);
+   const ratio=await candidate.evaluate(node=>node.naturalWidth/node.naturalHeight);
+   expect(ratio,path+" editorial artwork must preserve its complete 3:2 frame").toBeCloseTo(1.5,1);
+  }
+  const watermark=await page.locator("body").evaluate(node=>{
+   const style=getComputedStyle(node,"::after");
+   return {position:style.position,opacity:Number(style.opacity),width:parseFloat(style.width),backgroundImage:style.backgroundImage};
+  });
+  expect(watermark.position).toBe("fixed");
+  expect(watermark.opacity).toBeLessThanOrEqual(.04);
+  expect(watermark.width).toBeLessThanOrEqual(220);
+  expect(watermark.backgroundImage).toContain("inex-logo.png");
+  const viewport=page.viewportSize()||{width:1280,height:720};
+  await page.setViewportSize({width:390,height:844});
+  const mobileWatermark=await page.locator("body").evaluate(node=>{
+   const style=getComputedStyle(node,"::after");
+   return {position:style.position,opacity:Number(style.opacity),width:parseFloat(style.width)};
+  });
+  expect(mobileWatermark.position).toBe("fixed");
+  expect(mobileWatermark.opacity).toBeLessThanOrEqual(.03);
+  expect(mobileWatermark.width).toBeLessThanOrEqual(138);
+  await page.setViewportSize(viewport);
   const image=images.first();
-  await image.scrollIntoViewIfNeeded();
-  await expect.poll(()=>image.evaluate(node=>node.complete&&node.naturalWidth>0)).toBe(true);
   const altAr=await image.getAttribute("data-alt-ar");
   const altEn=await image.getAttribute("data-alt-en");
   await page.locator("#langBtn").click();
@@ -251,4 +274,35 @@ test("editorial insurance imagery loads and alternative text follows the selecte
   await page.locator("#langBtn").click();
   await expect(image).toHaveAttribute("alt",altEn);
  }
+});
+
+
+test("bilingual typography and light/dark text contrast remain readable",async({page})=>{
+ await page.setViewportSize({width:1280,height:900});
+ await page.goto("/",{waitUntil:"domcontentloaded"});
+ const darkHeading=page.locator(".dark-band h2");
+ const darkParagraph=page.locator(".dark-band p");
+ await expect(darkHeading).toHaveCSS("color","rgb(255, 255, 255)");
+ await expect(darkHeading.locator("em")).toHaveCSS("-webkit-text-fill-color","rgb(241, 212, 155)");
+ await expect(darkParagraph).toHaveCSS("color","rgb(228, 237, 245)");
+ await expect(darkParagraph).toHaveCSS("font-weight","500");
+ const englishCopy=page.locator(".dark-band p");
+ await expect(englishCopy).toHaveCSS("font-family",/Plus Jakarta Sans/);
+ await page.locator("#langBtn").click();
+ await expect(page.locator("html")).toHaveAttribute("lang","ar");
+ await expect(darkHeading).toHaveCSS("color","rgb(255, 255, 255)");
+ await expect(darkParagraph).toHaveCSS("color","rgb(228, 237, 245)");
+ await expect(darkParagraph).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
+ await page.goto("/platform.html",{waitUntil:"domcontentloaded"});
+ await expect(page.locator("html")).toHaveAttribute("lang","ar");
+ const arabicHeading=page.locator(".visual-feature-copy h2");
+ const arabicParagraph=page.locator(".visual-feature-copy p");
+ await expect(arabicHeading).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
+ await expect(arabicHeading).toHaveCSS("font-weight","700");
+ await expect(arabicHeading).toHaveCSS("color","rgb(7, 24, 46)");
+ await expect(arabicParagraph).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
+ await expect(arabicParagraph).toHaveCSS("font-weight","500");
+ expect(parseFloat(await arabicParagraph.evaluate(node=>getComputedStyle(node).fontSize))).toBeGreaterThanOrEqual(15);
+ const paragraphColor=await arabicParagraph.evaluate(node=>getComputedStyle(node).color);
+ expect(paragraphColor).toBe("rgb(67, 88, 110)");
 });
