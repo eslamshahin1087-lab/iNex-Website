@@ -24,7 +24,7 @@ Please do not publish credentials, personal information or an exploitable vulner
 The owner should configure a branch protection rule or repository ruleset for `main`:
 
 1. Require changes to enter through a pull request; do not permit direct pushes.
-2. Require the `static-checks` and `chromium-smoke-tests` checks to pass.
+2. Require the `static-checks`, `chromium-smoke-tests` and `Analyze JavaScript` checks to pass.
 3. Block force pushes and branch deletion.
 4. Require conversation resolution.
 5. Require one approval when a second trusted maintainer is available. If the repository is operated by one person, keep the pull-request and status-check requirements without creating an impossible self-approval requirement.
