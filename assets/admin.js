@@ -200,7 +200,7 @@ $("loginForm").addEventListener("submit",async event=>{
   return;
  }
  try{
-  const {createClient}=await import("https://esm.sh/@supabase/supabase-js@2.119.0");
+  const {createClient}=await import("https://esm.sh/@supabase/supabase-js@2.119.2");
   supabase=createClient(config.supabaseUrl,config.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
   const {data:{session}}=await supabase.auth.getSession();
   if(session?.user)await checkAdmin(session.user);
