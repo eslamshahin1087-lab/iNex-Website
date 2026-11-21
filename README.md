@@ -139,4 +139,4 @@ The CMS uses a separate Supabase project, Auth, Row Level Security and a public 
 
 ## Editorial imagery and page backgrounds
 
-The public pages now include original WebP editorial imagery covering protection, digital policies, insurance transformation and connected platforms. Each page also receives a subtle iNex-inspired background using the navy, champagne-gold and digital-blue palette. New image assets and the associated bilingual copy are included in the CMS seed inventory so admins can replace or edit them after the dedicated iNex-CMS project is configured.
+The public pages now include original, resolution-independent SVG editorial illustrations covering protection, digital policies, insurance transformation and connected platforms. Each page also receives a subtle iNex-inspired background using the navy, champagne-gold and digital-blue palette. New image assets and the associated bilingual copy are included in the CMS seed inventory so admins can replace or edit them after the dedicated iNex-CMS project is configured.
