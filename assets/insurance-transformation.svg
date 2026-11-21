@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">Digital transformation in insurance</title><desc id="desc">An insurance professional works with connected data, customer insights and analytics dashboards in a contemporary digital workspace.</desc>
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#07182d"/><stop offset=".58" stop-color="#0b2b45"/><stop offset="1" stop-color="#101f36"/></linearGradient>
+ <radialGradient id="light"><stop stop-color="#4abbd2" stop-opacity=".3"/><stop offset="1" stop-color="#4abbd2" stop-opacity="0"/></radialGradient>
+ <linearGradient id="gold" x2="1" y2="1"><stop stop-color="#f8dda0"/><stop offset=".5" stop-color="#d6a24e"/><stop offset="1" stop-color="#98672c"/></linearGradient>
+ <linearGradient id="panel" x2="0" y2="1"><stop stop-color="#16415d"/><stop offset="1" stop-color="#0b2038"/></linearGradient>
+ <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#9bd5e4" stroke-opacity=".075"/></pattern>
+ <filter id="shadow"><feGaussianBlur stdDeviation="18"/></filter>
+</defs>
+<rect width="1200" height="800" rx="34" fill="url(#bg)"/><rect width="1200" height="800" rx="34" fill="url(#grid)"/><circle cx="700" cy="385" r="450" fill="url(#light)"/>
+<ellipse cx="580" cy="720" rx="475" ry="38" fill="#010913" opacity=".6" filter="url(#shadow)"/>
+<g transform="translate(90 165)">
+ <rect x="0" y="0" width="320" height="410" rx="26" fill="#12334d" stroke="#4c8ea5" stroke-opacity=".7" stroke-width="3"/>
+ <rect x="24" y="24" width="272" height="46" rx="13" fill="#1a4a63"/><circle cx="52" cy="47" r="9" fill="url(#gold)"/><rect x="78" y="42" width="115" height="9" rx="4.5" fill="#e2f0f2"/>
+ <rect x="26" y="96" width="126" height="128" rx="18" fill="#0c2238"/><path d="M48 188a44 44 0 1 1 74 27" fill="none" stroke="#5ac0d8" stroke-width="9" stroke-linecap="round"/><path d="M48 188a44 44 0 0 0 70 15" fill="none" stroke="url(#gold)" stroke-width="9" stroke-linecap="round"/>
+ <rect x="172" y="96" width="124" height="58" rx="16" fill="#0c2238"/><rect x="190" y="115" width="74" height="9" rx="4.5" fill="#e0eff1"/><rect x="190" y="134" width="44" height="7" rx="3.5" fill="#6b9aac"/>
+ <rect x="172" y="166" width="124" height="58" rx="16" fill="#0c2238"/><rect x="190" y="185" width="78" height="9" rx="4.5" fill="#e0eff1"/><rect x="190" y="204" width="51" height="7" rx="3.5" fill="#6b9aac"/>
+ <rect x="26" y="244" width="270" height="139" rx="18" fill="#0c2238"/><path d="M51 346 91 310l37 17 45-55 41 20 48-27" fill="none" stroke="#55bed7" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M51 356h230" stroke="#62899c" stroke-opacity=".45" stroke-width="2"/>
+</g>
+<g transform="translate(525 120)">
+ <rect x="0" y="0" width="570" height="500" rx="30" fill="url(#panel)" stroke="#5bb8ce" stroke-opacity=".72" stroke-width="3"/>
+ <rect x="30" y="28" width="510" height="68" rx="18" fill="#0b2138" stroke="#386f89" stroke-width="2"/>
+ <circle cx="65" cy="62" r="13" fill="url(#gold)"/><rect x="94" y="53" width="172" height="10" rx="5" fill="#e6f4f5"/><rect x="94" y="71" width="110" height="7" rx="3.5" fill="#79a5b7"/>
+ <rect x="30" y="122" width="240" height="156" rx="20" fill="#0a1e34"/><rect x="54" y="146" width="98" height="9" rx="4.5" fill="#b8d5de"/><rect x="54" y="169" width="175" height="7" rx="3.5" fill="#587d91"/>
+ <path d="M54 246h34v-34h34v14h34v-42h34v62h34" fill="none" stroke="url(#gold)" stroke-width="8" stroke-linejoin="round"/>
+ <rect x="292" y="122" width="248" height="156" rx="20" fill="#0a1e34"/><rect x="318" y="145" width="145" height="9" rx="4.5" fill="#b8d5de"/>
+ <g transform="translate(318 177)"><rect x="0" y="48" width="26" height="27" rx="7" fill="#2f829c"/><rect x="43" y="29" width="26" height="46" rx="7" fill="#4aaac0"/><rect x="86" y="10" width="26" height="65" rx="7" fill="url(#gold)"/><rect x="129" y="0" width="26" height="75" rx="7" fill="#62c2d7"/></g>
+ <rect x="30" y="300" width="510" height="170" rx="20" fill="#0a1e34"/><rect x="55" y="324" width="135" height="9" rx="4.5" fill="#d9edf1"/><rect x="55" y="346" width="220" height="7" rx="3.5" fill="#638ba0"/>
+ <path d="M58 430c54-65 87-44 125-70s74-8 105-40 75 13 106-12 77-10 116-25" fill="none" stroke="#61c4d9" stroke-width="6" stroke-linecap="round"/>
+ <path d="M58 446h460" stroke="#527b91" stroke-opacity=".5" stroke-width="2"/><circle cx="288" cy="320" r="8" fill="url(#gold)"/><circle cx="394" cy="308" r="8" fill="#e7d096"/>
+</g>
+<g transform="translate(280 345)">
+ <circle cx="116" cy="68" r="61" fill="#c98f69"/><path d="M57 66c4-52 30-82 68-80 40 2 58 32 59 76-31-15-75-26-127 4Z" fill="#172840"/>
+ <path d="M20 360c7-130 43-205 104-205 68 0 103 73 110 205Z" fill="#17617d"/><path d="m81 184 43 48 42-48" fill="none" stroke="#74ccde" stroke-width="10"/><path d="M116 233v120" stroke="#0e3b57" stroke-width="4"/>
+ <path d="M31 270 0 326m206-56 34 56" stroke="#c98f69" stroke-width="23" stroke-linecap="round"/>
+</g>
+<g fill="none" stroke="#79d0df" stroke-width="3" stroke-opacity=".7"><path d="M408 350 525 300M410 540 525 500M1095 235l42-40"/><circle cx="408" cy="350" r="8" fill="url(#gold)"/><circle cx="410" cy="540" r="8" fill="url(#gold)"/><circle cx="1137" cy="195" r="8" fill="url(#gold)"/></g>
+</svg>
