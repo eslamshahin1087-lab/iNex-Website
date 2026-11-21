@@ -25,6 +25,8 @@ jobs:
           node-version: 22
       - name: Install test dependencies
         run: npm install --no-audit --no-fund
+      - name: Check installed dependencies for high-severity vulnerabilities
+        run: npm audit --audit-level=high
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Run browser smoke tests
