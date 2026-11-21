@@ -171,7 +171,13 @@ $("createForm").addEventListener("submit",async event=>{
   setMessage($("createMessage"),err.message||"تعذر إضافة العنصر.","error");
  }
 });
-$("logoutButton").addEventListener("click",async()=>{await supabase?.auth.signOut();user=null;showLogin();});
+$("logoutButton").addEventListener("click",async()=>{
+ try{await supabase?.auth.signOut();}
+ finally{
+  try{await fetch("/admin/__logout",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:"logout=1"});}
+  finally{location.replace("/admin/");}
+ }
+});
 $("forgotPassword").addEventListener("click",async()=>{
  if(!supabase)return;
  const email=$("email").value.trim();if(!email){setMessage($("loginMessage"),"أدخل بريدك الإلكتروني أولًا.","error");return;}
