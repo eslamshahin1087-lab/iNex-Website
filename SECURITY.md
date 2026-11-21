@@ -22,6 +22,9 @@ Please do not publish credentials, personal information or an exploitable vulner
 - The browser may contain only the Supabase Project URL and publishable key. A service-role key, secret key, database password, Cloudflare API token or GitHub token must never be placed in HTML, JavaScript, CSS or other public files.
 - Static and browser CI checks validate the security configuration. CodeQL scans the JavaScript, and Dependabot monitors npm and GitHub Actions dependencies.
 
+
+- The repository keeps `wrangler.toml` for local development only and intentionally omits `pages_build_output_dir`. This keeps Cloudflare Pages production configuration—including dashboard-managed environment variables and secrets—under the Cloudflare dashboard rather than opting production into Wrangler-file configuration.
+
 ## Required repository settings
 
 The owner should configure a branch protection rule or repository ruleset for `main`:
