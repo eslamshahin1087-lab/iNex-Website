@@ -159,11 +159,14 @@ const visualAssets=["insurance-protection.webp","digital-policy.webp","insurance
 for(const asset of visualAssets){
  const assetPath=path.join(root,"assets",asset);
  assert.ok(fs.existsSync(assetPath),"Missing editorial image asset: "+asset);
- assert.ok(fs.statSync(assetPath).size>5000,"Editorial image appears unexpectedly small: "+asset);
+ assert.ok(fs.statSync(assetPath).size>30000,"Editorial image appears unexpectedly small: "+asset);
 }
 const pageBackgrounds=read("assets/page-backgrounds.css");
 assert.ok(pageBackgrounds.includes('url("/assets/inex-logo.png")'),"Page background must use the iNex mark as a subtle watermark");
-assert.ok(pageBackgrounds.includes("var(--nx-bg-rotation)"),"Page background should vary its mark treatment by page");
+assert.ok(pageBackgrounds.includes("position:fixed")&&pageBackgrounds.includes("opacity:.035"),"iNex mark must read as a restrained site-wide watermark");
+assert.ok(pageBackgrounds.includes("filter:grayscale(1)"),"The watermark must be monochrome rather than a full-colour logo");
+assert.ok(pageBackgrounds.includes(".page-hero:after{content:none!important"),"The oversized page-hero monogram must not compete with the watermark");
+assert.ok(pageBackgrounds.includes(".visual-feature-media img")&&pageBackgrounds.includes("aspect-ratio:3/2"),"Editorial images must retain their complete native 3:2 composition");
 for(const slug of ["index","platform","solutions","awareness","company","contact","resources"]){
  const html=read(slug+".html");
  assert.ok(html.includes('href="/assets/page-backgrounds.css"'),slug+" must load its iNex page background");
