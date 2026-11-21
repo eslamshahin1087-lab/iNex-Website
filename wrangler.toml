@@ -1,4 +1,3 @@
 # Cloudflare Pages project configuration
 name = "inex-website"
-pages_build_output_dir = "."
 compatibility_date = "2026-10-30"
