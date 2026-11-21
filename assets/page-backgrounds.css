@@ -2,10 +2,7 @@
 :root{
   --nx-bg-blue:rgba(85,169,200,.105);
   --nx-bg-gold:rgba(200,155,85,.085);
-  --nx-bg-mark:rgba(7,24,46,.045);
-  --nx-bg-rotation:-14deg;
   --nx-bg-x:82%;
-  --nx-bg-y:130px;
 }
 body{position:relative;isolation:isolate;overflow-x:clip}
 body::before{
@@ -42,8 +39,13 @@ body[data-cms-page="resources"]{--nx-bg-blue:rgba(55,139,193,.13);--nx-bg-gold:r
 body:not([data-cms-page]){--nx-bg-blue:rgba(85,169,200,.08);--nx-bg-gold:rgba(200,155,85,.07)}
 body[data-cms-page="index"]::before{background-position:0 0,0 0,20px 30px}
 @media(max-width:760px){
-  body::after{inset-block-start:165px;inset-inline-end:-28vw;width:78vw;opacity:.42}
-  body[data-cms-page="awareness"]::after,  body::before{height:720px;background-size:auto,auto,32px 32px}
+  body::after{
+    inset-block-start:36vh;
+    inset-inline-end:16px;
+    width:clamp(104px,24vw,138px);
+    opacity:.03;
+  }
+  body::before{height:720px;background-size:auto,auto,32px 32px}
 }
 
 /* iNex editorial visual stories */
