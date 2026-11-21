@@ -241,9 +241,22 @@ test("editorial insurance imagery loads and alternative text follows the selecte
   const images=section.locator("img[data-cms-image-key]");
   const count=await images.count();
   expect(count,path+" must expose its editorial images").toBeGreaterThan(0);
+  for(let i=0;i<count;i++){
+   const candidate=images.nth(i);
+   await candidate.scrollIntoViewIfNeeded();
+   await expect.poll(()=>candidate.evaluate(node=>node.complete&&node.naturalWidth>=700&&node.naturalHeight>=460)).toBe(true);
+   const ratio=await candidate.evaluate(node=>node.naturalWidth/node.naturalHeight);
+   expect(ratio,path+" editorial artwork must preserve its complete 3:2 frame").toBeCloseTo(1.5,1);
+  }
+  const watermark=await page.locator("body").evaluate(node=>{
+   const style=getComputedStyle(node,"::after");
+   return {position:style.position,opacity:Number(style.opacity),width:parseFloat(style.width),backgroundImage:style.backgroundImage};
+  });
+  expect(watermark.position).toBe("fixed");
+  expect(watermark.opacity).toBeLessThanOrEqual(.04);
+  expect(watermark.width).toBeLessThanOrEqual(220);
+  expect(watermark.backgroundImage).toContain("inex-logo.png");
   const image=images.first();
-  await image.scrollIntoViewIfNeeded();
-  await expect.poll(()=>image.evaluate(node=>node.complete&&node.naturalWidth>0)).toBe(true);
   const altAr=await image.getAttribute("data-alt-ar");
   const altEn=await image.getAttribute("data-alt-en");
   await page.locator("#langBtn").click();
