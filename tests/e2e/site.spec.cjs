@@ -275,3 +275,34 @@ test("editorial insurance imagery loads and alternative text follows the selecte
   await expect(image).toHaveAttribute("alt",altEn);
  }
 });
+
+
+test("bilingual typography and light/dark text contrast remain readable",async({page})=>{
+ await page.setViewportSize({width:1280,height:900});
+ await page.goto("/",{waitUntil:"domcontentloaded"});
+ const darkHeading=page.locator(".dark-band h2");
+ const darkParagraph=page.locator(".dark-band p");
+ await expect(darkHeading).toHaveCSS("color","rgb(255, 255, 255)");
+ await expect(darkHeading.locator("em")).toHaveCSS("-webkit-text-fill-color","rgb(241, 212, 155)");
+ await expect(darkParagraph).toHaveCSS("color","rgb(228, 237, 245)");
+ await expect(darkParagraph).toHaveCSS("font-weight","500");
+ const englishCopy=page.locator(".dark-band p");
+ await expect(englishCopy).toHaveCSS("font-family",/Plus Jakarta Sans/);
+ await page.locator("#langBtn").click();
+ await expect(page.locator("html")).toHaveAttribute("lang","ar");
+ await expect(darkHeading).toHaveCSS("color","rgb(255, 255, 255)");
+ await expect(darkParagraph).toHaveCSS("color","rgb(228, 237, 245)");
+ await expect(darkParagraph).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
+ await page.goto("/platform.html",{waitUntil:"domcontentloaded"});
+ await expect(page.locator("html")).toHaveAttribute("lang","ar");
+ const arabicHeading=page.locator(".visual-feature-copy h2");
+ const arabicParagraph=page.locator(".visual-feature-copy p");
+ await expect(arabicHeading).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
+ await expect(arabicHeading).toHaveCSS("font-weight","700");
+ await expect(arabicHeading).toHaveCSS("color","rgb(7, 24, 46)");
+ await expect(arabicParagraph).toHaveCSS("font-family",/IBM Plex Sans Arabic/);
+ await expect(arabicParagraph).toHaveCSS("font-weight","500");
+ expect(parseFloat(await arabicParagraph.evaluate(node=>getComputedStyle(node).fontSize))).toBeGreaterThanOrEqual(15);
+ const paragraphColor=await arabicParagraph.evaluate(node=>getComputedStyle(node).color);
+ expect(paragraphColor).toBe("rgb(67, 88, 110)");
+});
