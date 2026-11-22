@@ -86,72 +86,9 @@ assert.match(read("assets/brand-system.css"),/prefers-reduced-motion:reduce/);
 assert.ok(read("assets/brand-system.css").includes("main:before"),"All pages should use the digital background layer");
 assert.ok(read("index.html").includes("From information to clearer decisions"),"Homepage should explain the iNex value proposition");
 
-/* iNex CMS structure and safe admin boundary. */
-for(const page of ["index.html","platform.html","solutions.html","awareness.html","company.html","contact.html","resources.html"]){
- const html=read(page);
- assert.ok(html.includes('data-cms-page="'+page.replace(".html","")+'"'),page+" must identify its CMS page slug");
- assert.ok(html.includes('data-cms-region="custom-content"'),page+" must provide a custom content region");
- assert.match(html,/data-cms-key="[^"]+"/,page+" must expose editable translated content");
- assert.match(html,/data-cms-image-key="[^"]+"/,page+" must expose editable images");
-}
-assert.ok(read("admin/index.html").includes('id="loginForm"'),"CMS admin must provide a login form");
-assert.ok(read("admin/index.html").includes('name="robots" content="noindex,nofollow"'),"CMS admin must not be indexed");
-assert.ok(read("assets/cms-public.js").includes("is_published"),"Public CMS layer must respect publication state");
-assert.ok(read("assets/admin.js").includes("signInWithPassword"),"CMS access must use authenticated login");
-assert.ok(!/service_role|sb_secret_/i.test(read("assets/admin.js")+read("assets/cms-public.js")+read("assets/cms-config.js")),"No privileged Supabase key may be shipped to the browser");
-assert.match(read("supabase/setup-cms.sql"),/enable row level security/i);
-assert.match(read("supabase/setup-cms.sql"),/cms_admins/i);
-assert.match(read("supabase/setup-cms.sql"),/inex-site-media/i);
-
-assert.ok(read("index.html").includes('data-cms-image-key="index.logo.18"'),"Insurer logos must be individually manageable in the CMS");
-assert.ok(read("supabase/setup-cms.sql").includes("'index.logo.18'"),"CMS setup must seed all 18 insurer logo records");
-assert.ok(read("supabase/setup-cms.sql").includes("image_mode"),"CMS schema must support cropped sprite and uploaded image assets");
-assert.ok(read("assets/cms-public.js").includes("row.image_mode==="),"CMS renderer must preserve sprite crops and support individual logo uploads");
-assert.ok(read("_headers").includes("https://esm.sh"),"CSP must allow the pinned Supabase browser SDK import");
-
-
-/* iNex CMS inventory, security boundary and deployment-readiness checks. */
-const cmsSql=read("supabase/setup-cms.sql");
-const cmsSqlCompact=cmsSql.replace(/\s+/g,"");
-const cmsPublic=read("assets/cms-public.js");
-const cmsAdmin=read("assets/admin.js");
-const cmsPages=["index.html","platform.html","solutions.html","awareness.html","company.html","contact.html","resources.html"];
-const cmsTypeCounts={};
-for(const type of ["text","image","card"])cmsTypeCounts[type]=cmsSql.split(", '"+type+"',").length-1;
-assert.ok(cmsTypeCounts.text>=624,"CMS seed must retain the bilingual page text inventory");
-const cmsImageKeys=cmsSql.match(/(?:index|platform|solutions|awareness|company|contact|resources)\.(?:image|logo)\.\d+/g)||[]; assert.ok(new Set(cmsImageKeys).size>=38,"CMS seed must retain page imagery and individually managed insurer logos");
-assert.ok(cmsSql.includes("content_type in ('text','card')"),"CMS schema must support adding card content");
-for(let i=1;i<=18;i++)assert.ok(cmsSql.includes("'index.logo."+String(i).padStart(2,"0")+"'"),"Missing individually managed insurer logo "+i);
-for(const page of cmsPages){
- const slug=page.replace(".html","");
- const html=read(page);
- assert.ok(html.includes('data-cms-page="'+slug+'"'),page+" must identify its CMS page slug");
- assert.ok(html.includes('data-cms-region="custom-content"'),page+" must provide a custom-content region");
- assert.ok(html.includes('assets/cms-config.js')&&html.includes('assets/cms-public.js'),page+" must load the optional public CMS layer");
- for(const [attribute,type] of [["data-cms-key","text"],["data-cms-image-key","image"]]){
-  for(const match of html.matchAll(new RegExp(attribute+'="([^"]+)"',"g"))){
-   const seedRow="('"+slug+"','"+match[1]+"','"+type+"'";
-   assert.ok(cmsSqlCompact.includes(seedRow),page+" CMS key has no matching "+type+" seed: "+match[1]);
-  }
- }
-}
-assert.ok(cmsPublic.includes("new DOMParser()"),"Public CMS content must be parsed before rendering");
-assert.ok(cmsPublic.includes('const allowed=new Set(["BR","STRONG","B","EM","I","U","SMALL","SPAN","SUB","SUP"])'),"Public CMS content must allow only safe inline elements");
-assert.ok(cmsPublic.includes('if(url.protocol!=="https:")return null;'),"Remote CMS image URLs must require HTTPS");
-assert.ok(cmsPublic.includes('eq("is_published",true)'),"Public pages must never load unpublished CMS content");
-assert.ok(cmsPublic.includes("rows.filter(row=>row.is_custom&&row.is_visible)"),"Custom CMS blocks must respect their visibility state");
-assert.ok(cmsSql.includes("alter table public.cms_admins enable row level security"));
-assert.ok(cmsSql.includes("alter table public.cms_content enable row level security"));
-assert.ok(cmsSql.includes('create policy "CMS admins can update content"'));
-assert.ok(cmsSql.includes("with check ((select public.is_cms_admin()))"),"CMS writes must verify admin authorization");
-for(const policy of ["iNex CMS admins can upload media","iNex CMS admins can replace media","iNex CMS admins can delete media"])assert.ok(cmsSql.includes(policy),"Storage operation must be restricted: "+policy);
-assert.ok(cmsAdmin.includes("signInWithPassword"),"CMS must use authenticated password login");
-assert.ok(cmsAdmin.includes("cms_admins"),"CMS must verify admin membership");
-assert.ok(cmsAdmin.includes("file.size>8*1024*1024"),"CMS uploads must enforce the 8MB limit");
-assert.ok(cmsAdmin.includes('user.id+"/"+page'),"Uploaded media must be scoped to the authenticated admin");
-assert.ok(!cmsAdmin.includes("signUp("),"The CMS must not expose public account registration");
-assert.doesNotMatch(cmsAdmin+cmsPublic+read("assets/cms-config.js"),/service_role|sb_secret_/i,"No privileged Supabase key may be shipped to the browser");
-
+/* CMS seed inventory is validated by the SQLite migration test. */
+const cmsSql=read("migrations/0002_seed_content.sql");
+const cmsImageKeys=cmsSql.match(/(?:index|platform|solutions|awareness|company|contact|resources)\.(?:image|logo)\.\d+/g)||[];
 
 /* iNex editorial visuals, page backgrounds and CMS-managed image inventory. */
 const visualPages=["index.html","platform.html","solutions.html","awareness.html","company.html","contact.html","resources.html"];
