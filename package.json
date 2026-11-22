@@ -4,7 +4,7 @@
   "private": true,
   "description": "Independent bilingual iNex marketing website",
   "scripts": {
-    "test": "node tests/check-site.cjs && node --test tests/admin-edge-auth.test.cjs tests/cms-media-validation.test.mjs",
+    "test": "node tests/check-site.cjs && node --test tests/admin-edge-auth.test.cjs tests/cms-media-validation.test.mjs tests/cms-media-storage.test.mjs",
     "test:e2e": "playwright test"
   },
   "engines": {
