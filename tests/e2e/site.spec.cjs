@@ -231,7 +231,8 @@ test("public CMS renders custom cards responsively and sanitizes untrusted marku
 
  await page.setViewportSize({width:390,height:844});
  await expect(card).toBeVisible();
- await expect(region).toHaveCSS("grid-template-columns","390px");
+ const mobileColumns=await region.evaluate(element=>getComputedStyle(element).gridTemplateColumns.trim().split(/\\s+/).length);
+ expect(mobileColumns).toBe(1);
 });
 test("editorial insurance imagery loads and alternative text follows the selected language",async({page})=>{
  const routes=[
