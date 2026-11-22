@@ -1,10 +1,10 @@
 import { verifyAdminSession, isSameOriginAdminRequest } from "../auth.mjs";
 import { hasValidImageSignature } from "../media-validation.mjs";
+import { MAX_CMS_IMAGE_BYTES, storeCmsMedia, deleteCmsMedia } from "../../cms/media-storage.mjs";
 
 const COOKIE_NAME = "__Secure-iNexAdminSession";
 const PAGE_SLUGS = new Set(["index","platform","solutions","awareness","company","contact","resources"]);
 const IMAGE_TYPES = new Map([["image/jpeg","jpg"],["image/png","png"],["image/webp","webp"],["image/avif","avif"]]);
-const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
 const MAX_JSON_BYTES = 64 * 1024;
 
 function json(data, status = 200) {
@@ -30,7 +30,6 @@ async function isAdmin(request, env) {
   return token ? verifyAdminSession(token, env.INEX_ADMIN_EMAIL.trim(), env.INEX_ADMIN_SESSION_SECRET) : false;
 }
 function dbReady(env) { return Boolean(env.INEX_CMS_DB && typeof env.INEX_CMS_DB.prepare === "function"); }
-function mediaReady(env) { return Boolean(env.INEX_CMS_MEDIA && typeof env.INEX_CMS_MEDIA.put === "function"); }
 async function readJson(request) {
   if (Number(request.headers.get("Content-Length") || 0) > MAX_JSON_BYTES) throw new Error("حجم الطلب أكبر من الحد المسموح.");
   const raw = await request.text();
@@ -142,27 +141,31 @@ async function removeRow(env, url) {
   return json({ok:true,hidden:true});
 }
 async function uploadMedia(request, env) {
-  if (!mediaReady(env)) return json({error:"مساحة صور الموقع غير مربوطة بعد."},503);
-  if (Number(request.headers.get("Content-Length") || 0) > MAX_IMAGE_BYTES + 128 * 1024) return json({error:"حجم الصورة أكبر من 8MB."},413);
+  if (!dbReady(env)) return json({error:"قاعدة محتوى الموقع غير مربوطة بعد."},503);
+  if (Number(request.headers.get("Content-Length") || 0) > MAX_CMS_IMAGE_BYTES + 128 * 1024) {
+    return json({error:"حجم الصورة بعد الضغط يجب ألا يتجاوز 1.5MB."},413);
+  }
   const form = await request.formData();
   const file = form.get("file");
   if (!file || typeof file.arrayBuffer !== "function") return json({error:"اختر ملف صورة أولًا."},400);
   const extension = IMAGE_TYPES.get(file.type);
   if (!extension) return json({error:"الصيغة غير مدعومة. استخدم JPEG أو PNG أو WebP أو AVIF."},415);
-  if (file.size < 1 || file.size > MAX_IMAGE_BYTES) return json({error:"حجم الصورة يجب ألا يتجاوز 8MB."},413);
+  if (file.size < 1 || file.size > MAX_CMS_IMAGE_BYTES) {
+    return json({error:"حجم الصورة بعد الضغط يجب ألا يتجاوز 1.5MB."},413);
+  }
   const imageBytes = new Uint8Array(await file.arrayBuffer());
   if (!hasValidImageSignature(file.type, imageBytes)) {
     return json({error:"محتوى الملف لا يطابق صيغة الصورة المعلنة."},415);
   }
   const key = crypto.randomUUID().toLowerCase()+"."+extension;
-  await env.INEX_CMS_MEDIA.put(key,imageBytes,{httpMetadata:{contentType:file.type,cacheControl:"public, max-age=31536000, immutable"}});
-  return json({key,url:"/api/cms/media/"+key},201);
+  await storeCmsMedia(env.INEX_CMS_DB,key,file.type,imageBytes);
+  return json({key,url:"/api/cms/media/"+key,size_bytes:imageBytes.byteLength},201);
 }
 async function deleteMedia(request, env) {
-  if (!mediaReady(env)) return json({error:"مساحة صور الموقع غير مربوطة بعد."},503);
+  if (!dbReady(env)) return json({error:"قاعدة محتوى الموقع غير مربوطة بعد."},503);
   const body = await readJson(request);
   if (!validMediaKey(body.key)) return json({error:"مسار الصورة غير صالح."},400);
-  await env.INEX_CMS_MEDIA.delete(body.key);
+  await deleteCmsMedia(env.INEX_CMS_DB,body.key);
   return json({ok:true});
 }
 export async function onRequest(context) {
@@ -172,7 +175,7 @@ export async function onRequest(context) {
   if (request.method!=="GET" && !isSameOriginAdminRequest(request,url)) return json({error:"تم رفض الطلب لعدم تطابق المصدر."},403);
   try {
     const route=url.pathname.slice("/admin/api/".length).replace(/\/+$/,"");
-    if (route==="session" && request.method==="GET") return json({email:env.INEX_ADMIN_EMAIL.trim(),databaseReady:dbReady(env),mediaReady:mediaReady(env)});
+    if (route==="session" && request.method==="GET") return json({email:env.INEX_ADMIN_EMAIL.trim(),databaseReady:dbReady(env)});
     if (route==="content" && request.method==="GET") {
       const page=url.searchParams.get("page");
       if (page && !validPage(page)) return json({error:"الصفحة المطلوبة غير صحيحة."},400);

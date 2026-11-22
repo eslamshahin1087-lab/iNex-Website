@@ -42,7 +42,7 @@ The iNex customer application is maintained in the separate `iNex-App` repositor
 - This repository contains the public iNex website and its private website CMS only.
 - The iNex application repository is a read-only product reference; this repository does not change application code or backend resources.
 - InsurNex is a distinct strategic partner product; present it separately from iNex and link to its published application.
-- The website CMS uses dedicated Cloudflare D1 and R2 resources through this repository's Pages Functions. Never reuse iNex-App or InsurNex databases, users, keys, storage or functions.
+- The website CMS uses a dedicated Cloudflare D1 database through this repository's Pages Functions. CMS-uploaded images are stored as bounded D1 BLOBs; no R2 subscription or external storage service is required. Never reuse iNex-App or InsurNex databases, users, keys, storage or functions.
 - No Firebase, Firestore, authentication or customer records from the iNex application are connected to this website.
 - Do not change Cloudflare Production settings, custom domains or production deployment without separate explicit approval.
 

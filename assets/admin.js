@@ -29,11 +29,45 @@ function makeCheck(label,checked){
  return {wrap,input};
 }
 function badge(text,kind=""){const element=document.createElement("span");element.className="pill "+kind;element.textContent=text;return element;}
+const MAX_CMS_IMAGE_BYTES=1500000;
+async function optimizeImageForD1(file){
+ if(file.size<=MAX_CMS_IMAGE_BYTES)return file;
+ if(file.size>8*1024*1024)throw new Error("حجم الصورة الأصلية يجب ألا يتجاوز 8MB.");
+ if(typeof createImageBitmap!=="function")throw new Error("هذا المتصفح لا يدعم ضغط الصور تلقائيًا. اختر صورة لا تتجاوز 1.5MB.");
+ let bitmap;
+ try{bitmap=await createImageBitmap(file);}catch{throw new Error("تعذر قراءة الصورة لضغطها. جرّب JPEG أو PNG أو WebP.");}
+ try{
+  let width=bitmap.width,height=bitmap.height;
+  if(!width||!height)throw new Error("أبعاد الصورة غير صالحة.");
+  const maxDimension=1800;
+  if(Math.max(width,height)>maxDimension){
+   const scale=maxDimension/Math.max(width,height);
+   width=Math.max(1,Math.round(width*scale));height=Math.max(1,Math.round(height*scale));
+  }
+  const canvas=document.createElement("canvas"),context=canvas.getContext("2d",{alpha:true});
+  if(!context)throw new Error("تعذر تهيئة ضغط الصورة في المتصفح.");
+  for(let pass=0;pass<6;pass++){
+   canvas.width=width;canvas.height=height;
+   context.clearRect(0,0,width,height);context.drawImage(bitmap,0,0,width,height);
+   for(const quality of [0.82,0.72,0.62,0.54]){
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/webp",quality));
+    if(blob&&blob.type==="image/webp"&&blob.size>0&&blob.size<=MAX_CMS_IMAGE_BYTES){
+     const base=(file.name||"iNex-image").replace(/\.[^.]+$/,"");
+     return new File([blob],base+".webp",{type:"image/webp",lastModified:Date.now()});
+    }
+   }
+   if(Math.max(width,height)<=640)break;
+   width=Math.max(1,Math.round(width*0.82));height=Math.max(1,Math.round(height*0.82));
+  }
+  throw new Error("تعذر ضغط الصورة إلى أقل من 1.5MB. اختر صورة أصغر أو قلّل أبعادها.");
+ }finally{bitmap.close?.();}
+}
 async function uploadImage(file){
  const allowed=["image/jpeg","image/png","image/webp","image/avif"];
  if(!file||!allowed.includes(file.type))throw new Error("صيغة غير مدعومة. اختر JPEG أو PNG أو WebP أو AVIF.");
- if(file.size<1||file.size>8*1024*1024)throw new Error("حجم الصورة يجب ألا يتجاوز 8MB.");
- const form=new FormData();form.append("file",file,file.name||"image");
+ if(file.size<1||file.size>8*1024*1024)throw new Error("حجم الصورة الأصلية يجب ألا يتجاوز 8MB.");
+ const optimized=await optimizeImageForD1(file);
+ const form=new FormData();form.append("file",optimized,optimized.name||"image");
  return api("media",{method:"POST",body:form});
 }
 async function loadRows(){
@@ -78,7 +112,7 @@ function renderRow(row){
   const upload=makeField("استبدال الصورة (اختياري)","");
   file=document.createElement("input");file.type="file";file.accept="image/jpeg,image/png,image/webp,image/avif";
   upload.box.replaceChild(file,upload.el);
-  const hint=document.createElement("small");hint.textContent="حتى 8MB – JPEG / PNG / WebP / AVIF";upload.box.append(hint);
+  const hint=document.createElement("small");hint.textContent="حتى 8MB؛ الصور الأكبر من 1.5MB تُضغط تلقائيًا إلى WebP.";upload.box.append(hint);
   imageRow.append(preview,upload.box);card.append(imageRow);
   const altRow=document.createElement("div");altRow.className="row-grid";
   altEn=makeField("وصف الصورة – EN",row.alt_en);altAr=makeField("وصف الصورة – AR",row.alt_ar);
@@ -126,7 +160,7 @@ function renderRow(row){
   remove.disabled=true;
   try{
    await api("content?id="+encodeURIComponent(row.id),{method:"DELETE"});
-   if(Boolean(row.is_custom)&&row.storage_path){try{await deleteMedia(row.storage_path);}catch(error){console.warn("Unused R2 object could not be removed:",error);}}
+   if(Boolean(row.is_custom)&&row.storage_path){try{await deleteMedia(row.storage_path);}catch(error){console.warn("Unused CMS image could not be removed:",error);}}
    toast(Boolean(row.is_custom)?"تم حذف العنصر.":"تم إخفاء العنصر من الموقع.");await loadRows();
   }catch(error){toast("تعذر تنفيذ الطلب: "+(error.message||"خطأ غير معروف"));}
   finally{remove.disabled=false;}
@@ -181,7 +215,6 @@ $("logoutButton").addEventListener("click",async()=>{
    showBackendNotice("تم التحقق من جلسة الإدارة، لكن قاعدة بيانات CMS (INEX_CMS_DB) غير مربوطة بعد. لم يتم تعديل المحتوى.");
    $("contentStatus").textContent="بانتظار ربط قاعدة بيانات الموقع.";return;
   }
-  if(!session.mediaReady)showBackendNotice("قاعدة البيانات متاحة، لكن مساحة الصور (INEX_CMS_MEDIA) غير مربوطة بعد. إدارة الصور غير متاحة.");
   await loadRows();
  }catch(error){
   showBackendNotice(error.message||"خدمة CMS غير متاحة في هذه البيئة.");
