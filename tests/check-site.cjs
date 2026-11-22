@@ -140,6 +140,8 @@ assert.ok(new Set(cmsImageKeys).size>=48,"CMS must include the original inventor
 
 /* Readability and contrast regression checks for both site languages. */
 const typeSystem=read("assets/brand-system.css");
+assert.ok(typeSystem.includes(".cms-custom-region:not(:empty)"),"CMS-created content must use a responsive site section");
+assert.ok(typeSystem.includes(".cms-custom-region .cms-created-block"),"CMS-created blocks must inherit the brand card system");
 assert.ok(typeSystem.includes("iNex readable type & contrast system"),"The site-wide readability system must be present");
 assert.ok(typeSystem.includes("--nx-text-secondary:#4b6076"),"Secondary copy must use a high-contrast slate tone");
 assert.ok(typeSystem.includes("--nx-heading-dark:#ffffff"),"Dark surfaces must use white headings");
