@@ -87,6 +87,10 @@ assert.ok(read("assets/brand-system.css").includes("main:before"),"All pages sho
 assert.ok(read("index.html").includes("From information to clearer decisions"),"Homepage should explain the iNex value proposition");
 
 /* CMS seed inventory is validated by the SQLite migration test. */
+const cmsPublicApi=read("functions/api/cms/[[path]].js");
+assert.ok(cmsPublicApi.includes("is_published = 1 AND (is_custom = 0 OR is_visible = 1)"),"Public API must send hidden originals for DOM hiding but exclude hidden custom content");
+const cmsAdminApi=read("functions/admin/api/[[path]].js");
+assert.ok(cmsAdminApi.includes("hasValidImageSignature")&&read("functions/admin/media-validation.mjs").includes("ftyp"),"CMS image uploads must validate binary signatures");
 const cmsSql=read("migrations/0002_seed_content.sql");
 const cmsImageKeys=cmsSql.match(/(?:index|platform|solutions|awareness|company|contact|resources)\.(?:image|logo)\.\d+/g)||[];
 
@@ -138,6 +142,8 @@ assert.ok(new Set(cmsImageKeys).size>=48,"CMS must include the original inventor
 
 /* Readability and contrast regression checks for both site languages. */
 const typeSystem=read("assets/brand-system.css");
+assert.ok(typeSystem.includes(".cms-custom-region:not(:empty)"),"CMS-created content must use a responsive site section");
+assert.ok(typeSystem.includes(".cms-custom-region .cms-created-block"),"CMS-created blocks must inherit the brand card system");
 assert.ok(typeSystem.includes("iNex readable type & contrast system"),"The site-wide readability system must be present");
 assert.ok(typeSystem.includes("--nx-text-secondary:#4b6076"),"Secondary copy must use a high-contrast slate tone");
 assert.ok(typeSystem.includes("--nx-heading-dark:#ffffff"),"Dark surfaces must use white headings");

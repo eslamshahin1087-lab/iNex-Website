@@ -18,7 +18,7 @@ export async function onRequest(context) {
       if (!PAGE_SLUGS.has(page)) return json({error:"الصفحة المطلوبة غير صحيحة."},400);
       if (!env.INEX_CMS_DB || typeof env.INEX_CMS_DB.prepare!=="function") return json({error:"خدمة محتوى الموقع غير متاحة حاليًا."},503);
       const result=await env.INEX_CMS_DB.prepare(
-        "SELECT page_slug,content_key,content_type,section_label,label_en,label_ar,content_en,content_ar,image_url,alt_en,alt_ar,sort_order,is_published,is_visible,is_custom,image_mode,image_position FROM cms_content WHERE page_slug = ? AND is_published = 1 AND is_visible = 1 ORDER BY sort_order,id"
+        "SELECT page_slug,content_key,content_type,section_label,label_en,label_ar,content_en,content_ar,image_url,alt_en,alt_ar,sort_order,is_published,is_visible,is_custom,image_mode,image_position FROM cms_content WHERE page_slug = ? AND is_published = 1 AND (is_custom = 0 OR is_visible = 1) ORDER BY sort_order,id"
       ).bind(page).all();
       return json({rows:result.results||[]});
     }

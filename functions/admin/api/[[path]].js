@@ -1,4 +1,5 @@
 import { verifyAdminSession, isSameOriginAdminRequest } from "../auth.mjs";
+import { hasValidImageSignature } from "../media-validation.mjs";
 
 const COOKIE_NAME = "__Secure-iNexAdminSession";
 const PAGE_SLUGS = new Set(["index","platform","solutions","awareness","company","contact","resources"]);
@@ -149,8 +150,12 @@ async function uploadMedia(request, env) {
   const extension = IMAGE_TYPES.get(file.type);
   if (!extension) return json({error:"الصيغة غير مدعومة. استخدم JPEG أو PNG أو WebP أو AVIF."},415);
   if (file.size < 1 || file.size > MAX_IMAGE_BYTES) return json({error:"حجم الصورة يجب ألا يتجاوز 8MB."},413);
+  const imageBytes = new Uint8Array(await file.arrayBuffer());
+  if (!hasValidImageSignature(file.type, imageBytes)) {
+    return json({error:"محتوى الملف لا يطابق صيغة الصورة المعلنة."},415);
+  }
   const key = crypto.randomUUID().toLowerCase()+"."+extension;
-  await env.INEX_CMS_MEDIA.put(key,await file.arrayBuffer(),{httpMetadata:{contentType:file.type,cacheControl:"public, max-age=31536000, immutable"}});
+  await env.INEX_CMS_MEDIA.put(key,imageBytes,{httpMetadata:{contentType:file.type,cacheControl:"public, max-age=31536000, immutable"}});
   return json({key,url:"/api/cms/media/"+key},201);
 }
 async function deleteMedia(request, env) {
