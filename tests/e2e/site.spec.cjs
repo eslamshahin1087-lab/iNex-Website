@@ -183,44 +183,37 @@ test("reduced-motion preference disables decorative motion while keeping story c
  await context.close();
 });
 
-test("CMS admin is private and shows setup guidance until a backend is configured",async({page})=>{
+test("CMS admin shell is visible but reports missing Cloudflare bindings in static preview",async({page})=>{
  await page.goto("/admin/");
  await expect(page).toHaveTitle("إدارة محتوى iNex");
  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content","noindex,nofollow");
- await expect(page.locator("#loginPanel")).toBeVisible();
- await expect(page.locator("#configNotice")).toBeVisible();
- await expect(page.locator("#email")).toBeDisabled();
- await expect(page.locator("#password")).toBeDisabled();
- await expect(page.locator("#dashboard")).toBeHidden();
+ await expect(page.locator("#dashboard")).toBeVisible();
+ await expect(page.locator("#backendNotice")).toBeVisible();
+ await expect(page.locator("#backendNotice")).toContainText("Cloudflare Pages Preview");
 });
-test("public CMS hooks have safe static fallbacks when no backend is configured",async({page})=>{
+test("public CMS safely falls back to the static bilingual website when API is unavailable",async({page})=>{
  await page.goto("/");
  await expect(page.locator("main h1")).toContainText("Insurance makes sense");
  await expect(page.locator("[data-cms-key]").first()).toBeAttached();
  await expect(page.locator("[data-cms-image-key]").first()).toBeAttached();
  await expect(page.locator('[data-cms-region="custom-content"]')).toBeAttached();
 });
-
-
-test("CMS administration is private and login-gated",async({page})=>{
- await page.goto("/admin/",{waitUntil:"domcontentloaded"});
- await expect(page).toHaveTitle("إدارة محتوى iNex");
- await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content","noindex,nofollow");
- await expect(page.locator("#loginPanel")).toBeVisible();
- await expect(page.locator("#dashboard")).toBeHidden();
- await expect(page.locator("#password")).toHaveAttribute("type","password");
- const configNotice=page.locator("#configNotice");
- if(await configNotice.isVisible()){
-  await expect(page.locator("#email")).toBeDisabled();
-  await expect(page.locator("#password")).toBeDisabled();
-  await expect(page.locator('#loginForm button[type="submit"]')).toBeDisabled();
- }else{
-  await expect(page.locator("#email")).toBeEnabled();
-  await expect(page.locator("#password")).toBeEnabled();
- }
+test("public CMS applies sanitized bilingual content from its same-origin API",async({page})=>{
+ await page.route("**/api/cms/content?page=*",route=>route.fulfill({
+  status:200,
+  contentType:"application/json",
+  body:JSON.stringify({rows:[
+   {page_slug:"index",content_key:"index.text.019",content_type:"text",content_en:"CMS preview content",content_ar:"محتوى تجريبي من CMS",is_custom:0,is_visible:1},
+   {page_slug:"index",content_key:"index.image.01",content_type:"image",image_url:"/assets/inex-logo.png",alt_en:"CMS logo",alt_ar:"شعار CMS",is_custom:0,is_visible:1,image_mode:"file"}
+  ]})
+ }));
+ await page.goto("/");
+ await expect(page.locator('[data-cms-key="index.text.019"]')).toContainText("CMS preview content");
+ await expect(page.locator('[data-cms-image-key="index.image.01"]')).toHaveAttribute("src","/assets/inex-logo.png");
+ await page.locator("#langBtn").click();
+ await expect(page.locator('[data-cms-key="index.text.019"]')).toContainText("محتوى تجريبي من CMS");
+ await expect(page.locator('[data-cms-image-key="index.image.01"]')).toHaveAttribute("alt","شعار CMS");
 });
-
-
 test("editorial insurance imagery loads and alternative text follows the selected language",async({page})=>{
  const routes=[
   ["/","insurance-visual-library"],

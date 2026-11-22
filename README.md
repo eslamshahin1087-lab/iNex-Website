@@ -39,12 +39,12 @@ The iNex customer application is maintained in the separate `iNex-App` repositor
 
 ## Project boundaries
 
-- This repository contains the public iNex website only.
-- The iNex application repository is a read-only product reference.
+- This repository contains the public iNex website and its private website CMS only.
+- The iNex application repository is a read-only product reference; this repository does not change application code or backend resources.
 - InsurNex is a distinct strategic partner product; present it separately from iNex and link to its published application.
-- No Firebase, Firestore, authentication, Cloudinary, Worker, API or production data integration is included.
-- Do not modify the application repository or its backend.
-- Do not change Cloudflare production settings, custom domains or production deployment without separate explicit approval.
+- The website CMS uses dedicated Cloudflare D1 and R2 resources through this repository's Pages Functions. Never reuse iNex-App or InsurNex databases, users, keys, storage or functions.
+- No Firebase, Firestore, authentication or customer records from the iNex application are connected to this website.
+- Do not change Cloudflare Production settings, custom domains or production deployment without separate explicit approval.
 
 ## Stack and local preview
 
@@ -132,10 +132,13 @@ The Resources page now opens in English and contains practical starter guidance 
 
 ## Private iNex content management
 
-A private CMS interface is available at `/admin/`. It is designed to manage the existing bilingual text inventory, page imagery and the 18 insurer logos individually, as well as add new text, image and card blocks to each public page. Existing static elements can be hidden without removing their original HTML; newly created CMS blocks can be deleted.
+A private CMS interface is available at /admin/. Its Cloudflare Pages edge gate authenticates the administrator with a signed, eight-hour HttpOnly session. The CMS API verifies that session again before every read or write.
 
-The CMS uses a separate Supabase project, Auth, Row Level Security and a public site-media bucket. Its database setup and first-admin provisioning steps are documented in [CMS_SETUP.md](CMS_SETUP.md). Run the SQL in `supabase/setup-cms.sql` only in the dedicated iNex CMS project, then configure `assets/cms-config.js` with that project's URL and publishable key. Never place a service-role or secret key in browser code.
+The website CMS stores content in a dedicated Cloudflare D1 database (INEX_CMS_DB) and uploaded images in a dedicated R2 bucket (INEX_CMS_MEDIA). Public pages request published, visible content through a same-origin Pages Function. R2 images are served through a same-origin route; the bucket does not need public access.
 
+The D1 migrations preserve the existing bilingual content inventory, image metadata and 18 individually manageable insurer logos. Setup, binding names, migrations and Preview validation are documented in CMS_SETUP.md.
+
+supabase/setup-cms.sql is a legacy file from the earlier Supabase design. Do not execute it or configure a Supabase project for this website CMS.
 
 ## Editorial imagery and page backgrounds
 

@@ -24,3 +24,5 @@ jobs:
           node-version: 22
       - name: Run static quality checks
         run: npm test
+      - name: Validate D1 migrations and seed inventory
+        run: python3 tests/check-cms-migrations.py
