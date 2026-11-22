@@ -87,6 +87,8 @@ assert.ok(read("assets/brand-system.css").includes("main:before"),"All pages sho
 assert.ok(read("index.html").includes("From information to clearer decisions"),"Homepage should explain the iNex value proposition");
 
 /* CMS seed inventory is validated by the SQLite migration test. */
+const cmsPublicApi=read("functions/api/cms/[[path]].js");
+assert.ok(cmsPublicApi.includes("is_published = 1 AND (is_custom = 0 OR is_visible = 1)"),"Public API must send hidden originals for DOM hiding but exclude hidden custom content");
 const cmsAdminApi=read("functions/admin/api/[[path]].js");
 assert.ok(cmsAdminApi.includes("hasValidImageSignature")&&read("functions/admin/media-validation.mjs").includes("ftyp"),"CMS image uploads must validate binary signatures");
 const cmsSql=read("migrations/0002_seed_content.sql");

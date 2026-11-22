@@ -205,12 +205,14 @@ test("public CMS renders custom cards responsively and sanitizes untrusted marku
   body:JSON.stringify({rows:[
    {page_slug:"index",content_key:"index.text.019",content_type:"text",content_en:"CMS preview content",content_ar:"محتوى تجريبي من CMS",is_custom:0,is_visible:1},
    {page_slug:"index",content_key:"index.image.01",content_type:"image",image_url:"/assets/inex-logo.png",alt_en:"CMS logo",alt_ar:"شعار CMS",is_custom:0,is_visible:1,image_mode:"file"},
+   {page_slug:"index",content_key:"index.text.143",content_type:"text",content_en:"Hidden original element",content_ar:"عنصر أصلي مخفي",is_custom:0,is_visible:0},
    {page_slug:"index",content_key:"custom-card-test",content_type:"card",label_en:"Editorial card",label_ar:"بطاقة تحريرية",content_en:"<strong>Safe CMS</strong><script>window.__cmsInjected=true</script><img src=x onerror=window.__cmsInjected=true>",content_ar:"بطاقة آمنة من المحتوى التحريري",is_custom:1,is_visible:1}
   ]})
  }));
  await page.goto("/");
  await expect(page.locator('[data-cms-key="index.text.019"]')).toContainText("CMS preview content");
  await expect(page.locator('[data-cms-image-key="index.image.01"]')).toHaveAttribute("src","/assets/inex-logo.png");
+ await expect(page.locator('[data-cms-key="index.text.143"]')).toBeHidden();
 
  const region=page.locator('[data-cms-region="custom-content"]');
  const card=region.locator(".cms-created-block");
