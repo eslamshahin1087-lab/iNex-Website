@@ -221,7 +221,7 @@ assert.ok(read("functions/admin/[[path]].js").includes("context.next()"),"Nested
 assert.ok(read("assets/admin.js").includes("/admin/__logout"),"Dashboard logout must clear the edge session");
 
 const functionRoutes=JSON.parse(read("_routes.json"));
-assert.deepEqual(functionRoutes,{version:1,include:["/admin","/admin/*"],exclude:[]},"Cloudflare Pages Functions must run only for the admin route");
+assert.deepEqual(functionRoutes,{version:1,include:["/admin","/admin/*","/api/cms/*"],exclude:[]},"Cloudflare Pages Functions must run for admin and the public CMS API");
 
 assert.ok(adminEdgeAuth.includes("getAdminConfigurationIssues"),"Admin configuration must expose only safe, non-secret diagnostics");
 assert.ok(adminEdgeMiddleware.includes("configurationErrorPage(configurationIssues)"),"Misconfigured admin runtime must identify missing binding names without showing their values");
