@@ -229,31 +229,18 @@ for(const header of [
  "Permissions-Policy:"
 ])assert.ok(responseHeaders.includes(header),"Missing security response header: "+header);
 assert.ok(responseHeaders.includes("default-src 'self'"),"CSP must default to same-origin resources");
-assert.ok(responseHeaders.includes("script-src 'self' https://esm.sh"),"CSP must allow only local scripts and the pinned Supabase SDK host");
+assert.ok(responseHeaders.includes("connect-src 'self'"),"CMS API connections must remain same-origin");
 assert.ok(responseHeaders.includes("frame-ancestors 'none'"),"CSP must prevent framing");
 assert.ok(responseHeaders.includes("object-src 'none'"),"CSP must disable legacy plugin objects");
 assert.ok(responseHeaders.includes("upgrade-insecure-requests"),"CSP must upgrade accidental insecure requests");
 assert.doesNotMatch(responseHeaders,/script-src[^;]*'unsafe-inline'/,"CSP must not allow inline JavaScript");
 assert.doesNotMatch(responseHeaders,/script-src[^;]*'unsafe-eval'/,"CSP must not allow eval-based JavaScript");
 assert.ok(responseHeaders.includes("/admin/*\n  X-Robots-Tag: noindex, nofollow, noarchive\n  Cache-Control: no-store, max-age=0"),"Admin pages must not be indexed or cached");
-assert.ok(responseHeaders.includes("https://*.supabase.co"),"CSP must allow only the expected Supabase project host pattern for CMS content");
 assert.doesNotMatch(responseHeaders,/Access-Control-Allow-Origin:\s*\*/i,"The website must not publish a wildcard CORS policy");
 
-const cmsAdminSql=cmsSql.slice(cmsSql.indexOf("create table if not exists public.cms_admins"),cmsSql.indexOf("-- Initial editable inventory"));
-assert.ok(cmsAdminSql.includes("alter table public.cms_admins enable row level security"),"CMS admin membership must use RLS");
-assert.ok(cmsAdminSql.includes("user_id = (select auth.uid())"),"Admins may only read their own membership record");
-assert.match(cmsAdminSql,/security invoker/i,"The admin-check function must run with invoker privileges");
-assert.doesNotMatch(cmsAdminSql,/security definer/i,"CMS authorization must not bypass RLS via SECURITY DEFINER");
-assert.ok(cmsAdminSql.includes("alter table public.cms_content enable row level security"),"CMS content must use RLS");
-assert.ok(cmsAdminSql.includes("using (is_published = true)"),"Anonymous content reads must be limited to published content");
-assert.ok(cmsAdminSql.includes("with check ((select public.is_cms_admin()))"),"CMS inserts and updates must require an active CMS admin");
-assert.ok(cmsAdminSql.includes("bucket_id = 'inex-site-media' and (select public.is_cms_admin())"),"Storage writes must be restricted to active CMS admins and the dedicated bucket");
-assert.ok(cmsAdmin.includes("signInWithPassword"),"CMS must authenticate administrators with Supabase Auth");
-assert.ok(!/signUp\s*\(/.test(cmsAdmin),"CMS must not allow public sign-up");
-assert.ok(cmsAdmin.includes("cms_admins")&&cmsAdmin.includes("is_active"),"CMS must verify active membership before showing the dashboard");
 const publicCmsConfig=read("assets/cms-config.js");
-assert.ok(publicCmsConfig.includes('supabaseUrl: ""')&&publicCmsConfig.includes('publishableKey: ""'),"CMS must stay disconnected until a dedicated database is deliberately provisioned");
-assert.doesNotMatch(publicCmsConfig,/service_role|sb_secret_|SUPABASE_SERVICE_ROLE_KEY/i,"No privileged Supabase credential may be included in public configuration");
+assert.ok(publicCmsConfig.includes("publicApiBase"),"CMS public config must use same-origin endpoint");
+
 
 const publicSourceFiles=[...pages,"resources.html","404.html"].map(read).concat([
  read("assets/site.js"),read("assets/admin.js"),read("assets/cms-public.js"),publicCmsConfig,

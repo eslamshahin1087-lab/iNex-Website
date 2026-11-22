@@ -1,6 +1,2 @@
-
-/* Public configuration only. Never place privileged server credentials in browser code. */
-window.INEX_CMS_CONFIG = Object.freeze({
-  supabaseUrl: "",
-  publishableKey: ""
-});
+/* Public same-origin API configuration. Never place secrets here. */
+window.INEX_CMS_CONFIG = Object.freeze({ publicApiBase: "/api/cms" });
