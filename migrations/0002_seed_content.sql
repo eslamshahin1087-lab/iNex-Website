@@ -233,7 +233,10 @@ values
 ('platform', 'platform.text.059', 'text', 'Bring available policy information, documents and requests together in your account, and refer to the original', 'اجمع معلومات الوثائق والمستندات والطلبات المتاحة في حسابك، وارجع إلى الوثيقة الأصلية عند التحقق من أي شرط أو م', 'Bring available policy information, documents and requests together in your account, and refer to the original policy whenever checking a condition or benefit.', 'اجمع معلومات الوثائق والمستندات والطلبات المتاحة في حسابك، وارجع إلى الوثيقة الأصلية عند التحقق من أي شرط أو منفعة.', null, null, null, 590, false),
 ('platform', 'platform.text.060', 'text', 'Choose your next step', 'اختر خطوتك التالية', 'Choose your next step', 'اختر خطوتك التالية', null, null, null, 600, false),
 ('platform', 'platform.text.061', 'text', 'Explore available services or submit a request through the app, and consult your broker or insurer when specia', 'استكشف الخدمات المتاحة أو أرسل طلبًا من خلال التطبيق، واستعن بالوسيط أو شركة التأمين عند الحاجة إلى تأكيد أو ت', 'Explore available services or submit a request through the app, and consult your broker or insurer when specialist confirmation or interpretation is needed.', 'استكشف الخدمات المتاحة أو أرسل طلبًا من خلال التطبيق، واستعن بالوسيط أو شركة التأمين عند الحاجة إلى تأكيد أو تفسير متخصص.', null, null, null, 610, false),
-('platform', 'platform.image.02', 'image', 'iNex', 'iNex', null, null, 'iNex', 'iNex', '/assets/inex-logo.png', 1020, false),
+('platform', 'platform.image.02', 'image', 'iNex', 'iNex', null, null, 'iNex', 'iNex', '/assets/inex-logo.png', 1020, false);
+
+INSERT OR IGNORE INTO cms_content (page_slug, content_key, content_type, label_en, label_ar, content_en, content_ar, alt_en, alt_ar, image_url, sort_order, is_custom)
+values
 ('platform', 'platform.text.062', 'text', 'Understand insurance. Protect what matters.', 'افهم تأمينك. احمِ ما يهمك.', 'Understand insurance. Protect what matters.', 'افهم تأمينك. احمِ ما يهمك.', null, null, null, 620, false),
 ('platform', 'platform.text.063', 'text', 'Explore', 'استكشف', 'Explore', 'استكشف', null, null, null, 630, false),
 ('platform', 'platform.text.064', 'text', 'The platform', 'المنصة', 'The platform', 'المنصة', null, null, null, 640, false),
@@ -455,7 +458,10 @@ values
 ('company', 'company.text.017', 'text', 'InsurNex', 'InsurNex', 'InsurNex', 'InsurNex', null, null, null, 170, false),
 ('company', 'company.text.018', 'text', 'ABOUT iNEX', 'عن iNex', 'ABOUT iNEX', 'عن iNex', null, null, null, 180, false),
 ('company', 'company.text.019', 'text', 'iNex aims to make insurance easier to understand and the information and services around it easier to access. ', 'تعمل iNex على جعل التأمين أسهل فهمًا وأكثر وضوحًا في الوصول إلى المعلومات والخدمات المرتبطة به. نريد أن ينتقل ', 'iNex aims to make insurance easier to understand and the information and services around it easier to access. We want customers to move beyond simply holding a policy they may not fully understand, towards knowing what it means for them and what they should ask or review.', 'تعمل iNex على جعل التأمين أسهل فهمًا وأكثر وضوحًا في الوصول إلى المعلومات والخدمات المرتبطة به. نريد أن ينتقل العميل من مجرد امتلاك وثيقة لا يعرف تفاصيلها إلى فهم أفضل لما تعنيه له، وما الذي ينبغي أن يسأل عنه أو يراجعه.', null, null, null, 190, false),
-('company', 'company.text.020', 'text', 'OUR PHILOSOPHY', 'فلسفتنا', 'OUR PHILOSOPHY', 'فلسفتنا', null, null, null, 200, false),
+('company', 'company.text.020', 'text', 'OUR PHILOSOPHY', 'فلسفتنا', 'OUR PHILOSOPHY', 'فلسفتنا', null, null, null, 200, false);
+
+INSERT OR IGNORE INTO cms_content (page_slug, content_key, content_type, label_en, label_ar, content_en, content_ar, alt_en, alt_ar, image_url, sort_order, is_custom)
+values
 ('company', 'company.text.021', 'text', 'A better insurance experience starts with information people can understand, then moves to a realistic review ', 'نؤمن أن التجربة التأمينية الأفضل تبدأ بمعلومة مفهومة، ثم تنتقل إلى تقييم واقعي للاحتياجات، واستكشاف الخيارات، ', 'A better insurance experience starts with information people can understand, then moves to a realistic review of needs, exploration of options and service follow-up. We connect awareness with digital tools that help customers organise the journey without replacing the role of the broker or insurer.', 'نؤمن أن التجربة التأمينية الأفضل تبدأ بمعلومة مفهومة، ثم تنتقل إلى تقييم واقعي للاحتياجات، واستكشاف الخيارات، ومتابعة الخدمات. لذلك نربط التوعية بأدوات رقمية تساعد العميل على تنظيم رحلته دون أن تحل محل دور الوسيط أو شركة التأمين.', null, null, null, 210, false),
 ('company', 'company.text.022', 'text', 'That is why iNex brings together insurance awareness, protection assessment and customer services, while keepi', 'لهذا تجمع iNex بين التوعية التأمينية وتقييم الحماية وخدمات العميل، مع إبقاء دور الوسيط وشركة التأمين وشروط الو', 'That is why iNex brings together insurance awareness, protection assessment and customer services, while keeping the roles of the broker, insurer and policy terms clear.', 'لهذا تجمع iNex بين التوعية التأمينية وتقييم الحماية وخدمات العميل، مع إبقاء دور الوسيط وشركة التأمين وشروط الوثيقة واضحًا.', null, null, null, 220, false),
 ('company', 'company.text.023', 'text', 'Clarity', 'الوضوح', 'Clarity', 'الوضوح', null, null, null, 230, false),
@@ -667,7 +673,6 @@ values
 ('index','index.logo.16','image','Misr Insurance','مصر للتأمين',null,null,'/assets/insurance-companies-sprite.avif',null,'Misr Insurance','مصر للتأمين',1160,true,true,false,'sprite','60% 100%'),
 ('index','index.logo.17','image','Allianz Egypt','أليانز مصر',null,null,'/assets/insurance-companies-sprite.avif',null,'Allianz Egypt','أليانز مصر',1170,true,true,false,'sprite','80% 100%'),
 ('index','index.logo.18','image','Al Wataniya Insurance','الوطنية للتأمين',null,null,'/assets/insurance-companies-sprite.avif',null,'Al Wataniya Insurance','الوطنية للتأمين',1180,true,true,false,'sprite','100% 100%');
-
 
 -- iNex editorial insurance imagery and bilingual visual-story content.
 INSERT OR IGNORE INTO cms_content
