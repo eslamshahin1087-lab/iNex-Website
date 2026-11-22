@@ -2,6 +2,7 @@
 """Validate the iNex D1 schema, seed inventory and D1 statement-size limits."""
 
 from pathlib import Path
+import re
 import sqlite3
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -72,6 +73,26 @@ logos = connection.execute(
     "SELECT content_key FROM cms_content WHERE page_slug='index' AND content_key LIKE 'index.logo.%'"
 ).fetchall()
 assert len(logos) == 18, f"Expected 18 insurer logos, found {len(logos)}"
+
+# Every editable HTML hook must resolve to a matching seeded D1 record.
+for page_slug in ("index", "platform", "solutions", "awareness", "company", "contact", "resources"):
+    html = (ROOT / f"{page_slug}.html").read_text(encoding="utf-8")
+    assert f'data-cms-page="{page_slug}"' in html, f"{page_slug}.html is missing its CMS page marker"
+    for attribute, content_type in (
+        ("data-cms-key", "text"),
+        ("data-cms-image-key", "image"),
+    ):
+        keys = re.findall(rf'{attribute}="([^"]+)"', html)
+        assert keys, f"{page_slug}.html is missing {attribute} hooks"
+        for key in keys:
+            row = connection.execute(
+                "SELECT 1 FROM cms_content WHERE page_slug = ? AND content_key = ? AND content_type = ?",
+                (page_slug, key, content_type),
+            ).fetchone()
+            assert row is not None, (
+                f"{page_slug}.html {attribute}={key!r} has no matching "
+                f"{content_type} record in the D1 seed"
+            )
 
 connection.executescript(seed_sql)
 count_after_rerun = connection.execute("SELECT COUNT(*) FROM cms_content").fetchone()[0]
