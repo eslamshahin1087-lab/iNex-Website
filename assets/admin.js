@@ -160,7 +160,7 @@ function renderRow(row){
   remove.disabled=true;
   try{
    await api("content?id="+encodeURIComponent(row.id),{method:"DELETE"});
-   if(Boolean(row.is_custom)&&row.storage_path){try{await deleteMedia(row.storage_path);}catch(error){console.warn("Unused R2 object could not be removed:",error);}}
+   if(Boolean(row.is_custom)&&row.storage_path){try{await deleteMedia(row.storage_path);}catch(error){console.warn("Unused CMS image could not be removed:",error);}}
    toast(Boolean(row.is_custom)?"تم حذف العنصر.":"تم إخفاء العنصر من الموقع.");await loadRows();
   }catch(error){toast("تعذر تنفيذ الطلب: "+(error.message||"خطأ غير معروف"));}
   finally{remove.disabled=false;}
