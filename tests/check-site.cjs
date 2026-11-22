@@ -243,15 +243,15 @@ assert.ok(adminEdgeMiddleware.includes("isSameOriginAdminRequest(request, url)")
 
 /* Free-plan CMS media storage must stay inside the dedicated D1 database. */
 const cmsMediaStorage=read("functions/cms/media-storage.mjs");
-const cmsAdminApi=read("functions/admin/api/[[path]].js");
-const cmsPublicApi=read("functions/api/cms/[[path]].js");
-const adminUi=read("assets/admin.js");
+const d1MediaAdminApi=read("functions/admin/api/[[path]].js");
+const d1MediaPublicApi=read("functions/api/cms/[[path]].js");
+const d1MediaAdminUi=read("assets/admin.js");
 const cmsMediaMigration=read("migrations/0003_cms_media.sql");
 assert.ok(cmsMediaStorage.includes("MAX_CMS_IMAGE_BYTES = 1_500_000"),"CMS media must remain below D1's 2 MB BLOB/row maximum");
 assert.ok(cmsMediaStorage.includes("image_data")&&cmsMediaStorage.includes("toCmsMediaBytes"),"CMS media must normalize and store D1 BLOB bytes");
-assert.ok(cmsAdminApi.includes("storeCmsMedia")&&cmsAdminApi.includes("deleteCmsMedia"),"Admin media endpoints must write and delete D1 BLOBs");
-assert.ok(!cmsAdminApi.includes("INEX_CMS_MEDIA"),"Admin media storage must not depend on an R2 binding");
-assert.ok(cmsPublicApi.includes("getCmsMedia")&&cmsPublicApi.includes("media.bytes"),"Public media endpoint must serve image bytes from D1");
-assert.ok(!cmsPublicApi.includes("INEX_CMS_MEDIA"),"Public media reads must not depend on R2");
-assert.ok(adminUi.includes("optimizeImageForD1")&&adminUi.includes("image/webp"),"Admin uploads must compress oversized images before sending them to D1");
+assert.ok(d1MediaAdminApi.includes("storeCmsMedia")&&d1MediaAdminApi.includes("deleteCmsMedia"),"Admin media endpoints must write and delete D1 BLOBs");
+assert.ok(!d1MediaAdminApi.includes("INEX_CMS_MEDIA"),"Admin media storage must not depend on an R2 binding");
+assert.ok(d1MediaPublicApi.includes("getCmsMedia")&&d1MediaPublicApi.includes("media.bytes"),"Public media endpoint must serve image bytes from D1");
+assert.ok(!d1MediaPublicApi.includes("INEX_CMS_MEDIA"),"Public media reads must not depend on R2");
+assert.ok(d1MediaAdminUi.includes("optimizeImageForD1")&&d1MediaAdminUi.includes("image/webp"),"Admin uploads must compress oversized images before sending them to D1");
 assert.ok(cmsMediaMigration.includes("image_data BLOB")&&cmsMediaMigration.includes("size_bytes BETWEEN 1 AND 1500000"),"D1 media migration must define and bound the BLOB storage");
